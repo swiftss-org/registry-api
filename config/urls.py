@@ -1,29 +1,26 @@
 import os
+
 from django.conf import settings
-from django.urls import re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-
-
 # API URLS
 api_urls = [
     # API base url
     path("api/v1/", include("config.api_router")),
-    path('api-auth/', include('rest_framework.urls')),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 # ADMIN URLs
 admin_urls = [
     path("admin/", admin.site.urls),
 ]
-
 
 
 # Pages URLS
@@ -76,7 +73,7 @@ if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local
     # web socket development
     static_urls = staticfiles_urlpatterns()
-    
+
 else:
     static_urls = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -90,5 +87,5 @@ if settings.DEBUG:
         import debug_toolbar
 
         urlpatterns = [
-                          path("__debug__/", include(debug_toolbar.urls))
-                      ] + urlpatterns
+            path("__debug__/", include(debug_toolbar.urls))
+        ] + urlpatterns

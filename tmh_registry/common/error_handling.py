@@ -22,6 +22,7 @@ from rest_framework.status import (
     HTTP_405_METHOD_NOT_ALLOWED,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
+
 from tmh_registry.common.exceptions import ProjectAPIException
 
 logger = getLogger(__name__)

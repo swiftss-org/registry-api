@@ -36,5 +36,3 @@ if [ -n "$REDIS_URL" ]; then
     sed -i "s/<YOUR PASSWORD>/${BASH_REMATCH[1]}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
   fi
 fi
-
-

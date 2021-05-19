@@ -29,7 +29,7 @@ http:
   routers:
     web-router:
       rule: "Host(`example.com`) || Host(`www.example.com`)"
-      
+
       entryPoints:
         - web
       middlewares:
@@ -39,7 +39,7 @@ http:
 
     web-secure-router:
       rule: "Host(`example.com`) || Host(`www.example.com`)"
-      
+
       entryPoints:
         - web-secure
       middlewares:
@@ -90,5 +90,3 @@ providers:
   file:
     filename: /etc/traefik/traefik.yml
     watch: true
-
-

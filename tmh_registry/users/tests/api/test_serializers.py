@@ -1,7 +1,9 @@
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from mock import MagicMock
-from tmh_registry.users.api.serializers import UserSerializer
 from pytest import mark
+
+from tmh_registry.users.api.serializers import UserSerializer
+
 
 @mark.users
 @mark.users_serializers
@@ -35,5 +37,3 @@ class TestUserSerializer(TestCase):
         result = serializer.create(create_dict)
 
         self.assertEqual(result.email, new_email)
-
-

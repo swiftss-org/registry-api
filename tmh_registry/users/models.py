@@ -13,4 +13,3 @@ class Profile(models.Model):
         default=None,
         null=True,
     )
-

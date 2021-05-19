@@ -1,7 +1,7 @@
-from rest_framework.routers import DefaultRouter
 from django.urls import include, path
-from tmh_registry.users.api.viewsets import UserViewSet
+from rest_framework.routers import DefaultRouter
 
+from tmh_registry.users.api.viewsets import UserViewSet
 
 router = DefaultRouter()
 
@@ -11,4 +11,3 @@ app_name = "api"
 
 urlpatterns = router.urls
 urlpatterns += [path("", include("tmh_registry.users.urls"))]
-
