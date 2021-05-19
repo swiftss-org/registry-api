@@ -1,0 +1,111 @@
+name: CI
+
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'ci/**'
+      - 'issue/**'
+      - 'master'
+      - 'develop'
+      - 'hotfix/**'
+      - 'bug/**'
+      - 'fix/**'
+      - 'refactor/**'
+      - 'build/**'
+      - 'test/**'
+
+
+jobs:
+  precommit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: 3.8.7
+          architecture: x64
+      - name: Checkout Repository
+        uses: actions/checkout@main
+      - name: Install dependencies
+        run: pip install -r requirements/local.txt
+      - name: Run precommit
+        run: pre-commit run --all-files
+
+# With no caching at all the entire ci process takes 4m 30s to complete!
+  unittest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v2
+      - name: Build the Stack
+        run:  docker-compose -f local.yml build
+      - name: Make DB Migrations
+        run:  docker-compose -f local.yml run --rm django python manage.py migrate
+      - name: Run the Stack
+        run:  docker-compose -f local.yml up -d
+      - name: Run Django Tests
+        run: docker-compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
+      - name: Print Coverage
+        run: docker-compose -f local.yml exec -T django coverage report
+      - name: Tear down the Stack
+        run: docker-compose -f local.yml down
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+    needs:
+      - unittest
+      - precommit
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      - name: Push to Staging
+        if: github.ref == 'refs/heads/develop'
+        uses: akhileshns/heroku-deploy@v3.2.6
+        
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_STG_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        
+
+      - name: Push to Production
+        if: github.ref == 'refs/heads/master'
+        uses: akhileshns/heroku-deploy@v3.2.6
+        
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_PROD_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        
+
+  bump:
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/master'"
+    runs-on: ubuntu-latest
+    needs:
+      - unittest
+      - precommit
+      - deploy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@main
+      - name: Install dependencies
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn install
+      - name: Release
+        
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+        

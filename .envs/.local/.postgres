@@ -1,0 +1,8 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=tmh_registry
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+DATABASE_URL=postgres://admin:admin@postgres:5432/tmh_registry

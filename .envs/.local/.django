@@ -1,0 +1,7 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+
+ADMIN_EMAIL=admin@admin.com
+ADMIN_PASSWORD=admin

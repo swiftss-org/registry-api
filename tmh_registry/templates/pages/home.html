@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<body>
+    </br></br>
+      <h3>Welcome to TMH Registry Home Page </h3>
+        <br/>
+          <h5>In the following links you can find reference to</h5>
+        <br/>
+        
+        <li>
+          <a href="/swagger/">
+            Swagger
+          </a>
+          <p3>where all available calls and responses to and from the api are documented.</p3>
+        </li>
+        <li>
+          <a href="/admin/">
+            Django Admin Panel
+          </a>
+          <p3>where once logged you gain access to the django admin interface.</p3>
+        </li>
+         <li>
+          <a href="/api/v1">
+            Browsable TMH Registry
+          </a>
+          <p3>where once logged you gain access to browsable TMH Registry .</p3>
+        </li>
+        </br><h6>
+          The application is using Token Authentication to authentication users.</br>
+          To To be able to log in to TMH Registry you must install a web plugin like
+          <a href="https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en">ModHeader</a></br>
+          where you can modify your https request and add the token needed to be authorized by the application.
+        </h6>
+        <!--        You can Place more options here-->
+
+</body>
+{% endblock content %}
+
