@@ -68,7 +68,7 @@ jobs:
 
       - name: Push to Staging
         if: github.ref == 'refs/heads/develop'
-        uses: akhileshns/heroku-deploy@v3.2.6
+        uses: akhileshns/heroku-deploy@v3.12.12
 
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
@@ -78,7 +78,7 @@ jobs:
 
       - name: Push to Production
         if: github.ref == 'refs/heads/main'
-        uses: akhileshns/heroku-deploy@v3.2.6
+        uses: akhileshns/heroku-deploy@v3.12.12
 
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
