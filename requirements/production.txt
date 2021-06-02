@@ -5,6 +5,7 @@
 gunicorn==20.0.4  # https://github.com/benoitc/gunicorn
 psycopg2==2.8.6  # https://github.com/psycopg/psycopg2
 Collectfast==2.2.0  # https://github.com/antonagestam/collectfast
+whitenoise==5.2.0 # https://github.com/evansd/whitenoise
 
 # Django
 # ------------------------------------------------------------------------------
