@@ -40,7 +40,7 @@ class SignInSerializer(serializers.Serializer):
     Serializer responsible for input validation of sign in view
     """
 
-    email = serializers.EmailField(required=True)
+    username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
     def update(self, instance, validated_data):  # pragma: no cover
