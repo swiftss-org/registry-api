@@ -171,7 +171,3 @@ SWAGGER_SETTINGS = {
     },
     'USE_SESSION_AUTH': False,
 }
-
-# Datadog
-# ------------------------------------------------------------------------------
-INSTALLED_APPS += ["ddtrace.contrib.django"]  # noqa F405
