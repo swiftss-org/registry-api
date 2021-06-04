@@ -28,11 +28,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserReadSerializer(serializers.ModelSerializer):
-    medical_personnel = MedicalPersonnelSerializer()
-
     class Meta:
         model = User
-        fields = ["email", "medical_personnel"]
+        fields = ["email"]
 
 
 class SignInSerializer(serializers.Serializer):
