@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class Profile(models.Model):
+class MedicalPersonnel(models.Model):
     """
     Model for Profile which is a proxy model of User
     """
@@ -13,3 +13,4 @@ class Profile(models.Model):
         default=None,
         null=True,
     )
+

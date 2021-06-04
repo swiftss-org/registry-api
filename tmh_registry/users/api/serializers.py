@@ -2,14 +2,14 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 
-from tmh_registry.users.models import Profile
+from tmh_registry.users.models import MedicalPersonnel
 
 User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = MedicalPersonnel
         fields = ["user"]
 
 
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             user = User.objects.create(**validated_data)
-            profile = Profile(user=user)
+            profile = MedicalPersonnel(user=user)
             profile.save()
             user.save()
             return user
