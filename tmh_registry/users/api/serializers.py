@@ -7,7 +7,7 @@ from tmh_registry.users.models import MedicalPersonnel
 User = get_user_model()
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class MedicalPersonnelSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalPersonnel
         fields = ["user"]
@@ -21,18 +21,18 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             user = User.objects.create(**validated_data)
-            profile = MedicalPersonnel(user=user)
-            profile.save()
+            medical_personnel = MedicalPersonnel(user=user)
+            medical_personnel.save()
             user.save()
             return user
 
 
 class UserReadSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
+    medical_personnel = MedicalPersonnelSerializer()
 
     class Meta:
         model = User
-        fields = ["email", "profile"]
+        fields = ["email", "medical_personnel"]
 
 
 class SignInSerializer(serializers.Serializer):
