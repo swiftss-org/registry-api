@@ -15,6 +15,7 @@ class BaseUserManagementTestView(ABC):
     def setUpClass(cls) -> None:
         super(BaseUserManagementTestView, cls).setUpClass()
         cls.request_factory = RequestFactory()
+        cls.username = "username"
         cls.email = "email@email.com"
         cls.password = "password"
         cls.code = "code"
@@ -39,9 +40,8 @@ class TestSignInView(BaseUserManagementTestView, TestCase):
     @patch("tmh_registry.users.api.views." "authenticate")
     def test_authentication_error(self, authenticate):
         data = {
-            "email": self.email,
+            "username": self.username,
             "password": self.password,
-            "code": self.code,
         }
         request = self.request_factory.post(
             self.url, data, content_type="application/json"
@@ -51,15 +51,14 @@ class TestSignInView(BaseUserManagementTestView, TestCase):
         with self.assertRaises(Exception):
             self.view.post(request)
             authenticate.assert_called_once_with(
-                username=self.email, password=self.password
+                username=self.username, password=self.password
             )
 
     @patch("tmh_registry.users.api.views." "authenticate")
     def test_user_not_found_error(self, authenticate):
         data = {
-            "email": self.email,
+            "username": self.username,
             "password": self.password,
-            "code": self.code,
         }
 
         request = self.request_factory.post(
@@ -70,20 +69,19 @@ class TestSignInView(BaseUserManagementTestView, TestCase):
         with self.assertRaises(Exception):
             self.view.post(request)
             authenticate.assert_called_once_with(
-                username=self.email, password=self.password
+                username=self.username, password=self.password
             )
 
     @patch("tmh_registry.users.api.views." "authenticate")
     def test_sunny_day(self, authenticate):
-        User.objects.create(
-            username=self.email, email=self.email, password=self.password
+        user = User.objects.create(
+            username=self.username, email=self.email, password=self.password
         )
         data = {
-            "email": self.email,
+            "username": self.username,
             "password": self.password,
-            "code": self.code,
         }
-        authenticate.return_value = True
+        authenticate.return_value = user
         request = self.request_factory.post(
             self.url, data, content_type="application/json"
         )
@@ -92,5 +90,5 @@ class TestSignInView(BaseUserManagementTestView, TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         authenticate.assert_called_once_with(
-            username=self.email, password=self.password
+            username=self.username, password=self.password
         )
