@@ -11,3 +11,4 @@ app_name = "api"
 
 urlpatterns = router.urls
 urlpatterns += [path("", include("tmh_registry.users.urls"))]
+urlpatterns += [path("", include("tmh_registry.registry.urls"))]
