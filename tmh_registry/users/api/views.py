@@ -91,16 +91,16 @@ class SignInView(BaseUserManagementView):
         """
         serializer = self.get_valid_serializer(request)
 
-        if not authenticate(
-            username=serializer.data.get("email"),
+        user = authenticate(
+            username=serializer.data.get("username"),
             password=serializer.data.get("password"),
-        ):
+        )
+
+        if not user:
             raise Exception(
-                "The email and password provided are invalid",
+                "The username and/or password provided are invalid",
                 status.HTTP_400_BAD_REQUEST,
             )
-
-        user = self.get_user_from_email(serializer.data.get("email"))
 
         token = Token.objects.get_or_create(user=user)[0]
         return_serializer = SignInResponseSerializer(
