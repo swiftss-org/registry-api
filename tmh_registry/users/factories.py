@@ -12,8 +12,8 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    first_name = faker.first_name()
-    last_name = faker.last_name()
+    first_name = factory.LazyAttribute(lambda n: faker.first_name())
+    last_name = factory.LazyAttribute(lambda n: faker.last_name())
     username = factory.LazyAttribute(
         lambda o: f"{o.first_name.lower()}_{o.last_name.lower()}"
     )
