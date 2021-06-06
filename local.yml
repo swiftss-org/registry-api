@@ -27,7 +27,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: tmh_registry_production_postgres
+    image: tmh_registry_local_postgres
     restart: unless-stopped
     container_name: postgres
     ports:
