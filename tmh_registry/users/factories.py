@@ -21,6 +21,7 @@ class UserFactory(DjangoModelFactory):
         lambda o: "%s@example.com"
         % (o.first_name.lower() + o.last_name.lower())
     )
+    password = factory.LazyAttribute(lambda n: faker.password())
 
 
 class MedicalPersonnelFactory(DjangoModelFactory):
