@@ -14,7 +14,6 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
 class PatientViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
     mixins.ListModelMixin,
     GenericViewSet,
 ):
