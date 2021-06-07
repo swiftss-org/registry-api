@@ -14,6 +14,7 @@ from rest_framework.test import APIClient
 
 from .....users.factories import MedicalPersonnelFactory
 from ....factories import HospitalFactory, PatientFactory
+from ....models import PatientHospitalMapping
 
 
 @mark.registry
@@ -43,6 +44,8 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertEqual(1, response.data["count"])
         self.assertEqual(self.patient.id, response.data["results"][0]["id"])
+        self.assertEqual([], response.data["results"][0]["hospitals"])
+        self.assertNotIn("hospital_id", response.data["results"][0])
 
     def test_get_patients_list_unauthorized(self):
         self.client = APIClient()
@@ -109,6 +112,7 @@ class TestPatientsViewSet(TestCase):
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
+            "hospital_id": self.hospital.id,
         }
         response = self.client.post(
             "/api/v1/patients/", data=data, format="json"
@@ -124,6 +128,15 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
 
+        self.assertEqual(1, len(response.data["hospitals"]))
+        self.assertEqual(self.hospital.id, response.data["hospitals"][0]["id"])
+        self.assertEqual(
+            1,
+            PatientHospitalMapping.objects.filter(
+                patient_id=response.data["id"], hospital_id=self.hospital.id
+            ).count(),
+        )
+
     def test_create_patients_without_year_of_birth_but_with_age(self):
         data = {
             "first_name": "John",
@@ -137,6 +150,7 @@ class TestPatientsViewSet(TestCase):
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
+            "hospital_id": self.hospital.id,
         }
         response = self.client.post(
             "/api/v1/patients/", data=data, format="json"
@@ -152,8 +166,52 @@ class TestPatientsViewSet(TestCase):
         )
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
+        self.assertEqual(1, len(response.data["hospitals"]))
 
     def test_create_patients_without_year_of_birth_and_age(self):
+        data = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "national_id": 26683571435542132621,
+            "age": None,
+            "day_of_birth": 3,
+            "month_of_birth": 10,
+            "year_of_birth": None,
+            "gender": 0,
+            "phone_1": 234633241,
+            "phone_2": 324362141,
+            "address": "16 Test Street, Test City, Test Country",
+        }
+
+        response = self.client.post(
+            "/api/v1/patients/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_create_patient_with_non_existing_hospital_id(self):
+        data = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "national_id": 26683571435542132621,
+            "age": None,
+            "day_of_birth": 3,
+            "month_of_birth": 10,
+            "year_of_birth": None,
+            "gender": 0,
+            "phone_1": 234633241,
+            "phone_2": 324362141,
+            "address": "16 Test Street, Test City, Test Country",
+            "hospital_id": 99999,
+        }
+
+        response = self.client.post(
+            "/api/v1/patients/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_create_patient_without_hospital_id(self):
         data = {
             "first_name": "John",
             "last_name": "Doe",

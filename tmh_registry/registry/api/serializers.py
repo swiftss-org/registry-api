@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Hospital, Patient
+from ..models import Hospital, Patient, PatientHospitalMapping
 
 
 class HospitalSerializer(serializers.ModelSerializer):
@@ -11,6 +11,16 @@ class HospitalSerializer(serializers.ModelSerializer):
 
 class PatientSerializer(serializers.ModelSerializer):
     age = serializers.IntegerField(allow_null=True)
+    hospitals = serializers.SerializerMethodField()
+    hospital_id = serializers.IntegerField(write_only=True)
+
+    def get_hospitals(self, obj):
+        hospitals = Hospital.objects.filter(
+            id__in=PatientHospitalMapping.objects.filter(
+                patient=obj
+            ).values_list("hospital_id", flat=True)
+        )
+        return HospitalSerializer(hospitals, many=True).data
 
     class Meta:
         model = Patient
@@ -27,6 +37,8 @@ class PatientSerializer(serializers.ModelSerializer):
             "phone_1",
             "phone_2",
             "address",
+            "hospitals",
+            "hospital_id",
         ]
 
     def to_representation(self, instance):
@@ -41,7 +53,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if not validated_data["year_of_birth"]:
+        if not validated_data.get("year_of_birth", None):
             if validated_data["age"]:
                 validated_data[
                     "year_of_birth"
@@ -53,6 +65,27 @@ class PatientSerializer(serializers.ModelSerializer):
                     }
                 )
 
-        validated_data.pop("age", None)
+        if validated_data.get("hospital_id", None):
+            try:
+                hospital = Hospital.objects.get(
+                    id=validated_data["hospital_id"]
+                )
+            except Hospital.DoesNotExist:
+                raise serializers.ValidationError(
+                    {
+                        "error": "The hospital you are trying to register this patient does not exist."
+                    }
+                )
+            validated_data.pop("hospital_id", None)
+        else:
+            raise serializers.ValidationError(
+                {"error": "The patient needs to be registered to a hospital."}
+            )
 
-        return super(PatientSerializer, self).create(validated_data)
+        validated_data.pop("age", None)
+        new_patient = super(PatientSerializer, self).create(validated_data)
+        PatientHospitalMapping.objects.create(
+            patient=new_patient, hospital=hospital
+        )
+
+        return new_patient
