@@ -10,6 +10,8 @@ class Hospital(models.Model):
 
 
 class Patient(models.Model):
+    GENDER_CHOICES = [("GENDER_MALE", "Male"), ("GENDER_FEMALE", "Female")]
+
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     national_id = models.IntegerField(null=True, blank=True, unique=True)
@@ -17,9 +19,7 @@ class Patient(models.Model):
     day_of_birth = models.PositiveIntegerField(null=True, blank=True)
     month_of_birth = models.PositiveIntegerField(null=True, blank=True)
     year_of_birth = models.PositiveIntegerField(null=True, blank=True)
-    gender = models.IntegerField(
-        choices=[("GENDER_MALE", "Male"), ("GENDER_FEMALE", "Female")]
-    )
+    gender = models.IntegerField(choices=GENDER_CHOICES)
     phone_1 = models.IntegerField(null=True, blank=True)
     phone_2 = models.IntegerField(null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
