@@ -24,13 +24,15 @@ class TestHospitalsViewSet(TestCase):
         cls.medical_personnel = MedicalPersonnelFactory()
         cls.token = Token.objects.create(user=cls.medical_personnel.user)
 
+    def setUp(self) -> None:
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+
     ######################
     # Test list endpoint #
     ######################
 
     def test_get_hospitals_list_successful(self):
-        self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         response = self.client.get("/api/v1/hospitals/", format="json")
 
         self.assertEqual(HTTP_200_OK, response.status_code)
@@ -58,8 +60,6 @@ class TestHospitalsViewSet(TestCase):
     ########################
 
     def test_get_hospitals_detail_successful(self):
-        self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         response = self.client.get(
             f"/api/v1/hospitals/{self.hospital.id}/", format="json"
         )
