@@ -1,14 +1,20 @@
-from django.test import RequestFactory, TestCase
+from django.test import TestCase
 from pytest import mark
+from rest_framework.authtoken.models import Token
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_403_FORBIDDEN,
+)
+from rest_framework.test import APIClient
 
 from .....users.factories import MedicalPersonnelFactory
-from ....api.viewsets import HospitalViewSet
 from ....factories import HospitalFactory
 
 
 @mark.registry
-@mark.registry.registry_viewsets
-@mark.registry.registry_viewsets.hospitals
+@mark.registry_viewsets
+@mark.registry_viewsets_hospitals
 class TestHospitalsViewSet(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -16,11 +22,67 @@ class TestHospitalsViewSet(TestCase):
 
         cls.hospital = HospitalFactory()
         cls.medical_personnel = MedicalPersonnelFactory()
+        cls.token = Token.objects.create(user=cls.medical_personnel.user)
 
-        cls.request_factory = RequestFactory()
-        request = cls.request_factory.get(
-            "/api/v1/users/",
-            content_type="application/json",
+    ######################
+    # Test list endpoint #
+    ######################
+
+    def test_get_hospitals_list_successful(self):
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get("/api/v1/hospitals/", format="json")
+
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+        self.assertEqual(self.hospital.id, response.data["results"][0]["id"])
+
+    def test_get_hospitals_list_unauthorized(self):
+        self.client = APIClient()
+        response = self.client.get("/api/v1/hospitals/", format="json")
+
+        self.assertEqual(HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_get_hospitals_list_from_non_admin_user(self):
+        self.non_admin_mp = MedicalPersonnelFactory(user__is_staff=False)
+        self.token = Token.objects.create(user=self.non_admin_mp.user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get("/api/v1/hospitals/", format="json")
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+
+    ########################
+    # Test detail endpoint #
+    ########################
+
+    def test_get_hospitals_detail_successful(self):
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get(
+            f"/api/v1/hospitals/{self.hospital.id}/", format="json"
         )
-        cls.view_set = HospitalViewSet()
-        cls.view_set.request = request
+
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(self.hospital.id, response.data["id"])
+
+    def test_get_hospitals_detail_unauthorized(self):
+        self.client = APIClient()
+        response = self.client.get(
+            f"/api/v1/hospitals/{self.hospital.id}/", format="json"
+        )
+
+        self.assertEqual(HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_get_hospitals_detail_from_non_admin_user(self):
+        self.non_admin_mp = MedicalPersonnelFactory(user__is_staff=False)
+        self.token = Token.objects.create(user=self.non_admin_mp.user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get(
+            f"/api/v1/hospitals/{self.hospital.id}/", format="json"
+        )
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
