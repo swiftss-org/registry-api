@@ -10,6 +10,8 @@ class HospitalSerializer(serializers.ModelSerializer):
 
 
 class PatientSerializer(serializers.ModelSerializer):
+    age = serializers.IntegerField(allow_null=True)
+
     class Meta:
         model = Patient
         fields = [
@@ -26,3 +28,31 @@ class PatientSerializer(serializers.ModelSerializer):
             "phone_2",
             "address",
         ]
+
+    def to_representation(self, instance):
+        data = super(PatientSerializer, self).to_representation(instance)
+
+        data["national_id"] = int(data["national_id"])
+        data["phone_1"] = int(data["phone_1"])
+        data["phone_2"] = int(data["phone_2"])
+        data["age"] = instance.age
+
+        return data
+
+    def create(self, validated_data):
+
+        if not validated_data["year_of_birth"]:
+            if validated_data["age"]:
+                validated_data[
+                    "year_of_birth"
+                ] = Patient.get_year_of_birth_from_age(validated_data["age"])
+            else:
+                raise serializers.ValidationError(
+                    {
+                        "error": "Either 'age' or 'year_of_birth' should be populated."
+                    }
+                )
+
+        validated_data.pop("age", None)
+
+        return super(PatientSerializer, self).create(validated_data)

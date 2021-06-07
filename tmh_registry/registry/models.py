@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 
@@ -19,7 +21,6 @@ class Patient(models.Model):
     national_id = models.CharField(
         max_length=20, null=True, blank=True, unique=True
     )
-    age = models.PositiveIntegerField(null=True, blank=True)
     day_of_birth = models.PositiveIntegerField(null=True, blank=True)
     month_of_birth = models.PositiveIntegerField(null=True, blank=True)
     year_of_birth = models.PositiveIntegerField(null=True, blank=True)
@@ -30,6 +31,14 @@ class Patient(models.Model):
 
     def __str__(self):
         return f"{self.first_name} - {self.last_name}"
+
+    @property
+    def age(self):
+        return datetime.datetime.today().year - self.year_of_birth
+
+    @staticmethod
+    def get_year_of_birth_from_age(age):
+        return datetime.datetime.today().year - age
 
 
 class PatientHospitalMapping(models.Model):

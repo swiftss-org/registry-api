@@ -1,5 +1,4 @@
 import random
-from datetime import datetime
 
 import factory
 from factory.django import DjangoModelFactory
@@ -32,9 +31,6 @@ class PatientFactory(DjangoModelFactory):
         lambda n: faker.date_of_birth().month
     )
     year_of_birth = factory.LazyAttribute(lambda n: faker.date_of_birth().year)
-    age = factory.LazyAttribute(
-        lambda o: datetime.today().year - o.year_of_birth
-    )
     gender = factory.LazyAttribute(
         lambda n: random.choice([x[0] for x in Patient.GENDER_CHOICES])
     )
