@@ -16,14 +16,16 @@ class Patient(models.Model):
 
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
-    national_id = models.IntegerField(null=True, blank=True, unique=True)
+    national_id = models.CharField(
+        max_length=20, null=True, blank=True, unique=True
+    )
     age = models.PositiveIntegerField(null=True, blank=True)
     day_of_birth = models.PositiveIntegerField(null=True, blank=True)
     month_of_birth = models.PositiveIntegerField(null=True, blank=True)
     year_of_birth = models.PositiveIntegerField(null=True, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICES)
-    phone_1 = models.IntegerField(null=True, blank=True)
-    phone_2 = models.IntegerField(null=True, blank=True)
+    phone_1 = models.CharField(max_length=16, null=True, blank=True)
+    phone_2 = models.CharField(max_length=16, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
