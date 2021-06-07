@@ -10,7 +10,9 @@ class Hospital(models.Model):
 
 
 class Patient(models.Model):
-    GENDER_CHOICES = [("GENDER_MALE", "Male"), ("GENDER_FEMALE", "Female")]
+    GENDER_MALE = 0
+    GENDER_FEMALE = 1
+    GENDER_CHOICES = [(GENDER_MALE, "Male"), (GENDER_FEMALE, "Female")]
 
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
