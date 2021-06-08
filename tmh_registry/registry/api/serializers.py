@@ -9,10 +9,9 @@ class HospitalSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "address"]
 
 
-class PatientSerializer(serializers.ModelSerializer):
+class ReadPatientSerializer(serializers.ModelSerializer):
     age = serializers.IntegerField(allow_null=True)
     hospitals = serializers.SerializerMethodField()
-    hospital_id = serializers.IntegerField(write_only=True)
 
     def get_hospitals(self, obj):
         hospitals = Hospital.objects.filter(
@@ -38,11 +37,10 @@ class PatientSerializer(serializers.ModelSerializer):
             "phone_2",
             "address",
             "hospitals",
-            "hospital_id",
         ]
 
     def to_representation(self, instance):
-        data = super(PatientSerializer, self).to_representation(instance)
+        data = super(ReadPatientSerializer, self).to_representation(instance)
 
         data["national_id"] = int(data["national_id"])
         data["phone_1"] = int(data["phone_1"])
@@ -50,6 +48,33 @@ class PatientSerializer(serializers.ModelSerializer):
         data["age"] = instance.age
 
         return data
+
+
+class CreatePatientSerializer(serializers.ModelSerializer):
+    age = serializers.IntegerField(allow_null=True)
+    hospital_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Patient
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "national_id",
+            "age",
+            "day_of_birth",
+            "month_of_birth",
+            "year_of_birth",
+            "gender",
+            "phone_1",
+            "phone_2",
+            "address",
+            "hospital_id",
+        ]
+
+    def to_representation(self, instance):
+        serializer = ReadPatientSerializer(instance)
+        return serializer.data
 
     def create(self, validated_data):
 
@@ -83,7 +108,9 @@ class PatientSerializer(serializers.ModelSerializer):
             )
 
         validated_data.pop("age", None)
-        new_patient = super(PatientSerializer, self).create(validated_data)
+        new_patient = super(CreatePatientSerializer, self).create(
+            validated_data
+        )
         PatientHospitalMapping.objects.create(
             patient=new_patient, hospital=hospital
         )
