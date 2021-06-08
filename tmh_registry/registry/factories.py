@@ -32,7 +32,7 @@ class PatientFactory(DjangoModelFactory):
     )
     year_of_birth = factory.LazyAttribute(lambda n: faker.date_of_birth().year)
     gender = factory.LazyAttribute(
-        lambda n: random.choice([x[0] for x in Patient.GENDER_CHOICES])
+        lambda n: random.choice([gender.value for gender in Patient.Gender])
     )
     phone_1 = factory.LazyAttribute(lambda n: faker.numerify(text="#########"))
     phone_2 = factory.LazyAttribute(lambda n: faker.numerify(text="#########"))
