@@ -13,6 +13,7 @@ pytest==6.1.2  # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.4  # https://github.com/Frozenball/pytest-sugar
 mock==4.0.2 # https://pypi.org/project/mock/
 freezegun==0.1.11 # https://pypi.org/project/freezegun/0.1.11/
+faker==8.5.1 # https://github.com/joke2k/faker
 
 # Code quality
 # ------------------------------------------------------------------------------
