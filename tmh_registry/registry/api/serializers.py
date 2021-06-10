@@ -44,8 +44,8 @@ class ReadPatientSerializer(serializers.ModelSerializer):
         data["national_id"] = (
             int(data["national_id"]) if data["national_id"] else None
         )
-        data["phone_1"] = int(data["phone_1"]) if data["national_id"] else None
-        data["phone_2"] = int(data["phone_2"]) if data["national_id"] else None
+        data["phone_1"] = int(data["phone_1"]) if data["phone_1"] else None
+        data["phone_2"] = int(data["phone_2"]) if data["phone_2"] else None
         data["age"] = instance.age
 
         return data
