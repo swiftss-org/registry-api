@@ -1,8 +1,12 @@
 from django.test import RequestFactory, TestCase
 from mock import MagicMock
 from pytest import mark
+from rest_framework.authtoken.models import Token
+from rest_framework.status import HTTP_403_FORBIDDEN
+from rest_framework.test import APIClient
 
 from tmh_registry.users.api.serializers import UserSerializer
+from tmh_registry.users.factories import UserFactory
 
 
 @mark.users
@@ -37,3 +41,25 @@ class TestUserSerializer(TestCase):
         result = serializer.create(create_dict)
 
         self.assertEqual(result.email, new_email)
+
+    def test_create_non_medical_personnel(self):
+        self.non_mp_user = UserFactory()
+        self.token = Token.objects.create(user=self.non_mp_user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.post(
+            "/api/v1/users/", format="json", data={"email": "new@email.com"}
+        )
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_get_me_non_medical_personnel(self):
+        self.non_mp_user = UserFactory()
+        self.token = Token.objects.create(user=self.non_mp_user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get("/api/v1/users/me/", format="json")
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
