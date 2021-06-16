@@ -12,7 +12,9 @@ class MedicalPersonnel(models.Model):
         on_delete=models.CASCADE,
         default=None,
         null=True,
+        related_name="medical_personnel",
     )
+
     level = models.CharField(
         max_length=255,
         choices=[("LEAD_SURGEON", "Lead Surgeon")],

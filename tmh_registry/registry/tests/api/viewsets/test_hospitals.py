@@ -8,7 +8,7 @@ from rest_framework.status import (
 )
 from rest_framework.test import APIClient
 
-from .....users.factories import MedicalPersonnelFactory
+from .....users.factories import MedicalPersonnelFactory, UserFactory
 from ....factories import HospitalFactory
 
 
@@ -55,6 +55,16 @@ class TestHospitalsViewSet(TestCase):
 
         self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
 
+    def test_get_hospitals_list_from_non_medical_personnel_user(self):
+        self.non_mp_user = UserFactory()
+        self.token = Token.objects.create(user=self.non_mp_user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get("/api/v1/hospitals/", format="json")
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+
     ########################
     # Test detail endpoint #
     ########################
@@ -78,6 +88,18 @@ class TestHospitalsViewSet(TestCase):
     def test_get_hospitals_detail_from_non_admin_user(self):
         self.non_admin_mp = MedicalPersonnelFactory(user__is_staff=False)
         self.token = Token.objects.create(user=self.non_admin_mp.user)
+
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.get(
+            f"/api/v1/hospitals/{self.hospital.id}/", format="json"
+        )
+
+        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_get_hospitals_detail_from_non_medical_personnel_user(self):
+        self.non_mp_user = UserFactory()
+        self.token = Token.objects.create(user=self.non_mp_user)
 
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
