@@ -25,8 +25,7 @@ class ReadPatientSerializer(serializers.ModelSerializer):
         model = Patient
         fields = [
             "id",
-            "first_name",
-            "last_name",
+            "full_name",
             "national_id",
             "age",
             "day_of_birth",
@@ -42,9 +41,11 @@ class ReadPatientSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(ReadPatientSerializer, self).to_representation(instance)
 
-        data["national_id"] = int(data["national_id"])
-        data["phone_1"] = int(data["phone_1"])
-        data["phone_2"] = int(data["phone_2"])
+        data["national_id"] = (
+            int(data["national_id"]) if data["national_id"] else None
+        )
+        data["phone_1"] = int(data["phone_1"]) if data["phone_1"] else None
+        data["phone_2"] = int(data["phone_2"]) if data["phone_2"] else None
         data["age"] = instance.age
 
         return data
@@ -53,13 +54,13 @@ class ReadPatientSerializer(serializers.ModelSerializer):
 class CreatePatientSerializer(serializers.ModelSerializer):
     age = serializers.IntegerField(allow_null=True)
     hospital_id = serializers.IntegerField(write_only=True)
+    year_of_birth = serializers.IntegerField(allow_null=True)
 
     class Meta:
         model = Patient
         fields = [
             "id",
-            "first_name",
-            "last_name",
+            "full_name",
             "national_id",
             "age",
             "day_of_birth",

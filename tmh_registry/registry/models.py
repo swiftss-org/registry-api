@@ -17,16 +17,17 @@ class Patient(models.Model):
         GENDER_MALE = "Male"
         GENDER_FEMALE = "Female"
 
-    first_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255, null=True, blank=True)
+    full_name = models.CharField(max_length=255)
     national_id = models.CharField(
         max_length=20, null=True, blank=True, unique=True
     )
     day_of_birth = models.PositiveIntegerField(null=True, blank=True)
     month_of_birth = models.PositiveIntegerField(null=True, blank=True)
-    year_of_birth = models.PositiveIntegerField(null=True, blank=True)
+    year_of_birth = models.PositiveIntegerField()
     gender = models.CharField(
         max_length=32,
+        null=True,
+        blank=True,
         choices=[(gender.value, gender.value) for gender in Gender],
     )
     phone_1 = models.CharField(max_length=16, null=True, blank=True)
@@ -34,7 +35,7 @@ class Patient(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.first_name} - {self.last_name}"
+        return f"{self.full_name}"
 
     @property
     def age(self):

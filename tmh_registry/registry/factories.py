@@ -21,8 +21,7 @@ class PatientFactory(DjangoModelFactory):
     class Meta:
         model = Patient
 
-    first_name = factory.LazyAttribute(lambda n: faker.first_name())
-    last_name = factory.LazyAttribute(lambda n: faker.last_name())
+    full_name = factory.LazyAttribute(lambda n: faker.name())
     national_id = factory.LazyAttribute(
         lambda n: faker.numerify(text="####################")
     )
