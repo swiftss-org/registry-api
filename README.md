@@ -25,8 +25,8 @@ Create a virtual environment for this project.
 
 If you are using [pyenv](https://github.com/pyenv/pyenv):
 ```
-pyenv virtualenv cmo-allocation
-pyenv activate cmo-allocation
+pyenv virtualenv registry-api
+pyenv activate registry-api
 ```
 
 Install project dependencies:
