@@ -174,3 +174,7 @@ SWAGGER_SETTINGS = {
     },
     'USE_SESSION_AUTH': False,
 }
+
+# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/tmh-registry-client.*heroku.*app\.com$", r"^http:\/\/localhost.*$"]
