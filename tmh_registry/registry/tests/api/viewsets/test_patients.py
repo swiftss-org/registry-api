@@ -87,6 +87,33 @@ class TestPatientsViewSet(TestCase):
             response.data["results"][0]["hospital_mappings"][0]["hospital_id"],
         )
 
+    def test_get_patients_list_with_hospital_id_successful(self):
+        response = self.client.get(
+            f"/api/v1/patients/?hospital_id={self.hospital.id}", format="json"
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(0, response.data["count"])
+
+    def test_get_patients_list_with_full_name_search_term_successful(self):
+        size = len(self.patient.full_name)
+        fullname_search_term = self.patient.full_name[: size - 3]
+        response = self.client.get(
+            f"/api/v1/patients/?search_term={fullname_search_term}",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+
+    def test_get_patients_list_with_national_id_search_term_successful(self):
+        size = len(self.patient.national_id)
+        national_id_search_term = self.patient.national_id[: size - 3]
+        response = self.client.get(
+            f"/api/v1/patients/?search_term={national_id_search_term}",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+
     def test_get_patients_list_unauthorized(self):
         self.client = APIClient()
         response = self.client.get("/api/v1/patients/", format="json")
