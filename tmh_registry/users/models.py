@@ -35,10 +35,3 @@ class MedicalPersonnel(models.Model):
 
     def __str__(self):
         return f"({self.get_level_display()}) {self.user.username}"
-
-    def get_level_display(self):
-        return [
-            level_tuple[1]
-            for level_tuple in self.LEVEL_CHOICES
-            if level_tuple[0] == self.level
-        ]
