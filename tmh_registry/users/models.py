@@ -4,8 +4,17 @@ from django.db import models
 
 class MedicalPersonnel(models.Model):
     """
-    Model for Profile which is a proxy model of User
+    Model for Medical Personnel which is a proxy model of User
     """
+
+    SURGEON = "SURGEON"
+    LEAD_SURGEON = "LEAD_SURGEON"
+    NATIONAL_LEAD = "NATIONAL_LEAD"
+    LEVEL_CHOICES = (
+        (SURGEON, "Surgeon"),
+        (LEAD_SURGEON, "Lead Surgeon"),
+        (NATIONAL_LEAD, "National Lead"),
+    )
 
     user = models.OneToOneField(
         User,
@@ -17,12 +26,12 @@ class MedicalPersonnel(models.Model):
 
     level = models.CharField(
         max_length=255,
-        choices=[("LEAD_SURGEON", "Lead Surgeon")],
-        default="Lead Surgeon",
+        choices=LEVEL_CHOICES,
+        default=LEAD_SURGEON,
     )
 
     class Meta:
         verbose_name_plural = "Medical Personnel"
 
     def __str__(self):
-        return self.user.username
+        return f"({self.level}) {self.user.username}"
