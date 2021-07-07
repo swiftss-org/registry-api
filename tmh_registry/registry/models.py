@@ -57,7 +57,7 @@ class PatientHospitalMapping(models.Model):
         verbose_name_plural = "Patient-Hospital mapping"
 
     def __str__(self):
-        return f"{self.patient.last_name} - {self.hospital.name}"
+        return f"{self.patient.full_name} - {self.hospital.name}"
 
 
 class Episode(models.Model):
