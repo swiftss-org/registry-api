@@ -4,7 +4,7 @@ from factory import LazyAttribute, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 
-from .models import Hospital, Patient, PatientHospitalMapping
+from .models import Episode, Hospital, Patient, PatientHospitalMapping
 
 faker = Faker()
 
@@ -43,3 +43,10 @@ class PatientHospitalMappingFactory(DjangoModelFactory):
     patient = SubFactory(PatientFactory)
     hospital = SubFactory(HospitalFactory)
     patient_hospital_id = LazyAttribute(lambda n: faker.ssn())
+
+
+class EpisodeFactory(DjangoModelFactory):
+    class Meta:
+        model = Episode
+
+    diathermy_used = True

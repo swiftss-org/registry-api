@@ -162,7 +162,7 @@ class Episode(models.Model):
     diathermy_used = models.BooleanField()
 
     def __str__(self):
-        return f"({self.episode_type}) {self.patient_hospital_mapping.patient.first_name} {self.patient_hospital_mapping.patient.last_name}"
+        return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"
 
     class Meta:
         verbose_name_plural = "Episodes"

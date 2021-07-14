@@ -14,6 +14,7 @@ from rest_framework.test import APIClient
 
 from .....users.factories import MedicalPersonnelFactory, UserFactory
 from ....factories import (
+    EpisodeFactory,
     HospitalFactory,
     PatientFactory,
     PatientHospitalMappingFactory,
@@ -31,8 +32,11 @@ class TestPatientsViewSet(TestCase):
 
         cls.hospital = HospitalFactory()
         cls.patient = PatientFactory()
-        cls.mapping = PatientHospitalMappingFactory(
-            hospital=cls.hospital, patient=cls.patient
+        cls.patient_hospital_mapping = PatientHospitalMapping.objects.create(
+            patient=cls.patient, hospital=cls.hospital
+        )
+        cls.episode = EpisodeFactory(
+            patient_hospital_mapping=cls.patient_hospital_mapping
         )
         cls.medical_personnel = MedicalPersonnelFactory()
         cls.token = Token.objects.create(user=cls.medical_personnel.user)
@@ -134,6 +138,15 @@ class TestPatientsViewSet(TestCase):
             patient_hospital_id,
             response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
+
+    def test_get_patients_detail__with_episode_successful(self):
+        response = self.client.get(
+            f"/api/v1/patients/{self.patient.id}/", format="json"
+        )
+
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(self.patient.id, response.data["id"])
+        self.assertEqual(True, response.data["episodes"][0]["diathermy_used"])
 
     def test_get_patients_detail_unauthorized(self):
         self.client = APIClient()
