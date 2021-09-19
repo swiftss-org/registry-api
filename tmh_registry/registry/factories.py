@@ -1,10 +1,10 @@
 import random
 
-import factory
-from factory.django import DjangoModelFactory
+from django import DjangoModelFactory
+from factory import LazyAttribute, SubFactory
 from faker import Faker
 
-from .models import Hospital, Patient
+from .models import Hospital, Patient, PatientHospitalMapping
 
 faker = Faker()
 
@@ -13,26 +13,33 @@ class HospitalFactory(DjangoModelFactory):
     class Meta:
         model = Hospital
 
-    name = factory.LazyAttribute(lambda n: "Hospital '%s'" % faker.name())
-    address = factory.LazyAttribute(lambda n: faker.address())
+    name = LazyAttribute(lambda n: "Hospital '%s'" % faker.name())
+    address = LazyAttribute(lambda n: faker.address())
 
 
 class PatientFactory(DjangoModelFactory):
     class Meta:
         model = Patient
 
-    full_name = factory.LazyAttribute(lambda n: faker.name())
-    national_id = factory.LazyAttribute(
+    full_name = LazyAttribute(lambda n: faker.name())
+    national_id = LazyAttribute(
         lambda n: faker.numerify(text="####################")
     )
-    day_of_birth = factory.LazyAttribute(lambda n: faker.date_of_birth().day)
-    month_of_birth = factory.LazyAttribute(
-        lambda n: faker.date_of_birth().month
-    )
-    year_of_birth = factory.LazyAttribute(lambda n: faker.date_of_birth().year)
-    gender = factory.LazyAttribute(
+    day_of_birth = LazyAttribute(lambda n: faker.date_of_birth().day)
+    month_of_birth = LazyAttribute(lambda n: faker.date_of_birth().month)
+    year_of_birth = LazyAttribute(lambda n: faker.date_of_birth().year)
+    gender = LazyAttribute(
         lambda n: random.choice([gender.value for gender in Patient.Gender])
     )
-    phone_1 = factory.LazyAttribute(lambda n: faker.numerify(text="#########"))
-    phone_2 = factory.LazyAttribute(lambda n: faker.numerify(text="#########"))
-    address = factory.LazyAttribute(lambda n: faker.address())
+    phone_1 = LazyAttribute(lambda n: faker.numerify(text="#########"))
+    phone_2 = LazyAttribute(lambda n: faker.numerify(text="#########"))
+    address = LazyAttribute(lambda n: faker.address())
+
+
+class PatientHospitalMappingFactory(DjangoModelFactory):
+    class Meta:
+        model = PatientHospitalMapping
+
+    patient = SubFactory(PatientFactory)
+    hospital = SubFactory(HospitalFactory)
+    patient_hospital_id = LazyAttribute(lambda n: faker.ssn())
