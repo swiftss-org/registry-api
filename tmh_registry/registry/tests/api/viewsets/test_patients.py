@@ -13,7 +13,11 @@ from rest_framework.status import (
 from rest_framework.test import APIClient
 
 from .....users.factories import MedicalPersonnelFactory, UserFactory
-from ....factories import HospitalFactory, PatientFactory
+from ....factories import (
+    HospitalFactory,
+    PatientFactory,
+    PatientHospitalMappingFactory,
+)
 from ....models import PatientHospitalMapping
 
 
@@ -47,6 +51,7 @@ class TestPatientsViewSet(TestCase):
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
             "hospital_id": self.hospital.id,
+            "patient_hospital_id": "1111",
         }
 
     ######################
@@ -168,6 +173,7 @@ class TestPatientsViewSet(TestCase):
         data["full_name"] = "John Doe"
         data["year_of_birth"] = 1989
         data["hospital_id"] = self.hospital.id
+        data["patient_hospital_id"] = "1111"
 
         response = self.client.post(
             "/api/v1/patients/", data=data, format="json"
@@ -180,6 +186,19 @@ class TestPatientsViewSet(TestCase):
             datetime.datetime.today().year - data["year_of_birth"],
             response.data["age"],
         )
+
+    def test_create_patients_with_already_existing_patient_hospital_id(self):
+        data = self.get_patient_test_data()
+        PatientHospitalMappingFactory(
+            patient_hospital_id=data["patient_hospital_id"],
+            hospital_id=data["hospital_id"],
+        )
+
+        response = self.client.post(
+            "/api/v1/patients/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_create_patients_non_medical_personnel_user(self):
         self.non_mp_user = UserFactory()

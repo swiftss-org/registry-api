@@ -1,7 +1,7 @@
 import random
 
-from django import DjangoModelFactory
 from factory import LazyAttribute, SubFactory
+from factory.django import DjangoModelFactory
 from faker import Faker
 
 from .models import Hospital, Patient, PatientHospitalMapping
