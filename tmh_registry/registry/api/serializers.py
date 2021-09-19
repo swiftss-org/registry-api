@@ -17,11 +17,24 @@ class ReadPatientSerializer(ModelSerializer):
 
     def get_hospitals(self, obj):
         hospitals = Hospital.objects.filter(
-            id__in=PatientHospitalMapping.objects.filter(
-                patient=obj
-            ).values_list("hospital_id", flat=True)
+            id__in=obj.hospital_mappings.all().values_list(
+                "hospital_id", flat=True
+            )
         )
-        return HospitalSerializer(hospitals, many=True).data
+        hospital_data = HospitalSerializer(hospitals, many=True).data
+
+        # enrich with patient_hospital_id
+        idx = 0
+        for hospital in hospital_data:
+            patient_hospital_id = PatientHospitalMapping.objects.get(
+                hospital_id=hospital["id"], patient_id=obj.id
+            ).patient_hospital_id
+            hospital_data[idx].update(
+                {"patient_hospital_id": patient_hospital_id}
+            )
+            idx += 1
+
+        return hospital_data
 
     class Meta:
         model = Patient

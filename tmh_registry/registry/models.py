@@ -49,8 +49,12 @@ class Patient(models.Model):
 
 
 class PatientHospitalMapping(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, related_name="hospital_mappings"
+    )
+    hospital = models.ForeignKey(
+        Hospital, on_delete=models.CASCADE, related_name="patient_mappings"
+    )
     patient_hospital_id = models.CharField(max_length=256)
 
     class Meta:
