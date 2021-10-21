@@ -3,10 +3,12 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
 
-from ..models import Hospital, Patient
+from ..models import Hospital, Patient, PatientHospitalMapping
 from .serializers import (
     CreatePatientSerializer,
     HospitalSerializer,
+    PatientHospitalMappingReadSerializer,
+    PatientHospitalMappingWriteSerializer,
     ReadPatientSerializer,
 )
 
@@ -37,5 +39,17 @@ class PatientViewSet(
             return ReadPatientSerializer
         if self.action == "create":
             return CreatePatientSerializer
+
+        raise NotImplementedError
+
+
+class PatientHospitalMappingViewset(mixins.CreateModelMixin, GenericViewSet):
+    queryset = PatientHospitalMapping.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return PatientHospitalMappingReadSerializer
+        if self.action == "create":
+            return PatientHospitalMappingWriteSerializer
 
         raise NotImplementedError
