@@ -7,12 +7,6 @@ from tmh_registry.users.models import MedicalPersonnel
 User = get_user_model()
 
 
-class MedicalPersonnelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MedicalPersonnel
-        fields = ["user"]
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -31,6 +25,14 @@ class UserReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["email"]
+
+
+class MedicalPersonnelSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = MedicalPersonnel
+        fields = ["user"]
 
 
 class SignInSerializer(serializers.Serializer):

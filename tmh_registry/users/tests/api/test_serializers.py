@@ -43,23 +43,23 @@ class TestUserSerializer(TestCase):
         self.assertEqual(result.email, new_email)
 
     def test_create_non_medical_personnel(self):
-        self.non_mp_user = UserFactory()
-        self.token = Token.objects.create(user=self.non_mp_user)
+        non_mp_user = UserFactory()
+        token = Token.objects.create(user=non_mp_user)
 
-        self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
-        response = self.client.post(
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.post(
             "/api/v1/users/", format="json", data={"email": "new@email.com"}
         )
 
         self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
 
     def test_get_me_non_medical_personnel(self):
-        self.non_mp_user = UserFactory()
-        self.token = Token.objects.create(user=self.non_mp_user)
+        non_mp_user = UserFactory()
+        token = Token.objects.create(user=non_mp_user)
 
-        self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
-        response = self.client.get("/api/v1/users/me/", format="json")
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.get("/api/v1/users/me/", format="json")
 
         self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)

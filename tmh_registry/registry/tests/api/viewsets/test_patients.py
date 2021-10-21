@@ -14,11 +14,12 @@ from rest_framework.test import APIClient
 
 from .....users.factories import MedicalPersonnelFactory, UserFactory
 from ....factories import (
+    EpisodeFactory,
     HospitalFactory,
     PatientFactory,
     PatientHospitalMappingFactory,
 )
-from ....models import PatientHospitalMapping
+from ....models import Patient, PatientHospitalMapping
 
 
 @mark.registry
@@ -31,8 +32,11 @@ class TestPatientsViewSet(TestCase):
 
         cls.hospital = HospitalFactory()
         cls.patient = PatientFactory()
-        cls.mapping = PatientHospitalMappingFactory(
-            hospital=cls.hospital, patient=cls.patient
+        cls.patient_hospital_mapping = PatientHospitalMapping.objects.create(
+            patient=cls.patient, hospital=cls.hospital
+        )
+        cls.episode = EpisodeFactory(
+            patient_hospital_mapping=cls.patient_hospital_mapping
         )
         cls.medical_personnel = MedicalPersonnelFactory()
         cls.token = Token.objects.create(user=cls.medical_personnel.user)
@@ -49,7 +53,7 @@ class TestPatientsViewSet(TestCase):
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
-            "gender": "Female",
+            "gender": Patient.Gender.FEMALE,
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
@@ -73,7 +77,7 @@ class TestPatientsViewSet(TestCase):
             1, len(response.data["results"][0]["hospital_mappings"])
         )
         self.assertEqual(
-            self.mapping.patient_hospital_id,
+            self.patient_hospital_mapping.patient_hospital_id,
             response.data["results"][0]["hospital_mappings"][0][
                 "patient_hospital_id"
             ],
@@ -134,6 +138,15 @@ class TestPatientsViewSet(TestCase):
             patient_hospital_id,
             response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
+
+    def test_get_patients_detail_with_episode_successful(self):
+        response = self.client.get(
+            f"/api/v1/patients/{self.patient.id}/", format="json"
+        )
+
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(self.patient.id, response.data["id"])
+        self.assertEqual(True, response.data["episodes"][0]["diathermy_used"])
 
     def test_get_patients_detail_unauthorized(self):
         self.client = APIClient()

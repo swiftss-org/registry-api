@@ -1,7 +1,7 @@
 import datetime
-from enum import Enum
 
 from django.db import models
+from django.db.models.enums import TextChoices
 
 from ..users.models import MedicalPersonnel
 
@@ -15,9 +15,9 @@ class Hospital(models.Model):
 
 
 class Patient(models.Model):
-    class Gender(Enum):
-        GENDER_MALE = "Male"
-        GENDER_FEMALE = "Female"
+    class Gender(TextChoices):
+        MALE = ("MALE", "Male")
+        FEMALE = ("FEMALE", "Female")
 
     full_name = models.CharField(max_length=255)
     national_id = models.CharField(
@@ -30,7 +30,7 @@ class Patient(models.Model):
         max_length=32,
         null=True,
         blank=True,
-        choices=[(gender.value, gender.value) for gender in Gender],
+        choices=Gender.choices,
     )
     phone_1 = models.CharField(max_length=16, null=True, blank=True)
     phone_2 = models.CharField(max_length=16, null=True, blank=True)
@@ -69,77 +69,49 @@ class PatientHospitalMapping(models.Model):
 
 
 class Episode(models.Model):
+    class EpisodeChoices(TextChoices):
+        INGUINAL = ("INGUINAL", "Inguinal Mesh Hernia Repair")
+        INCISIONAL = ("INCISIONAL", "Incisional Mesh Hernia Repair")
+        FEMORAL = ("FEMORAL", "Femoral Mesh Hernia Repair")
+        HIATUS = ("HIATUS", "Hiatus Mesh Hernia Repair")
+        UMBILICAL = (
+            "UMBILICAL",
+            "Umbilical/Periumbilicial Mesh Hernia Repair",
+        )
 
-    INGUINAL = "INGUINAL"
-    INCISIONAL = "INCISIONAL"
-    FEMORAL = "FEMORAL"
-    HIATUS = "HIATUS"
-    UMBILICAL = "UMBILICAL"
-    EPISODE_CHOICES = (
-        (INGUINAL, "Inguinal Mesh Hernia Repair"),
-        (INCISIONAL, "Incisional Mesh Hernia Repair"),
-        (FEMORAL, "Femoral Mesh Hernia Repair"),
-        (HIATUS, "Hiatus Mesh Hernia Repair"),
-        (UMBILICAL, "Umbilical/Periumbilicial Mesh Hernia Repair"),
-    )
+    class CepodChoices(TextChoices):
+        PLANNED = ("PLANNED", "Planned")
+        EMERGENCY = ("EMERGENCY", "Emergency")
 
-    PLANNED = "PLANNED"
-    EMERGENCY = "EMERGENCY"
-    CEPOD_CHOICES = (
-        (PLANNED, "Planned"),
-        (EMERGENCY, "Emergency"),
-    )
+    class SideChoices(TextChoices):
+        LEFT = ("LEFT", "Left")
+        RIGHT = ("RIGHT", "Right")
 
-    LEFT = "LEFT"
-    RIGHT = "RIGHT"
-    SIDE_CHOICES = ((LEFT, "Left"), (RIGHT, "Right"))
+    class OccurenceChoices(TextChoices):
+        PRIMARY = ("PRIMARY", "Primary")
+        RECURRENT = ("RECURRENT", "Recurrent")
+        RERECURRENT = ("RERECURRENT", "Rerecurrent")
 
-    PRIMARY = "PRIMARY"
-    RECURRENT = "RECURRENT"
-    RERECURRENT = "RERECURRENT"
-    OCCURENCE_CHOICES = (
-        (PRIMARY, "Primary"),
-        (RECURRENT, "Recurrent"),
-        (RERECURRENT, "Rerecurrent"),
-    )
+    class TypeChoices(TextChoices):
+        DIRECT = ("DIRECT", "Direct")
+        INDIRECT = ("INDIRECT", "Indirect")
+        PANTALOON = ("PANTALOON", "Pantaloon")
 
-    DIRECT = "DIRECT"
-    INDIRECT = "INDIRECT"
-    PANTALOON = "PANTALOON"
-    TYPE_CHOICES = (
-        (DIRECT, "Direct"),
-        (INDIRECT, "Indirect"),
-        (PANTALOON, "Pantaloon"),
-    )
+    class ComplexityChoices(TextChoices):
+        SIMPLE = ("SIMPLE", "Simple")
+        INCARCERATED = ("INCARCERATED", "Incarcerated")
+        OBSTRUCTED = ("OBSTRUCTED", "Obstructed")
+        STRANGULATED = ("STRANGULATED", "Strangulated")
 
-    SIMPLE = "SIMPLE"
-    INCARCERATED = "INCARCERATED"
-    OBSTRUCTED = "OBSTRUCTED"
-    STRANGULATED = "STRANGULATED"
-    COMPLEXITY_CHOICES = (
-        (SIMPLE, "Simple"),
-        (INCARCERATED, "Incarcerated"),
-        (OBSTRUCTED, "Obstructed"),
-        (STRANGULATED, "Strangulated"),
-    )
+    class MeshTypeChoices(TextChoices):
+        TNMHP = ("TNMHP", "TNMHP Mesh")
+        KCMC = ("KCMC", "KCMC Generic Mesh")
+        COMMERCIAL = ("COMMERCIAL", "Commercial Mesh")
 
-    TNMHP = "TNMHP"
-    KCMC = "KCMC"
-    COMMERCIAL = "COMMERCIAL"
-    MESH_TYPE_CHOICES = (
-        (TNMHP, "TNMHP Mesh"),
-        (KCMC, "KCMC Generic Mesh"),
-        (COMMERCIAL, "Commercial Mesh"),
-    )
-
-    LOCAL = "LOCAL"
-    SPINAL = "SPINAL"
-    GENERAL = "GENERAL"
-    ANAESTHETIC_TYPE_CHOICES = (
-        (LOCAL, "Local Anaesthetic"),
-        (SPINAL, "Spinal Anaesthetic"),
-        (GENERAL, "General Anaesthetic"),
-    )
+    class AnaestheticChoices(TextChoices):
+        LOCAL = ("LOCAL", "Local Anaesthetic")
+        SPINAL = ("SPINAL", "Spinal Anaesthetic")
+        GENERAL = ("GENERAL", "General Anaesthetic")
 
     patient_hospital_mapping = models.ForeignKey(
         PatientHospitalMapping, on_delete=models.CASCADE
@@ -147,46 +119,47 @@ class Episode(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     surgery_date = models.DateField(null=True, blank=True)
     discharge_date = models.DateField(null=True, blank=True)
-    episode_type = models.CharField(max_length=128, choices=EPISODE_CHOICES)
+    episode_type = models.CharField(
+        max_length=128, choices=EpisodeChoices.choices
+    )
     surgeons = models.ManyToManyField(MedicalPersonnel)
     comments = models.TextField(null=True, blank=True)
-    cepod = models.CharField(max_length=16, choices=CEPOD_CHOICES)
-    side = models.CharField(max_length=16, choices=SIDE_CHOICES)
-    occurence = models.CharField(max_length=16, choices=OCCURENCE_CHOICES)
-    type = models.CharField(max_length=16, choices=TYPE_CHOICES)
-    complexity = models.CharField(max_length=16, choices=COMPLEXITY_CHOICES)
-    mesh_type = models.CharField(max_length=16, choices=MESH_TYPE_CHOICES)
+    cepod = models.CharField(max_length=16, choices=CepodChoices.choices)
+    side = models.CharField(max_length=16, choices=SideChoices.choices)
+    occurence = models.CharField(
+        max_length=16, choices=OccurenceChoices.choices
+    )
+    type = models.CharField(max_length=16, choices=TypeChoices.choices)
+    complexity = models.CharField(
+        max_length=16, choices=ComplexityChoices.choices
+    )
+    mesh_type = models.CharField(
+        max_length=16, choices=MeshTypeChoices.choices
+    )
     anaesthetic_type = models.CharField(
-        max_length=16, choices=ANAESTHETIC_TYPE_CHOICES
+        max_length=16, choices=AnaestheticChoices.choices
     )
     diathermy_used = models.BooleanField()
 
     def __str__(self):
-        return f"({self.episode_type}) {self.patient_hospital_mapping.patient.first_name} {self.patient_hospital_mapping.patient.last_name}"
+        return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"
 
     class Meta:
         verbose_name_plural = "Episodes"
 
 
 class FollowUp(models.Model):
-
-    NO_PAIN = "NO_PAIN"
-    MINIMAL = "MINIMAL"
-    MILD = "MILD"
-    MODERATE = "MODERATE"
-    SEVERE = "SEVERE"
-    PAIN_SEVERITY_CHOICES = (
-        (NO_PAIN, "No Pain"),
-        (MINIMAL, "Minimal"),
-        (MILD, "Mild"),
-        (MODERATE, "Moderate"),
-        (SEVERE, "Severe"),
-    )
+    class PainSeverityChoices(TextChoices):
+        NO_PAIN = ("NO_PAIN", "No Pain")
+        MINIMAL = ("MINIMAL", "Minimal")
+        MILD = ("MILD", "Mild")
+        MODERATE = ("MODERATE", "Moderate")
+        SEVERE = ("SEVERE", "Severe")
 
     episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
     follow_up_date = models.DateField()
     pain_severity = models.CharField(
-        max_length=16, choices=PAIN_SEVERITY_CHOICES
+        max_length=16, choices=PainSeverityChoices.choices
     )
     attendees = models.ManyToManyField(MedicalPersonnel)
     mesh_awareness = models.BooleanField()

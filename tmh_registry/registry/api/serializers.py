@@ -1,15 +1,36 @@
+from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from ..models import Hospital, Patient, PatientHospitalMapping
+from ...users.api.serializers import MedicalPersonnelSerializer
+from ..models import Episode, Hospital, Patient, PatientHospitalMapping
 
 
 class HospitalSerializer(ModelSerializer):
     class Meta:
         model = Hospital
         fields = ["id", "name", "address"]
+
+
+class EpisodeSerializer(ModelSerializer):
+    surgeons = MedicalPersonnelSerializer(many=True)
+
+    class Meta:
+        model = Episode
+        fields = [
+            "episode_type",
+            "cepod",
+            "side",
+            "occurence",
+            "type",
+            "complexity",
+            "comments",
+            "mesh_type",
+            "diathermy_used",
+            "surgeons",
+        ]
 
 
 class PatientHospitalMappingPatientSerializer(ModelSerializer):
@@ -21,6 +42,16 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
 class ReadPatientSerializer(ModelSerializer):
     age = IntegerField(allow_null=True)
     hospital_mappings = PatientHospitalMappingPatientSerializer(many=True)
+    episodes = SerializerMethodField()
+
+    @swagger_serializer_method(serializer_or_field=EpisodeSerializer)
+    def get_episodes(self, obj):
+        episodes = Episode.objects.filter(
+            patient_hospital_mapping__patient__id__in=obj.hospital_mappings.values_list(
+                "patient_id", flat=True
+            )
+        )
+        return EpisodeSerializer(episodes, many=True).data
 
     class Meta:
         model = Patient
@@ -37,6 +68,7 @@ class ReadPatientSerializer(ModelSerializer):
             "phone_2",
             "address",
             "hospital_mappings",
+            "episodes",
         ]
 
     def to_representation(self, instance):
