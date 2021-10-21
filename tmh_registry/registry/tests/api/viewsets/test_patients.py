@@ -69,10 +69,18 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(self.patient.id, response.data["results"][0]["id"])
         self.assertNotIn("hospital_id", response.data["results"][0])
 
-        self.assertEqual(1, len(response.data["results"][0]["hospitals"]))
+        self.assertEqual(
+            1, len(response.data["results"][0]["hospital_mappings"])
+        )
         self.assertEqual(
             self.mapping.patient_hospital_id,
-            response.data["results"][0]["hospitals"][0]["patient_hospital_id"],
+            response.data["results"][0]["hospital_mappings"][0][
+                "patient_hospital_id"
+            ],
+        )
+        self.assertEqual(
+            self.hospital.id,
+            response.data["results"][0]["hospital_mappings"][0]["hospital_id"],
         )
 
     def test_get_patients_list_unauthorized(self):
@@ -112,16 +120,19 @@ class TestPatientsViewSet(TestCase):
 
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertEqual(self.patient.id, response.data["id"])
-        self.assertEqual(1, len(response.data["hospitals"]))
+        self.assertEqual(1, len(response.data["hospital_mappings"]))
 
         patient_hospital_id = PatientHospitalMapping.objects.get(
             hospital=self.hospital.id, patient=self.patient.id
         ).patient_hospital_id
 
-        self.assertEqual(self.hospital.id, response.data["hospitals"][0]["id"])
+        self.assertEqual(
+            self.hospital.id,
+            response.data["hospital_mappings"][0]["hospital_id"],
+        )
         self.assertEqual(
             patient_hospital_id,
-            response.data["hospitals"][0]["patient_hospital_id"],
+            response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
 
     def test_get_patients_detail_unauthorized(self):
@@ -165,14 +176,15 @@ class TestPatientsViewSet(TestCase):
 
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertEqual(self.patient.id, response.data["id"])
-        self.assertEqual(2, len(response.data["hospitals"]))
+        self.assertEqual(2, len(response.data["hospital_mappings"]))
 
-        for hospital in response.data["hospitals"]:
+        for hospital_mapping in response.data["hospital_mappings"]:
             patient_hospital_id = PatientHospitalMapping.objects.get(
-                hospital_id=hospital["id"], patient_id=self.patient.id
+                hospital_id=hospital_mapping["hospital_id"],
+                patient_id=self.patient.id,
             ).patient_hospital_id
             self.assertEqual(
-                patient_hospital_id, hospital["patient_hospital_id"]
+                patient_hospital_id, hospital_mapping["patient_hospital_id"]
             )
 
     ########################
@@ -195,11 +207,14 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
 
-        self.assertEqual(1, len(response.data["hospitals"]))
-        self.assertEqual(self.hospital.id, response.data["hospitals"][0]["id"])
+        self.assertEqual(1, len(response.data["hospital_mappings"]))
+        self.assertEqual(
+            self.hospital.id,
+            response.data["hospital_mappings"][0]["hospital_id"],
+        )
         self.assertEqual(
             data["patient_hospital_id"],
-            response.data["hospitals"][0]["patient_hospital_id"],
+            response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
         self.assertEqual(
             1,
@@ -274,7 +289,7 @@ class TestPatientsViewSet(TestCase):
         )
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
-        self.assertEqual(1, len(response.data["hospitals"]))
+        self.assertEqual(1, len(response.data["hospital_mappings"]))
 
     def test_create_patients_without_year_of_birth_and_age(self):
         data = self.get_patient_test_data()

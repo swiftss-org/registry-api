@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import IntegerField, SerializerMethodField
+from rest_framework.fields import IntegerField
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
 from ..models import Hospital, Patient, PatientHospitalMapping
@@ -11,30 +12,15 @@ class HospitalSerializer(ModelSerializer):
         fields = ["id", "name", "address"]
 
 
+class PatientHospitalMappingPatientSerializer(ModelSerializer):
+    class Meta:
+        model = PatientHospitalMapping
+        fields = ["patient_hospital_id", "hospital_id"]
+
+
 class ReadPatientSerializer(ModelSerializer):
     age = IntegerField(allow_null=True)
-    hospitals = SerializerMethodField()
-
-    def get_hospitals(self, obj):
-        hospitals = Hospital.objects.filter(
-            id__in=obj.hospital_mappings.all().values_list(
-                "hospital_id", flat=True
-            )
-        )
-        hospital_data = HospitalSerializer(hospitals, many=True).data
-
-        # enrich with patient_hospital_id
-        idx = 0
-        for hospital in hospital_data:
-            patient_hospital_id = PatientHospitalMapping.objects.get(
-                hospital_id=hospital["id"], patient_id=obj.id
-            ).patient_hospital_id
-            hospital_data[idx].update(
-                {"patient_hospital_id": patient_hospital_id}
-            )
-            idx += 1
-
-        return hospital_data
+    hospital_mappings = PatientHospitalMappingPatientSerializer(many=True)
 
     class Meta:
         model = Patient
@@ -50,7 +36,7 @@ class ReadPatientSerializer(ModelSerializer):
             "phone_1",
             "phone_2",
             "address",
-            "hospitals",
+            "hospital_mappings",
         ]
 
     def to_representation(self, instance):
@@ -153,3 +139,64 @@ class CreatePatientSerializer(ModelSerializer):
         )
 
         return new_patient
+
+
+class PatientHospitalMappingReadSerializer(ModelSerializer):
+    patient = ReadPatientSerializer()
+    hospital = HospitalSerializer()
+
+    class Meta:
+        model = PatientHospitalMapping
+        fields = ["patient", "hospital", "patient_hospital"]
+
+
+class PatientHospitalMappingWriteSerializer(ModelSerializer):
+    patient_id = PrimaryKeyRelatedField(queryset=Patient.objects.all())
+    hospital_id = PrimaryKeyRelatedField(queryset=Hospital.objects.all())
+
+    class Meta:
+        model = PatientHospitalMapping
+        fields = ["patient_id", "hospital_id", "patient_hospital_id"]
+
+    def create(self, validated_data):
+        validated_data["patient_id"] = validated_data["patient_id"].id
+        validated_data["hospital_id"] = validated_data["hospital_id"].id
+
+        existing_mapping = PatientHospitalMapping.objects.filter(
+            patient_id=validated_data["patient_id"],
+            hospital_id=validated_data["hospital_id"],
+        )
+        if existing_mapping.exists():
+            raise ValidationError(
+                {
+                    "error": "PatientHospitalMapping for patient_id {patient_id} and hospital_id {hospital_id} "
+                    "already exists!".format(
+                        patient_id=validated_data["patient_id"],
+                        hospital_id=validated_data["hospital_id"],
+                    )
+                }
+            )
+
+        existing_patient_hospital_id = PatientHospitalMapping.objects.filter(
+            patient_hospital_id=validated_data["patient_hospital_id"],
+            hospital_id=validated_data["hospital_id"],
+        )
+        if existing_patient_hospital_id.exists():
+            raise ValidationError(
+                {
+                    "error": "Patient Hospital ID {patient_hospital_id} already exists for another patient in "
+                    "this hospital".format(
+                        patient_hospital_id=validated_data[
+                            "patient_hospital_id"
+                        ]
+                    )
+                }
+            )
+
+        new_mapping = PatientHospitalMapping.objects.create(
+            patient_hospital_id=validated_data["patient_hospital_id"],
+            hospital_id=validated_data["hospital_id"],
+            patient_id=validated_data["patient_id"],
+        )
+
+        return new_mapping
