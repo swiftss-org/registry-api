@@ -42,11 +42,51 @@ class PatientHospitalMappingFactory(DjangoModelFactory):
 
     patient = SubFactory(PatientFactory)
     hospital = SubFactory(HospitalFactory)
-    patient_hospital_id = LazyAttribute(lambda n: faker.ssn())
+    patient_hospital_id = LazyAttribute(lambda _: faker.ssn())
 
 
 class EpisodeFactory(DjangoModelFactory):
     class Meta:
         model = Episode
 
+    patient_hospital_mapping = SubFactory(PatientHospitalMappingFactory)
+    surgery_date = LazyAttribute(lambda _: faker.date_object())
+    discharge_date = LazyAttribute(lambda _: faker.date_object())
+    episode_type = LazyAttribute(
+        lambda _: faker.random_element(Episode.EpisodeChoices.values)
+    )
+    comments = LazyAttribute(lambda _: faker.sentence(nb_words=10))
+    cepod = LazyAttribute(
+        lambda _: faker.random_element(Episode.CepodChoices.values)
+    )
+    side = LazyAttribute(
+        lambda _: faker.random_element(Episode.SideChoices.values)
+    )
+    occurence = LazyAttribute(
+        lambda _: faker.random_element(Episode.OccurenceChoices.values)
+    )
+    type = LazyAttribute(
+        lambda _: faker.random_element(Episode.TypeChoices.values)
+    )
+    complexity = LazyAttribute(
+        lambda _: faker.random_element(Episode.ComplexityChoices.values)
+    )
+    mesh_type = LazyAttribute(
+        lambda _: faker.random_element(Episode.MeshTypeChoices.values)
+    )
+    anaesthetic_type = LazyAttribute(
+        lambda _: faker.random_element(Episode.AnaestheticChoices.values)
+    )
     diathermy_used = True
+
+    # @post_generation
+    # def medical_personnel(self, create, extracted, **kwargs):
+    #     if not create:
+    #         # Simple build, do nothing.
+    #         return
+    #
+    #     if extracted:
+    #         # A list of groups were passed in, use them
+    #         self.surgeons.add(*extracted)
+    #     else:
+    #         self.surgeons.add(MedicalPersonnelFactory())

@@ -19,7 +19,7 @@ from ....factories import (
     PatientFactory,
     PatientHospitalMappingFactory,
 )
-from ....models import PatientHospitalMapping
+from ....models import Patient, PatientHospitalMapping
 
 
 @mark.registry
@@ -53,7 +53,7 @@ class TestPatientsViewSet(TestCase):
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
-            "gender": "Female",
+            "gender": Patient.Gender.FEMALE,
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
@@ -77,7 +77,7 @@ class TestPatientsViewSet(TestCase):
             1, len(response.data["results"][0]["hospital_mappings"])
         )
         self.assertEqual(
-            self.mapping.patient_hospital_id,
+            self.patient_hospital_mapping.patient_hospital_id,
             response.data["results"][0]["hospital_mappings"][0][
                 "patient_hospital_id"
             ],
@@ -139,7 +139,7 @@ class TestPatientsViewSet(TestCase):
             response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
 
-    def test_get_patients_detail__with_episode_successful(self):
+    def test_get_patients_detail_with_episode_successful(self):
         response = self.client.get(
             f"/api/v1/patients/{self.patient.id}/", format="json"
         )

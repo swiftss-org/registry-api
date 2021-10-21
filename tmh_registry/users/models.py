@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.enums import TextChoices
 
 
 class MedicalPersonnel(models.Model):
@@ -7,14 +8,10 @@ class MedicalPersonnel(models.Model):
     Model for Medical Personnel which is a proxy model of User
     """
 
-    SURGEON = "SURGEON"
-    LEAD_SURGEON = "LEAD_SURGEON"
-    NATIONAL_LEAD = "NATIONAL_LEAD"
-    LEVEL_CHOICES = (
-        (SURGEON, "Surgeon"),
-        (LEAD_SURGEON, "Lead Surgeon"),
-        (NATIONAL_LEAD, "National Lead"),
-    )
+    class Level(TextChoices):
+        SURGEON = ("SURGEON", "Surgeon")
+        LEAD_SURGEON = ("LEAD_SURGEON", "Lead Surgeon")
+        NATIONAL_LEAD = ("NATIONAL_LEAD", "National Lead")
 
     user = models.OneToOneField(
         User,
@@ -26,8 +23,8 @@ class MedicalPersonnel(models.Model):
 
     level = models.CharField(
         max_length=255,
-        choices=LEVEL_CHOICES,
-        default=LEAD_SURGEON,
+        choices=Level.choices,
+        default=Level.LEAD_SURGEON,
     )
 
     class Meta:

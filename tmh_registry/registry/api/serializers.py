@@ -45,9 +45,7 @@ class ReadPatientSerializer(ModelSerializer):
 
     def get_episodes(self, obj):
         episodes = Episode.objects.filter(
-            patient_hospital_mapping__patient__id__in=PatientHospitalMapping.objects.filter(
-                patient=obj
-            ).values_list(
+            patient_hospital_mapping__patient__id__in=obj.hospital_mappings.values_list(
                 "patient_id", flat=True
             )
         )
