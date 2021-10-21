@@ -1,3 +1,4 @@
+from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
@@ -43,6 +44,7 @@ class ReadPatientSerializer(ModelSerializer):
     hospital_mappings = PatientHospitalMappingPatientSerializer(many=True)
     episodes = SerializerMethodField()
 
+    @swagger_serializer_method(serializer_or_field=EpisodeSerializer)
     def get_episodes(self, obj):
         episodes = Episode.objects.filter(
             patient_hospital_mapping__patient__id__in=obj.hospital_mappings.values_list(
