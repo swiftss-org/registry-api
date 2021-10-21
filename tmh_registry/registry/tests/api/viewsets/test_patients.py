@@ -63,7 +63,7 @@ class TestPatientsViewSet(TestCase):
 
     def test_get_patients_list_successful(self):
         response = self.client.get("/api/v1/patients/", format="json")
-        print(response.data)
+
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertEqual(1, response.data["count"])
         self.assertEqual(self.patient.id, response.data["results"][0]["id"])
