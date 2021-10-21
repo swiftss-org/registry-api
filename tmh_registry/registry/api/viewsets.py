@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.utils.decorators import method_decorator
-from django_filters import rest_framework as filters
+from django_filters import CharFilter, NumberFilter  # pylint: disable=E0401
+from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
@@ -20,12 +21,12 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = HospitalSerializer
 
 
-class PatientFilterSet(filters.FilterSet):
-    hospital_id = filters.NumberFilter(
+class PatientFilterSet(FilterSet):
+    hospital_id = NumberFilter(
         method="filter_hospital",
         label="Filter based on hospital",
     )
-    search_term = filters.CharFilter(
+    search_term = CharFilter(
         method="filter_search_term",
         label="Filter based on search_term",
     )
@@ -41,7 +42,7 @@ class PatientFilterSet(filters.FilterSet):
     def filter_search_term(self, queryset, name, value):
         if value:
             queryset = Patient.objects.filter(
-                Q(full_name__icontains=value) | Q(national_id__icontains=value)
+                Q(full_name__icontains=value) | Q(national_id__iexact=value)
             )
         return queryset
 
