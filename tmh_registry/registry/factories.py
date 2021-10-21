@@ -1,9 +1,10 @@
 import random
 
-from factory import LazyAttribute, SubFactory
+from factory import LazyAttribute, SubFactory, post_generation
 from factory.django import DjangoModelFactory
 from faker import Faker
 
+from ..users.factories import MedicalPersonnelFactory
 from .models import Episode, Hospital, Patient, PatientHospitalMapping
 
 faker = Faker()
@@ -79,14 +80,14 @@ class EpisodeFactory(DjangoModelFactory):
     )
     diathermy_used = True
 
-    # @post_generation
-    # def medical_personnel(self, create, extracted, **kwargs):
-    #     if not create:
-    #         # Simple build, do nothing.
-    #         return
-    #
-    #     if extracted:
-    #         # A list of groups were passed in, use them
-    #         self.surgeons.add(*extracted)
-    #     else:
-    #         self.surgeons.add(MedicalPersonnelFactory())
+    @post_generation
+    def medical_personnel(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            self.surgeons.add(*extracted)
+        else:
+            self.surgeons.add(MedicalPersonnelFactory())
