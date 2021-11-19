@@ -3,7 +3,8 @@ import datetime
 from django.db import models
 from django.db.models.enums import TextChoices
 
-from ..users.models import MedicalPersonnel
+from tmh_registry.common.models import TimeStampMixin
+from tmh_registry.users.models import MedicalPersonnel
 
 
 class Hospital(models.Model):
@@ -14,7 +15,7 @@ class Hospital(models.Model):
         return self.name
 
 
-class Patient(models.Model):
+class Patient(TimeStampMixin):
     class Gender(TextChoices):
         MALE = ("MALE", "Male")
         FEMALE = ("FEMALE", "Female")
