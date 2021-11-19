@@ -17,8 +17,8 @@ class Hospital(models.Model):
 
 class Patient(TimeStampMixin):
     class Gender(TextChoices):
-        MALE = ("MALE", "Male")
-        FEMALE = ("FEMALE", "Female")
+        MALE = ("Male", "Male")
+        FEMALE = ("Female", "Female")
 
     full_name = models.CharField(max_length=255)
     national_id = models.CharField(

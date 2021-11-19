@@ -19,7 +19,7 @@ from ....factories import (
     PatientFactory,
     PatientHospitalMappingFactory,
 )
-from ....models import Patient, PatientHospitalMapping
+from ....models import PatientHospitalMapping
 
 
 @mark.registry
@@ -57,7 +57,7 @@ class TestPatientsViewSet(TestCase):
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
-            "gender": Patient.Gender.FEMALE,
+            "gender": "Female",
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
@@ -296,6 +296,7 @@ class TestPatientsViewSet(TestCase):
             datetime.datetime.today().year - data["year_of_birth"],
             response.data["age"],
         )
+        self.assertEqual("Female", response.data["gender"])
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
 
