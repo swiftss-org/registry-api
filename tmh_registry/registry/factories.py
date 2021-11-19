@@ -23,6 +23,8 @@ class PatientFactory(DjangoModelFactory):
         model = Patient
 
     full_name = LazyAttribute(lambda n: faker.name())
+    created_at = LazyAttribute(lambda n: faker.date())
+    updated_at = LazyAttribute(lambda n: faker.date())
     national_id = LazyAttribute(
         lambda n: faker.numerify(text="####################")
     )

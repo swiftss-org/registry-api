@@ -18,6 +18,7 @@ django-timezone-field==4.0  # https://github.com/mfogel/django-timezone-field/
 django-cors-headers==3.7.0 # https://github.com/adamchainz/django-cors-headers
 django-csp==3.7  # https://github.com/mozilla/django-csp
 whitenoise==5.2.0 # https://github.com/evansd/whitenoise
+django-filter==2.4.0
 
 # Django REST Framework
 djangorestframework==3.12.2  # https://github.com/encode/django-rest-framework

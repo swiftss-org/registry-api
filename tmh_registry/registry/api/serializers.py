@@ -58,6 +58,7 @@ class ReadPatientSerializer(ModelSerializer):
         fields = [
             "id",
             "full_name",
+            "created_at",
             "national_id",
             "age",
             "day_of_birth",

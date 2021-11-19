@@ -19,7 +19,7 @@ from ....factories import (
     PatientFactory,
     PatientHospitalMappingFactory,
 )
-from ....models import Patient, PatientHospitalMapping
+from ....models import PatientHospitalMapping
 
 
 @mark.registry
@@ -31,7 +31,11 @@ class TestPatientsViewSet(TestCase):
         super(TestPatientsViewSet, cls).setUpClass()
 
         cls.hospital = HospitalFactory()
-        cls.patient = PatientFactory()
+
+        cls.patient = PatientFactory(full_name="John Doe")
+        cls.patient.created_at = datetime.date(year=2021, month=4, day=11)
+        cls.patient.save()
+
         cls.patient_hospital_mapping = PatientHospitalMapping.objects.create(
             patient=cls.patient, hospital=cls.hospital
         )
@@ -53,7 +57,7 @@ class TestPatientsViewSet(TestCase):
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
-            "gender": Patient.Gender.FEMALE,
+            "gender": "Female",
             "phone_1": 234633241,
             "phone_2": 324362141,
             "address": "16 Test Street, Test City, Test Country",
@@ -86,6 +90,81 @@ class TestPatientsViewSet(TestCase):
             self.hospital.id,
             response.data["results"][0]["hospital_mappings"][0]["hospital_id"],
         )
+
+    def test_get_patients_list_with_hospital_id_successful(self):
+        response = self.client.get(
+            f"/api/v1/patients/?hospital_id={self.hospital.id}", format="json"
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+        self.assertEqual(self.patient.id, response.data["results"][0]["id"])
+
+    def test_get_patients_list_with_full_name_search_term_successful(self):
+        fullname_search_term = self.patient.full_name[:-3]
+        response = self.client.get(
+            f"/api/v1/patients/?search_term={fullname_search_term}",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+
+    def test_get_patients_list_with_national_id_search_term_successful(self):
+        response = self.client.get(
+            f"/api/v1/patients/?search_term={self.patient.national_id}",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data["count"])
+
+    def test_get_patients_list_full_name_ordering(self):
+        patient2 = PatientFactory(full_name="Zachary Unknown")
+
+        response = self.client.get(
+            "/api/v1/patients/?ordering=full_name",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(2, response.data["count"])
+
+        self.assertEqual(self.patient.id, response.data["results"][0]["id"])
+        self.assertEqual(patient2.id, response.data["results"][1]["id"])
+
+        # descending
+        response = self.client.get(
+            "/api/v1/patients/?ordering=-full_name",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(2, response.data["count"])
+
+        self.assertEqual(patient2.id, response.data["results"][0]["id"])
+        self.assertEqual(self.patient.id, response.data["results"][1]["id"])
+
+    def test_get_patients_list_created_at_ordering(self):
+        patient2 = PatientFactory()
+        patient2.created_at = datetime.date(year=2021, month=11, day=4)
+        patient2.save()
+
+        response = self.client.get(
+            "/api/v1/patients/?ordering=created_at",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(2, response.data["count"])
+
+        self.assertEqual(self.patient.id, response.data["results"][0]["id"])
+        self.assertEqual(patient2.id, response.data["results"][1]["id"])
+
+        # descending
+        response = self.client.get(
+            "/api/v1/patients/?ordering=-created_at",
+            format="json",
+        )
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual(2, response.data["count"])
+
+        self.assertEqual(patient2.id, response.data["results"][0]["id"])
+        self.assertEqual(self.patient.id, response.data["results"][1]["id"])
 
     def test_get_patients_list_unauthorized(self):
         self.client = APIClient()
@@ -217,6 +296,7 @@ class TestPatientsViewSet(TestCase):
             datetime.datetime.today().year - data["year_of_birth"],
             response.data["age"],
         )
+        self.assertEqual("Female", response.data["gender"])
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
 
