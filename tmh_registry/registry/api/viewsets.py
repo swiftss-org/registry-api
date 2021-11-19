@@ -38,12 +38,12 @@ class PatientFilterSet(FilterSet):
             patient_ids = PatientHospitalMapping.objects.filter(
                 hospital_id=value
             ).values_list("patient_id", flat=True)
-            queryset = Patient.objects.filter(id__in=patient_ids)
+            queryset = queryset.filter(id__in=patient_ids)
         return queryset
 
     def filter_search_term(self, queryset, name, value):
         if value:
-            queryset = Patient.objects.filter(
+            queryset = queryset.filter(
                 Q(full_name__icontains=value) | Q(national_id__iexact=value)
             )
         return queryset
