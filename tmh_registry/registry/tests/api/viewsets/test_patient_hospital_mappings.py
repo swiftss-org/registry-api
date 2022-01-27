@@ -32,8 +32,8 @@ class TestPatientHospitalMappingViewset(TestCase):
         )
 
         self.assertEqual(HTTP_201_CREATED, response.status_code)
-        self.assertEqual(response.data["patient_id"], patient.id)
-        self.assertEqual(response.data["hospital_id"], hospital.id)
+        self.assertEqual(response.data["patient"]["id"], patient.id)
+        self.assertEqual(response.data["hospital"]["id"], hospital.id)
         self.assertEqual(
             response.data["patient_hospital_id"], data["patient_hospital_id"]
         )

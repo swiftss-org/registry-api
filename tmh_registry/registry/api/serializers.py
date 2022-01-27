@@ -5,6 +5,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from ...users.api.serializers import MedicalPersonnelSerializer
+from ...users.models import MedicalPersonnel
 from ..models import Episode, Hospital, Patient, PatientHospitalMapping
 
 
@@ -180,7 +181,7 @@ class PatientHospitalMappingReadSerializer(ModelSerializer):
 
     class Meta:
         model = PatientHospitalMapping
-        fields = ["patient", "hospital", "patient_hospital"]
+        fields = ["patient", "hospital", "patient_hospital_id"]
 
 
 class PatientHospitalMappingWriteSerializer(ModelSerializer):
@@ -190,6 +191,10 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
     class Meta:
         model = PatientHospitalMapping
         fields = ["patient_id", "hospital_id", "patient_hospital_id"]
+
+    def to_representation(self, instance):
+        serializer = PatientHospitalMappingReadSerializer(instance)
+        return serializer.data
 
     def create(self, validated_data):
         validated_data["patient_id"] = validated_data["patient_id"].id
@@ -233,3 +238,102 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
         )
 
         return new_mapping
+
+
+class EpisodeReadSerializer(ModelSerializer):
+    patient_hospital_mapping = PatientHospitalMappingReadSerializer()
+    surgeons = MedicalPersonnelSerializer(many=True)
+
+    class Meta:
+        model = Episode
+        fields = [
+            "patient_hospital_mapping",
+            "created",
+            "surgery_date",
+            "episode_type",
+            "surgeons",
+            "comments",
+            "cepod",
+            "side",
+            "occurence",
+            "type",
+            "complexity",
+            "mesh_type",
+            "anaesthetic_type",
+            "diathermy_used",
+        ]
+
+
+class EpisodeWriteSerializer(ModelSerializer):
+    patient_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Patient.objects.all()
+    )
+    hospital_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Hospital.objects.all()
+    )
+    surgeon_ids = PrimaryKeyRelatedField(
+        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+    )
+
+    class Meta:
+        model = Episode
+        fields = [
+            "patient_id",
+            "hospital_id",
+            "surgery_date",
+            "episode_type",
+            "surgeon_ids",
+            "comments",
+            "cepod",
+            "side",
+            "occurence",
+            "type",
+            "complexity",
+            "mesh_type",
+            "anaesthetic_type",
+            "diathermy_used",
+        ]
+
+    def to_representation(self, instance):
+        serializer = EpisodeReadSerializer(instance)
+        return serializer.data
+
+    def create(self, validated_data):
+        patient = validated_data["patient_id"]
+        hospital = validated_data["hospital_id"]
+        surgeons = validated_data["surgeon_ids"]
+
+        patient_hospital_mapping = PatientHospitalMapping.objects.filter(
+            patient_id=patient.id,
+            hospital_id=hospital.id,
+        ).first()
+        if patient_hospital_mapping is None:
+            raise ValidationError(
+                {
+                    "error": "PatientHospitalMapping for patient_id {patient_id} and hospital_id {hospital_id} "
+                    "does not exist.".format(
+                        patient_id=patient.id,
+                        hospital_id=hospital.id,
+                    )
+                }
+            )
+
+        episode = Episode.objects.create(
+            patient_hospital_mapping=patient_hospital_mapping,
+            surgery_date=validated_data["surgery_date"],
+            episode_type=validated_data["episode_type"],
+            comments=validated_data["comments"],
+            cepod=validated_data["cepod"],
+            side=validated_data["side"],
+            occurence=validated_data["occurence"],
+            type=validated_data["type"],
+            complexity=validated_data["complexity"],
+            mesh_type=validated_data["mesh_type"],
+            anaesthetic_type=validated_data["anaesthetic_type"],
+            diathermy_used=validated_data["diathermy_used"],
+        )
+
+        if surgeons:
+            episode.surgeons.set(surgeons)
+
+        return episode
