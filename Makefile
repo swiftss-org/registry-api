@@ -38,3 +38,5 @@ cover:
 
 teardown:
 	docker-compose -f ${COMPOSE_ENV}.yml down -v
+
+recreate: teardown run
