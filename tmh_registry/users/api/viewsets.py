@@ -11,9 +11,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from tmh_registry.users.api.serializers import (
+    MedicalPersonnelSerializer,
     UserReadSerializer,
     UserSerializer,
 )
+
+from ..models import MedicalPersonnel
 
 User = get_user_model()
 
@@ -36,3 +39,10 @@ class UserViewSet(
     def me(self, request):
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+
+class MedicalPersonnelViewSet(
+    RetrieveModelMixin, ListModelMixin, GenericViewSet
+):
+    queryset = MedicalPersonnel.objects.all()
+    serializer_class = MedicalPersonnelSerializer

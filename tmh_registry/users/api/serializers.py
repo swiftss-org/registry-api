@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from rest_framework import serializers
+from rest_framework.fields import CharField
+from rest_framework.serializers import ModelSerializer, Serializer
 
 from tmh_registry.users.models import MedicalPersonnel
 
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ["email"]
@@ -21,27 +22,28 @@ class UserSerializer(serializers.ModelSerializer):
             return user
 
 
-class UserReadSerializer(serializers.ModelSerializer):
+class UserReadSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ["email"]
 
 
-class MedicalPersonnelSerializer(serializers.ModelSerializer):
+class MedicalPersonnelSerializer(ModelSerializer):
     user = UserSerializer()
+    level = CharField(source="get_level_display")
 
     class Meta:
         model = MedicalPersonnel
-        fields = ["user"]
+        fields = ["user", "level"]
 
 
-class SignInSerializer(serializers.Serializer):
+class SignInSerializer(Serializer):
     """
     Serializer responsible for input validation of sign in view
     """
 
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
+    username = CharField(required=True)
+    password = CharField(required=True)
 
     def update(self, instance, validated_data):  # pragma: no cover
         pass
@@ -50,12 +52,12 @@ class SignInSerializer(serializers.Serializer):
         pass
 
 
-class SignInResponseSerializer(serializers.Serializer):
+class SignInResponseSerializer(Serializer):
     """
     Serializer responsible for output validation of sign in view
     """
 
-    token = serializers.CharField(required=True)
+    token = CharField(required=True)
     user = UserReadSerializer()
 
     def update(self, instance, validated_data):  # pragma: no cover
