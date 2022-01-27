@@ -1,11 +1,14 @@
 from django.db.models import Q
 from django.utils.decorators import method_decorator
-from django_filters import CharFilter, NumberFilter  # pylint: disable=E0401
+from django_filters import (  # pylint: disable=E0401
+    CharFilter,
+    NumberFilter,
+    OrderingFilter,
+)
 from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
-from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import GenericViewSet
 
 from ..models import Hospital, Patient, PatientHospitalMapping
@@ -32,6 +35,9 @@ class PatientFilterSet(FilterSet):
         method="filter_search_term",
         label="Filter based on search_term",
     )
+    ordering = OrderingFilter(
+        fields=("full_name", "created_at"),
+    )
 
     def filter_hospital(self, queryset, name, value):
         if value:
@@ -50,7 +56,7 @@ class PatientFilterSet(FilterSet):
 
     class Meta:
         model = Patient
-        fields = ["hospital_id"]
+        fields = ["hospital_id", "search_term"]
 
 
 @method_decorator(
@@ -66,7 +72,9 @@ class PatientFilterSet(FilterSet):
             Parameter(
                 "ordering",
                 IN_QUERY,
-                description="Choose with which field you want to order with. Possible options: [full_name, created_at]",
+                description="Choose with which field you want to order with. You can change to descending order by "
+                "adding a `-` before the field name e.g. `ordering=-full_name`. "
+                "Possible options: `[full_name, created_at]`",
                 type=TYPE_STRING,
             ),
             Parameter(
@@ -92,9 +100,6 @@ class PatientViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    filter_backends = [OrderingFilter]
-    ordering_fields = ("full_name", "created_at")
-
     filterset_class = PatientFilterSet
     queryset = Patient.objects.all()
 

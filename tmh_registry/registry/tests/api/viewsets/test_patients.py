@@ -92,6 +92,9 @@ class TestPatientsViewSet(TestCase):
         )
 
     def test_get_patients_list_with_hospital_id_successful(self):
+        # create othe patient hospital mappings
+        PatientHospitalMappingFactory.create_batch(10)
+
         response = self.client.get(
             f"/api/v1/patients/?hospital_id={self.hospital.id}", format="json"
         )
@@ -100,6 +103,9 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(self.patient.id, response.data["results"][0]["id"])
 
     def test_get_patients_list_with_full_name_search_term_successful(self):
+        # create other patient
+        PatientFactory(full_name="What Ever")
+
         fullname_search_term = self.patient.full_name[:-3]
         response = self.client.get(
             f"/api/v1/patients/?search_term={fullname_search_term}",
@@ -109,6 +115,9 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(1, response.data["count"])
 
     def test_get_patients_list_with_national_id_search_term_successful(self):
+        # create other patients
+        PatientFactory.create_batch(10)
+
         response = self.client.get(
             f"/api/v1/patients/?search_term={self.patient.national_id}",
             format="json",
