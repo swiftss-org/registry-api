@@ -9,11 +9,14 @@ from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.viewsets import GenericViewSet
 
-from ..models import Hospital, Patient, PatientHospitalMapping
+from ..models import Episode, Hospital, Patient, PatientHospitalMapping
 from .serializers import (
     CreatePatientSerializer,
+    EpisodeReadSerializer,
+    EpisodeWriteSerializer,
     HospitalSerializer,
     PatientHospitalMappingReadSerializer,
     PatientHospitalMappingWriteSerializer,
@@ -91,7 +94,7 @@ class PatientFilterSet(FilterSet):
                 type=TYPE_INTEGER,
             ),
         ],
-        responses={200: ReadPatientSerializer(many=True)},
+        responses={200: ReadPatientSerializer()},
     ),
 )
 class PatientViewSet(
@@ -112,7 +115,13 @@ class PatientViewSet(
         raise NotImplementedError
 
 
-class PatientHospitalMappingViewset(mixins.CreateModelMixin, GenericViewSet):
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(
+        responses={201: PatientHospitalMappingReadSerializer()}
+    ),
+)
+class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
     queryset = PatientHospitalMapping.objects.all()
 
     def get_serializer_class(self):
@@ -120,5 +129,21 @@ class PatientHospitalMappingViewset(mixins.CreateModelMixin, GenericViewSet):
             return PatientHospitalMappingReadSerializer
         if self.action == "create":
             return PatientHospitalMappingWriteSerializer
+
+        raise NotImplementedError
+
+
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(responses={201: EpisodeReadSerializer()}),
+)
+class EpisodeViewset(CreateModelMixin, GenericViewSet):
+    queryset = Episode.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return EpisodeReadSerializer
+        if self.action == "create":
+            return EpisodeWriteSerializer
 
         raise NotImplementedError
