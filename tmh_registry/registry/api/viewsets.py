@@ -12,9 +12,17 @@ from rest_framework import mixins, viewsets
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.viewsets import GenericViewSet
 
-from ..models import Episode, Hospital, Patient, PatientHospitalMapping
+from ..models import (
+    Discharge,
+    Episode,
+    Hospital,
+    Patient,
+    PatientHospitalMapping,
+)
 from .serializers import (
     CreatePatientSerializer,
+    DischargeReadSerializer,
+    DischargeWriteSerializer,
     EpisodeReadSerializer,
     EpisodeWriteSerializer,
     HospitalSerializer,
@@ -145,5 +153,21 @@ class EpisodeViewset(CreateModelMixin, GenericViewSet):
             return EpisodeReadSerializer
         if self.action == "create":
             return EpisodeWriteSerializer
+
+        raise NotImplementedError
+
+
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(responses={201: DischargeReadSerializer()}),
+)
+class DischargeViewset(CreateModelMixin, GenericViewSet):
+    queryset = Discharge.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return DischargeReadSerializer
+        if self.action == "create":
+            return DischargeWriteSerializer
 
         raise NotImplementedError

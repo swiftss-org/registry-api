@@ -253,6 +253,7 @@ class EpisodeReadSerializer(ModelSerializer):
     class Meta:
         model = Episode
         fields = [
+            "id",
             "patient_hospital_mapping",
             "created",
             "surgery_date",
@@ -372,3 +373,26 @@ class DischargeWriteSerializer(ModelSerializer):
             "aware_of_mesh",
             "infection",
         ]
+
+    def to_representation(self, instance):
+        serializer = DischargeReadSerializer(instance)
+        return serializer.data
+
+    def create(self, validated_data):
+        episode = validated_data["episode_id"]
+
+        if episode.surgery_date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode surgery date cannot be after Discharge date"
+                }
+            )
+
+        discharge = Discharge.objects.create(
+            episode_id=episode.id,
+            date=validated_data["date"],
+            aware_of_mesh=validated_data["aware_of_mesh"],
+            infection=validated_data["infection"],
+        )
+
+        return discharge
