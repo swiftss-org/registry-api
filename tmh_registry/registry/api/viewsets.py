@@ -15,6 +15,7 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import (
     Discharge,
     Episode,
+    FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
@@ -25,6 +26,8 @@ from .serializers import (
     DischargeWriteSerializer,
     EpisodeReadSerializer,
     EpisodeWriteSerializer,
+    FollowUpReadSerializer,
+    FollowUpWriteSerializer,
     HospitalSerializer,
     PatientHospitalMappingReadSerializer,
     PatientHospitalMappingWriteSerializer,
@@ -169,5 +172,21 @@ class DischargeViewset(CreateModelMixin, GenericViewSet):
             return DischargeReadSerializer
         if self.action == "create":
             return DischargeWriteSerializer
+
+        raise NotImplementedError
+
+
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(responses={201: FollowUpReadSerializer()}),
+)
+class FollowUpViewset(CreateModelMixin, GenericViewSet):
+    queryset = FollowUp.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return FollowUpReadSerializer
+        if self.action == "create":
+            return FollowUpWriteSerializer
 
         raise NotImplementedError

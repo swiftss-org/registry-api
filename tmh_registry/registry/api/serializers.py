@@ -1,6 +1,6 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import IntegerField
+from rest_framework.fields import CharField, IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
@@ -401,6 +401,8 @@ class DischargeWriteSerializer(ModelSerializer):
 
 class FollowUpReadSerializer(ModelSerializer):
     episode = EpisodeReadSerializer()
+    pain_severity = CharField(source="get_pain_severity_display")
+    attendees = MedicalPersonnelSerializer(many=True)
 
     class Meta:
         model = FollowUp
@@ -464,7 +466,7 @@ class FollowUpWriteSerializer(ModelSerializer):
             episode_id=episode.id,
             date=validated_data["date"],
             pain_severity=validated_data.get("pain_severity", ""),
-            mesh_awareness=validated_data["aware_of_mesh"],
+            mesh_awareness=validated_data["mesh_awareness"],
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
             numbness=validated_data["numbness"],

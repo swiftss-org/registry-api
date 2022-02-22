@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="followup",
             name="created_at",
-            field=models.DateField(auto_now_add=True, default=1998),
+            field=models.DateField(auto_now_add=True, default="1998-1-1"),
             preserve_default=False,
         ),
         migrations.AddField(

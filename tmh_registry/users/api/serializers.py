@@ -34,7 +34,7 @@ class MedicalPersonnelSerializer(ModelSerializer):
 
     class Meta:
         model = MedicalPersonnel
-        fields = ["user", "level"]
+        fields = ["id", "user", "level"]
 
 
 class SignInSerializer(Serializer):
