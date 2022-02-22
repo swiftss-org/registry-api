@@ -29,16 +29,18 @@ class EpisodeSerializer(ModelSerializer):
     class Meta:
         model = Episode
         fields = [
+            "surgery_date",
             "episode_type",
+            "surgeons",
+            "comments",
             "cepod",
             "side",
             "occurence",
             "type",
             "complexity",
-            "comments",
             "mesh_type",
+            "anaesthetic_type",
             "diathermy_used",
-            "surgeons",
         ]
 
 
