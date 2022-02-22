@@ -146,7 +146,11 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(responses={201: EpisodeReadSerializer()}),
+    decorator=swagger_auto_schema(
+        operation_summary="Register an Episode",
+        operation_description="Use this endpoint to register an episode. \n ",
+        responses={201: EpisodeReadSerializer()},
+    ),
 )
 class EpisodeViewset(CreateModelMixin, GenericViewSet):
     queryset = Episode.objects.all()
@@ -162,7 +166,12 @@ class EpisodeViewset(CreateModelMixin, GenericViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(responses={201: DischargeReadSerializer()}),
+    decorator=swagger_auto_schema(
+        operation_summary="Discharge a Patient",
+        operation_description="Use this endpoint to discharge a patient. Only one Discharge can be registered "
+        "for the same Episode.",
+        responses={201: DischargeReadSerializer()},
+    ),
 )
 class DischargeViewset(CreateModelMixin, GenericViewSet):
     queryset = Discharge.objects.all()
@@ -178,7 +187,13 @@ class DischargeViewset(CreateModelMixin, GenericViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(responses={201: FollowUpReadSerializer()}),
+    decorator=swagger_auto_schema(
+        operation_summary="Register a Follow Up",
+        operation_description="Use this endpoint to register a Follow Up. Multiple Follow Ups can be registered"
+        "for the same Episode.\n\n The accepted values for `pain_severity` are"
+        f" `{FollowUp.PainSeverityChoices.labels}`",
+        responses={201: FollowUpReadSerializer()},
+    ),
 )
 class FollowUpViewset(CreateModelMixin, GenericViewSet):
     queryset = FollowUp.objects.all()
