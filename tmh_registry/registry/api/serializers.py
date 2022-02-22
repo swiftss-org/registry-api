@@ -6,7 +6,13 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from ...users.api.serializers import MedicalPersonnelSerializer
 from ...users.models import MedicalPersonnel
-from ..models import Episode, Hospital, Patient, PatientHospitalMapping
+from ..models import (
+    Discharge,
+    Episode,
+    Hospital,
+    Patient,
+    PatientHospitalMapping,
+)
 
 
 class HospitalSerializer(ModelSerializer):
@@ -337,3 +343,32 @@ class EpisodeWriteSerializer(ModelSerializer):
             episode.surgeons.set(surgeons)
 
         return episode
+
+
+class DischargeReadSerializer(ModelSerializer):
+    episode = EpisodeReadSerializer()
+
+    class Meta:
+        model = Discharge
+        fields = [
+            "id",
+            "episode",
+            "date",
+            "aware_of_mesh",
+            "infection",
+        ]
+
+
+class DischargeWriteSerializer(ModelSerializer):
+    episode_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Episode.objects.filter(discharge=None)
+    )
+
+    class Meta:
+        model = Discharge
+        fields = [
+            "episode_id",
+            "date",
+            "aware_of_mesh",
+            "infection",
+        ]
