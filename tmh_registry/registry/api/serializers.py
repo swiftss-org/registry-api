@@ -4,6 +4,7 @@ from rest_framework.fields import CharField, IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
+from ...common.utils.functions import get_text_choice_value_from_label
 from ...users.api.serializers import MedicalPersonnelSerializer
 from ...users.models import MedicalPersonnel
 from ..models import (
@@ -426,6 +427,7 @@ class FollowUpWriteSerializer(ModelSerializer):
     attendee_ids = PrimaryKeyRelatedField(
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
+    pain_severity = CharField()
 
     class Meta:
         model = FollowUp
@@ -462,10 +464,16 @@ class FollowUpWriteSerializer(ModelSerializer):
                 }
             )
 
+        pain_severity = validated_data.get("pain_severity", "")
+        print(f"{pain_severity=}")
         follow_up = FollowUp.objects.create(
             episode_id=episode.id,
             date=validated_data["date"],
-            pain_severity=validated_data.get("pain_severity", ""),
+            pain_severity=get_text_choice_value_from_label(
+                FollowUp.PainSeverityChoices.choices, pain_severity
+            )
+            if pain_severity
+            else "",
             mesh_awareness=validated_data["mesh_awareness"],
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
