@@ -21,7 +21,7 @@ class TestDischargeCreate(TestCase):
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
-    def test_discharge_data(self):
+    def get_discharge_data(self):
         return {
             "episode_id": self.episode.id,
             "date": "2022-02-22",
@@ -30,8 +30,7 @@ class TestDischargeCreate(TestCase):
         }
 
     def test_successful(self):
-        data = self.test_discharge_data()
-        print(f"{data['episode_id']=}")
+        data = self.get_discharge_data()
         response = self.client.post(
             "/api/v1/discharges/", data=data, format="json"
         )
@@ -44,7 +43,7 @@ class TestDischargeCreate(TestCase):
         self.assertEqual(response.data["infection"], data["infection"])
 
     def test_when_episode_id_does_not_exist(self):
-        data = self.test_discharge_data()
+        data = self.get_discharge_data()
         data["episode_id"] = -1
         response = self.client.post(
             "/api/v1/discharges/", data=data, format="json"
@@ -54,7 +53,7 @@ class TestDischargeCreate(TestCase):
 
     def test_when_episode_is_already_discharged(self):
         DischargeFactory(episode=self.episode, date="2022-02-22")
-        data = self.test_discharge_data()
+        data = self.get_discharge_data()
         response = self.client.post(
             "/api/v1/discharges/", data=data, format="json"
         )
@@ -62,7 +61,7 @@ class TestDischargeCreate(TestCase):
         self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_when_episode_surgery_date_is_after_discharge_date(self):
-        data = self.test_discharge_data()
+        data = self.get_discharge_data()
         data["date"] = "2021-12-03"
         response = self.client.post(
             "/api/v1/discharges/", data=data, format="json"

@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.test import APIClient
 
+from tmh_registry.common.utils.functions import (
+    get_text_choice_value_from_label,
+)
 from tmh_registry.registry.factories import (
     HospitalFactory,
     PatientFactory,
@@ -34,16 +37,16 @@ class TestEpisodesViewSet(TestCase):
             "patient_id": self.patient.id,
             "hospital_id": self.hospital.id,
             "surgery_date": "2021-10-12",
-            "episode_type": Episode.EpisodeChoices.UMBILICAL.value,
+            "episode_type": Episode.EpisodeChoices.UMBILICAL.label,
             "surgeon_ids": [self.medical_personnel.id],
             "comments": "A random comment",
-            "cepod": Episode.CepodChoices.PLANNED.value,
-            "side": Episode.SideChoices.LEFT.value,
-            "occurence": Episode.OccurenceChoices.RECURRENT.value,
-            "type": Episode.TypeChoices.INDIRECT.value,
-            "complexity": Episode.ComplexityChoices.INCARCERATED.value,
-            "mesh_type": Episode.MeshTypeChoices.TNMHP.value,
-            "anaesthetic_type": Episode.AnaestheticChoices.SPINAL.value,
+            "cepod": Episode.CepodChoices.PLANNED.label,
+            "side": Episode.SideChoices.LEFT.label,
+            "occurence": Episode.OccurenceChoices.RECURRENT.label,
+            "type": Episode.TypeChoices.INDIRECT.label,
+            "complexity": Episode.ComplexityChoices.INCARCERATED.label,
+            "mesh_type": Episode.MeshTypeChoices.TNMHP.label,
+            "anaesthetic_type": Episode.AnaestheticChoices.SPINAL.label,
             "diathermy_used": True,
         }
 
@@ -120,4 +123,56 @@ class TestEpisodesViewSet(TestCase):
         )
         self.assertEqual(
             response.data["diathermy_used"], data["diathermy_used"]
+        )
+
+        # assert that values are stored in the db, not labels
+        episode = Episode.objects.get(id=response.data["id"])
+
+        self.assertEqual(
+            episode.episode_type,
+            get_text_choice_value_from_label(
+                Episode.EpisodeChoices.choices, data["episode_type"]
+            ),
+        )
+        self.assertEqual(
+            episode.cepod,
+            get_text_choice_value_from_label(
+                Episode.CepodChoices.choices, data["cepod"]
+            ),
+        )
+        self.assertEqual(
+            episode.side,
+            get_text_choice_value_from_label(
+                Episode.SideChoices.choices, data["side"]
+            ),
+        )
+        self.assertEqual(
+            episode.occurence,
+            get_text_choice_value_from_label(
+                Episode.OccurenceChoices.choices, data["occurence"]
+            ),
+        )
+        self.assertEqual(
+            episode.type,
+            get_text_choice_value_from_label(
+                Episode.TypeChoices.choices, data["type"]
+            ),
+        )
+        self.assertEqual(
+            episode.complexity,
+            get_text_choice_value_from_label(
+                Episode.ComplexityChoices.choices, data["complexity"]
+            ),
+        )
+        self.assertEqual(
+            episode.mesh_type,
+            get_text_choice_value_from_label(
+                Episode.MeshTypeChoices.choices, data["mesh_type"]
+            ),
+        )
+        self.assertEqual(
+            episode.anaesthetic_type,
+            get_text_choice_value_from_label(
+                Episode.AnaestheticChoices.choices, data["anaesthetic_type"]
+            ),
         )

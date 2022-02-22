@@ -1,14 +1,16 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import IntegerField
+from rest_framework.fields import CharField, IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
+from ...common.utils.functions import get_text_choice_value_from_label
 from ...users.api.serializers import MedicalPersonnelSerializer
 from ...users.models import MedicalPersonnel
 from ..models import (
     Discharge,
     Episode,
+    FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
@@ -50,6 +52,7 @@ class ReadPatientSerializer(ModelSerializer):
     age = IntegerField(allow_null=True)
     hospital_mappings = PatientHospitalMappingPatientSerializer(many=True)
     episodes = SerializerMethodField()
+    gender = CharField(source="get_gender_display")
 
     @swagger_serializer_method(serializer_or_field=EpisodeSerializer)
     def get_episodes(self, obj):
@@ -97,11 +100,11 @@ class CreatePatientSerializer(ModelSerializer):
     hospital_id = IntegerField(write_only=True)
     patient_hospital_id = IntegerField(write_only=True)
     year_of_birth = IntegerField(allow_null=True)
+    gender = CharField(allow_null=True)
 
     class Meta:
         model = Patient
         fields = [
-            "id",
             "full_name",
             "national_id",
             "age",
@@ -167,6 +170,14 @@ class CreatePatientSerializer(ModelSerializer):
             raise ValidationError(
                 {"error": "The patient needs to be registered to a hospital."}
             )
+
+        validated_data["gender"] = (
+            get_text_choice_value_from_label(
+                Patient.Gender.choices, validated_data["gender"]
+            )
+            if validated_data["gender"]
+            else validated_data["gender"]
+        )
 
         validated_data.pop("age", None)
         new_patient = super(CreatePatientSerializer, self).create(
@@ -249,6 +260,14 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
 class EpisodeReadSerializer(ModelSerializer):
     patient_hospital_mapping = PatientHospitalMappingReadSerializer()
     surgeons = MedicalPersonnelSerializer(many=True)
+    episode_type = CharField(source="get_episode_type_display")
+    cepod = CharField(source="get_cepod_display")
+    side = CharField(source="get_side_display")
+    occurence = CharField(source="get_occurence_display")
+    type = CharField(source="get_type_display")
+    complexity = CharField(source="get_complexity_display")
+    mesh_type = CharField(source="get_mesh_type_display")
+    anaesthetic_type = CharField(source="get_anaesthetic_type_display")
 
     class Meta:
         model = Episode
@@ -281,6 +300,14 @@ class EpisodeWriteSerializer(ModelSerializer):
     surgeon_ids = PrimaryKeyRelatedField(
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
+    episode_type = CharField()
+    cepod = CharField()
+    side = CharField()
+    occurence = CharField()
+    type = CharField()
+    complexity = CharField()
+    mesh_type = CharField()
+    anaesthetic_type = CharField()
 
     class Meta:
         model = Episode
@@ -325,20 +352,46 @@ class EpisodeWriteSerializer(ModelSerializer):
                 }
             )
 
-        episode = Episode.objects.create(
-            patient_hospital_mapping=patient_hospital_mapping,
-            surgery_date=validated_data["surgery_date"],
-            episode_type=validated_data["episode_type"],
-            comments=validated_data["comments"],
-            cepod=validated_data["cepod"],
-            side=validated_data["side"],
-            occurence=validated_data["occurence"],
-            type=validated_data["type"],
-            complexity=validated_data["complexity"],
-            mesh_type=validated_data["mesh_type"],
-            anaesthetic_type=validated_data["anaesthetic_type"],
-            diathermy_used=validated_data["diathermy_used"],
-        )
+        try:
+            episode = Episode.objects.create(
+                patient_hospital_mapping=patient_hospital_mapping,
+                surgery_date=validated_data["surgery_date"],
+                episode_type=get_text_choice_value_from_label(
+                    Episode.EpisodeChoices.choices,
+                    validated_data["episode_type"],
+                ),
+                comments=validated_data["comments"],
+                cepod=get_text_choice_value_from_label(
+                    Episode.CepodChoices.choices, validated_data["cepod"]
+                ),
+                side=get_text_choice_value_from_label(
+                    Episode.SideChoices.choices, validated_data["side"]
+                ),
+                occurence=get_text_choice_value_from_label(
+                    Episode.OccurenceChoices.choices,
+                    validated_data["occurence"],
+                ),
+                type=get_text_choice_value_from_label(
+                    Episode.TypeChoices.choices, validated_data["type"]
+                ),
+                complexity=get_text_choice_value_from_label(
+                    Episode.ComplexityChoices.choices,
+                    validated_data["complexity"],
+                ),
+                mesh_type=get_text_choice_value_from_label(
+                    Episode.MeshTypeChoices.choices,
+                    validated_data["mesh_type"],
+                ),
+                anaesthetic_type=get_text_choice_value_from_label(
+                    Episode.AnaestheticChoices.choices,
+                    validated_data["anaesthetic_type"],
+                ),
+                diathermy_used=validated_data["diathermy_used"],
+            )
+        except IndexError:
+            raise ValidationError(
+                {"error": "Not supported value provided for ChoiceField."}
+            )
 
         if surgeons:
             episode.surgeons.set(surgeons)
@@ -396,3 +449,88 @@ class DischargeWriteSerializer(ModelSerializer):
         )
 
         return discharge
+
+
+class FollowUpReadSerializer(ModelSerializer):
+    episode = EpisodeReadSerializer()
+    pain_severity = CharField(source="get_pain_severity_display")
+    attendees = MedicalPersonnelSerializer(many=True)
+
+    class Meta:
+        model = FollowUp
+        fields = [
+            "id",
+            "episode",
+            "date",
+            "pain_severity",
+            "attendees",
+            "mesh_awareness",
+            "seroma",
+            "infection",
+            "numbness",
+        ]
+
+
+class FollowUpWriteSerializer(ModelSerializer):
+    episode_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Episode.objects.exclude(discharge=None)
+    )
+    attendee_ids = PrimaryKeyRelatedField(
+        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+    )
+    pain_severity = CharField()
+
+    class Meta:
+        model = FollowUp
+        fields = [
+            "episode_id",
+            "date",
+            "pain_severity",
+            "attendee_ids",
+            "mesh_awareness",
+            "seroma",
+            "infection",
+            "numbness",
+        ]
+
+    def to_representation(self, instance):
+        serializer = FollowUpReadSerializer(instance)
+        return serializer.data
+
+    def create(self, validated_data):
+        episode = validated_data["episode_id"]
+        attendees = validated_data["attendee_ids"]
+
+        if episode.surgery_date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode surgery date cannot be after Follow Up date"
+                }
+            )
+
+        if episode.discharge.date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode Discharge date cannot be after Follow Up date"
+                }
+            )
+
+        pain_severity = validated_data.get("pain_severity", "")
+        print(f"{pain_severity=}")
+        follow_up = FollowUp.objects.create(
+            episode_id=episode.id,
+            date=validated_data["date"],
+            pain_severity=get_text_choice_value_from_label(
+                FollowUp.PainSeverityChoices.choices, pain_severity
+            )
+            if pain_severity
+            else "",
+            mesh_awareness=validated_data["mesh_awareness"],
+            seroma=validated_data["seroma"],
+            infection=validated_data["infection"],
+            numbness=validated_data["numbness"],
+        )
+
+        follow_up.attendees.set(attendees)
+
+        return follow_up

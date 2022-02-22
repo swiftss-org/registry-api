@@ -15,6 +15,7 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import (
     Discharge,
     Episode,
+    FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
@@ -25,6 +26,8 @@ from .serializers import (
     DischargeWriteSerializer,
     EpisodeReadSerializer,
     EpisodeWriteSerializer,
+    FollowUpReadSerializer,
+    FollowUpWriteSerializer,
     HospitalSerializer,
     PatientHospitalMappingReadSerializer,
     PatientHospitalMappingWriteSerializer,
@@ -73,7 +76,11 @@ class PatientFilterSet(FilterSet):
 @method_decorator(
     name="create",
     decorator=swagger_auto_schema(
-        responses={201: ReadPatientSerializer(many=True)}
+        operation_summary="Register a Patient",
+        operation_description="Use this endpoint to register a patient. A PatientHospitalMapping will be created "
+        "automatically for the newly created Patient and the provided Hospital.\n "
+        f"\nAccepted values for `gender` are `{Patient.Gender.labels}`. \n ",
+        responses={201: ReadPatientSerializer(many=True)},
     ),
 )
 @method_decorator(
@@ -143,7 +150,21 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(responses={201: EpisodeReadSerializer()}),
+    decorator=swagger_auto_schema(
+        operation_summary="Register an Episode",
+        operation_description="Use this endpoint to register an episode. Keep in mind that you need to create a "
+        "`PatientHospitalMapping`(through the POST /patient-hospital-mappings/ endpoint) "
+        "if one does not already exist for this specific Patient/Hospital pair.\n "
+        f"\nAccepted values for `episode_type` are `{Episode.EpisodeChoices.labels}`. \n "
+        f"\nAccepted values for `cepod` are `{Episode.CepodChoices.labels}`. \n "
+        f"\nAccepted values for `side` are `{Episode.SideChoices.labels}`. \n "
+        f"\nAccepted values for `occurence` are `{Episode.OccurenceChoices.labels}`. \n "
+        f"\nAccepted values for `type` are `{Episode.TypeChoices.labels}`. \n "
+        f"\nAccepted values for `complexity` are `{Episode.ComplexityChoices.labels}`. \n "
+        f"\nAccepted values for `mesh_type` are `{Episode.MeshTypeChoices.labels}`. \n "
+        f"\nAccepted values for `anaesthetic_type` are `{Episode.AnaestheticChoices.labels}`. \n ",
+        responses={201: EpisodeReadSerializer()},
+    ),
 )
 class EpisodeViewset(CreateModelMixin, GenericViewSet):
     queryset = Episode.objects.all()
@@ -159,7 +180,12 @@ class EpisodeViewset(CreateModelMixin, GenericViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(responses={201: DischargeReadSerializer()}),
+    decorator=swagger_auto_schema(
+        operation_summary="Discharge a Patient",
+        operation_description="Use this endpoint to discharge a patient. Only one Discharge can be registered "
+        "for the same Episode.",
+        responses={201: DischargeReadSerializer()},
+    ),
 )
 class DischargeViewset(CreateModelMixin, GenericViewSet):
     queryset = Discharge.objects.all()
@@ -169,5 +195,28 @@ class DischargeViewset(CreateModelMixin, GenericViewSet):
             return DischargeReadSerializer
         if self.action == "create":
             return DischargeWriteSerializer
+
+        raise NotImplementedError
+
+
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(
+        operation_summary="Register a Follow Up",
+        operation_description="Use this endpoint to register a Follow Up. Multiple Follow Ups can be registered "
+        "for the same Episode.\n "
+        "\nThe accepted values for `pain_severity` are "
+        f"`{FollowUp.PainSeverityChoices.labels}`.",
+        responses={201: FollowUpReadSerializer()},
+    ),
+)
+class FollowUpViewset(CreateModelMixin, GenericViewSet):
+    queryset = FollowUp.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return FollowUpReadSerializer
+        if self.action == "create":
+            return FollowUpWriteSerializer
 
         raise NotImplementedError

@@ -12,6 +12,7 @@ from rest_framework.status import (
 )
 from rest_framework.test import APIClient
 
+from .....common.utils.functions import get_text_choice_value_from_label
 from .....users.factories import MedicalPersonnelFactory, UserFactory
 from ....factories import (
     EpisodeFactory,
@@ -19,7 +20,7 @@ from ....factories import (
     PatientFactory,
     PatientHospitalMappingFactory,
 )
-from ....models import PatientHospitalMapping
+from ....models import Patient, PatientHospitalMapping
 
 
 @mark.registry
@@ -323,6 +324,16 @@ class TestPatientsViewSet(TestCase):
             PatientHospitalMapping.objects.filter(
                 patient_id=response.data["id"], hospital_id=self.hospital.id
             ).count(),
+        )
+
+        # assert db value
+        patient = Patient.objects.get(id=response.data["id"])
+
+        self.assertEqual(
+            get_text_choice_value_from_label(
+                Patient.Gender.choices, data["gender"]
+            ),
+            patient.gender,
         )
 
     def test_create_patients_only_with_mandatory_fields(self):

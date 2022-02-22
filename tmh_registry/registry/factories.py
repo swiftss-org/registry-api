@@ -8,6 +8,7 @@ from ..users.factories import MedicalPersonnelFactory
 from .models import (
     Discharge,
     Episode,
+    FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
@@ -108,3 +109,30 @@ class DischargeFactory(DjangoModelFactory):
     date = LazyAttribute(lambda _: faker.date_object())
     aware_of_mesh = LazyAttribute(lambda _: faker.boolean())
     infection = LazyAttribute(lambda _: faker.boolean())
+
+
+class FollowUpFactory(DjangoModelFactory):
+    class Meta:
+        model = FollowUp
+
+    episode = SubFactory(EpisodeFactory)
+    date = LazyAttribute(lambda _: faker.date_object())
+    pain_severity = LazyAttribute(
+        lambda _: faker.random_element(FollowUp.PainSeverityChoices.values)
+    )
+    mesh_awareness = LazyAttribute(lambda _: faker.boolean())
+    seroma = LazyAttribute(lambda _: faker.boolean())
+    infection = LazyAttribute(lambda _: faker.boolean())
+    numbness = LazyAttribute(lambda _: faker.boolean())
+
+    @post_generation
+    def attendees(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            self.attendees.add(*extracted)
+        else:
+            self.attendees.add(MedicalPersonnelFactory())
