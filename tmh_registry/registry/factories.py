@@ -5,7 +5,13 @@ from factory.django import DjangoModelFactory
 from faker import Faker
 
 from ..users.factories import MedicalPersonnelFactory
-from .models import Episode, Hospital, Patient, PatientHospitalMapping
+from .models import (
+    Discharge,
+    Episode,
+    Hospital,
+    Patient,
+    PatientHospitalMapping,
+)
 
 faker = Faker()
 
@@ -54,7 +60,6 @@ class EpisodeFactory(DjangoModelFactory):
 
     patient_hospital_mapping = SubFactory(PatientHospitalMappingFactory)
     surgery_date = LazyAttribute(lambda _: faker.date_object())
-    discharge_date = LazyAttribute(lambda _: faker.date_object())
     episode_type = LazyAttribute(
         lambda _: faker.random_element(Episode.EpisodeChoices.values)
     )
@@ -93,3 +98,13 @@ class EpisodeFactory(DjangoModelFactory):
             self.surgeons.add(*extracted)
         else:
             self.surgeons.add(MedicalPersonnelFactory())
+
+
+class DischargeFactory(DjangoModelFactory):
+    class Meta:
+        model = Discharge
+
+    episode = SubFactory(EpisodeFactory)
+    date = LazyAttribute(lambda _: faker.date_object())
+    aware_of_mesh = LazyAttribute(lambda _: faker.boolean())
+    infection = LazyAttribute(lambda _: faker.boolean())

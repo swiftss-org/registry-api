@@ -6,7 +6,13 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from ...users.api.serializers import MedicalPersonnelSerializer
 from ...users.models import MedicalPersonnel
-from ..models import Episode, Hospital, Patient, PatientHospitalMapping
+from ..models import (
+    Discharge,
+    Episode,
+    Hospital,
+    Patient,
+    PatientHospitalMapping,
+)
 
 
 class HospitalSerializer(ModelSerializer):
@@ -247,6 +253,7 @@ class EpisodeReadSerializer(ModelSerializer):
     class Meta:
         model = Episode
         fields = [
+            "id",
             "patient_hospital_mapping",
             "created",
             "surgery_date",
@@ -337,3 +344,55 @@ class EpisodeWriteSerializer(ModelSerializer):
             episode.surgeons.set(surgeons)
 
         return episode
+
+
+class DischargeReadSerializer(ModelSerializer):
+    episode = EpisodeReadSerializer()
+
+    class Meta:
+        model = Discharge
+        fields = [
+            "id",
+            "episode",
+            "date",
+            "aware_of_mesh",
+            "infection",
+        ]
+
+
+class DischargeWriteSerializer(ModelSerializer):
+    episode_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Episode.objects.filter(discharge=None)
+    )
+
+    class Meta:
+        model = Discharge
+        fields = [
+            "episode_id",
+            "date",
+            "aware_of_mesh",
+            "infection",
+        ]
+
+    def to_representation(self, instance):
+        serializer = DischargeReadSerializer(instance)
+        return serializer.data
+
+    def create(self, validated_data):
+        episode = validated_data["episode_id"]
+
+        if episode.surgery_date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode surgery date cannot be after Discharge date"
+                }
+            )
+
+        discharge = Discharge.objects.create(
+            episode_id=episode.id,
+            date=validated_data["date"],
+            aware_of_mesh=validated_data["aware_of_mesh"],
+            infection=validated_data["infection"],
+        )
+
+        return discharge

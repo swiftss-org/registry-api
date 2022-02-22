@@ -1,15 +1,27 @@
 import datetime
 
-from django.db import models
-from django.db.models.enums import TextChoices
+from django.db.models import (
+    CASCADE,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    ForeignKey,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    PositiveIntegerField,
+    TextChoices,
+    TextField,
+)
 
 from tmh_registry.common.models import TimeStampMixin
 from tmh_registry.users.models import MedicalPersonnel
 
 
-class Hospital(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
+class Hospital(Model):
+    name = CharField(max_length=255, null=True, blank=True)
+    address = CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -20,22 +32,20 @@ class Patient(TimeStampMixin):
         MALE = ("Male", "Male")
         FEMALE = ("Female", "Female")
 
-    full_name = models.CharField(max_length=255)
-    national_id = models.CharField(
-        max_length=20, null=True, blank=True, unique=True
-    )
-    day_of_birth = models.PositiveIntegerField(null=True, blank=True)
-    month_of_birth = models.PositiveIntegerField(null=True, blank=True)
-    year_of_birth = models.PositiveIntegerField()
-    gender = models.CharField(
+    full_name = CharField(max_length=255)
+    national_id = CharField(max_length=20, null=True, blank=True, unique=True)
+    day_of_birth = PositiveIntegerField(null=True, blank=True)
+    month_of_birth = PositiveIntegerField(null=True, blank=True)
+    year_of_birth = PositiveIntegerField()
+    gender = CharField(
         max_length=32,
         null=True,
         blank=True,
         choices=Gender.choices,
     )
-    phone_1 = models.CharField(max_length=16, null=True, blank=True)
-    phone_2 = models.CharField(max_length=16, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
+    phone_1 = CharField(max_length=16, null=True, blank=True)
+    phone_2 = CharField(max_length=16, null=True, blank=True)
+    address = CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.full_name}"
@@ -49,14 +59,14 @@ class Patient(TimeStampMixin):
         return datetime.datetime.today().year - age
 
 
-class PatientHospitalMapping(models.Model):
-    patient = models.ForeignKey(
-        Patient, on_delete=models.CASCADE, related_name="hospital_mappings"
+class PatientHospitalMapping(Model):
+    patient = ForeignKey(
+        Patient, on_delete=CASCADE, related_name="hospital_mappings"
     )
-    hospital = models.ForeignKey(
-        Hospital, on_delete=models.CASCADE, related_name="patient_mappings"
+    hospital = ForeignKey(
+        Hospital, on_delete=CASCADE, related_name="patient_mappings"
     )
-    patient_hospital_id = models.CharField(max_length=256)
+    patient_hospital_id = CharField(max_length=256)
 
     class Meta:
         unique_together = (
@@ -69,7 +79,7 @@ class PatientHospitalMapping(models.Model):
         return f"Patient {self.patient.full_name} ({self.patient_hospital_id}) - Hospital {self.hospital.name}"
 
 
-class Episode(models.Model):
+class Episode(Model):
     class EpisodeChoices(TextChoices):
         INGUINAL = ("INGUINAL", "Inguinal Mesh Hernia Repair")
         INCISIONAL = ("INCISIONAL", "Incisional Mesh Hernia Repair")
@@ -114,33 +124,24 @@ class Episode(models.Model):
         SPINAL = ("SPINAL", "Spinal Anaesthetic")
         GENERAL = ("GENERAL", "General Anaesthetic")
 
-    patient_hospital_mapping = models.ForeignKey(
-        PatientHospitalMapping, on_delete=models.CASCADE
+    patient_hospital_mapping = ForeignKey(
+        PatientHospitalMapping, on_delete=CASCADE
     )
-    created = models.DateTimeField(auto_now_add=True)
-    surgery_date = models.DateField(null=True, blank=True)
-    discharge_date = models.DateField(null=True, blank=True)
-    episode_type = models.CharField(
-        max_length=128, choices=EpisodeChoices.choices
-    )
-    surgeons = models.ManyToManyField(MedicalPersonnel)
-    comments = models.TextField(null=True, blank=True)
-    cepod = models.CharField(max_length=16, choices=CepodChoices.choices)
-    side = models.CharField(max_length=16, choices=SideChoices.choices)
-    occurence = models.CharField(
-        max_length=16, choices=OccurenceChoices.choices
-    )
-    type = models.CharField(max_length=16, choices=TypeChoices.choices)
-    complexity = models.CharField(
-        max_length=16, choices=ComplexityChoices.choices
-    )
-    mesh_type = models.CharField(
-        max_length=16, choices=MeshTypeChoices.choices
-    )
-    anaesthetic_type = models.CharField(
+    created = DateTimeField(auto_now_add=True)
+    surgery_date = DateField(null=True, blank=True)
+    episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
+    surgeons = ManyToManyField(MedicalPersonnel)
+    comments = TextField(null=True, blank=True)
+    cepod = CharField(max_length=16, choices=CepodChoices.choices)
+    side = CharField(max_length=16, choices=SideChoices.choices)
+    occurence = CharField(max_length=16, choices=OccurenceChoices.choices)
+    type = CharField(max_length=16, choices=TypeChoices.choices)
+    complexity = CharField(max_length=16, choices=ComplexityChoices.choices)
+    mesh_type = CharField(max_length=16, choices=MeshTypeChoices.choices)
+    anaesthetic_type = CharField(
         max_length=16, choices=AnaestheticChoices.choices
     )
-    diathermy_used = models.BooleanField()
+    diathermy_used = BooleanField()
 
     def __str__(self):
         return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"
@@ -149,7 +150,22 @@ class Episode(models.Model):
         verbose_name_plural = "Episodes"
 
 
-class FollowUp(models.Model):
+class Discharge(TimeStampMixin):
+    episode = OneToOneField(
+        Episode, on_delete=CASCADE, related_name="discharge"
+    )
+    date = DateField()
+    aware_of_mesh = BooleanField()
+    infection = BooleanField()
+
+    def __str__(self):
+        return f"Episode {self.episode.id} Discharge {self.id} - {self.date}"
+
+    class Meta:
+        verbose_name_plural = "Discharges"
+
+
+class FollowUp(Model):
     class PainSeverityChoices(TextChoices):
         NO_PAIN = ("NO_PAIN", "No Pain")
         MINIMAL = ("MINIMAL", "Minimal")
@@ -157,16 +173,16 @@ class FollowUp(models.Model):
         MODERATE = ("MODERATE", "Moderate")
         SEVERE = ("SEVERE", "Severe")
 
-    episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
-    follow_up_date = models.DateField()
-    pain_severity = models.CharField(
+    episode = ForeignKey(Episode, on_delete=CASCADE)
+    follow_up_date = DateField()
+    pain_severity = CharField(
         max_length=16, choices=PainSeverityChoices.choices
     )
-    attendees = models.ManyToManyField(MedicalPersonnel)
-    mesh_awareness = models.BooleanField()
-    seroma = models.BooleanField()
-    infection = models.BooleanField()
-    numbness = models.BooleanField()
+    attendees = ManyToManyField(MedicalPersonnel)
+    mesh_awareness = BooleanField()
+    seroma = BooleanField()
+    infection = BooleanField()
+    numbness = BooleanField()
 
     def __str__(self):
         return f"[{self.follow_up_date}] {self.episode}"
