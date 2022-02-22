@@ -9,6 +9,7 @@ from ...users.models import MedicalPersonnel
 from ..models import (
     Discharge,
     Episode,
+    FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
@@ -396,3 +397,79 @@ class DischargeWriteSerializer(ModelSerializer):
         )
 
         return discharge
+
+
+class FollowUpReadSerializer(ModelSerializer):
+    episode = EpisodeReadSerializer()
+
+    class Meta:
+        model = FollowUp
+        fields = [
+            "id",
+            "episode",
+            "date",
+            "pain_severity",
+            "attendees",
+            "mesh_awareness",
+            "seroma",
+            "infection",
+            "numbness",
+        ]
+
+
+class FollowUpWriteSerializer(ModelSerializer):
+    episode_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=Episode.objects.exclude(discharge=None)
+    )
+    attendee_ids = PrimaryKeyRelatedField(
+        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+    )
+
+    class Meta:
+        model = FollowUp
+        fields = [
+            "episode_id",
+            "date",
+            "pain_severity",
+            "attendee_ids",
+            "mesh_awareness",
+            "seroma",
+            "infection",
+            "numbness",
+        ]
+
+    def to_representation(self, instance):
+        serializer = FollowUpReadSerializer(instance)
+        return serializer.data
+
+    def create(self, validated_data):
+        episode = validated_data["episode_id"]
+        attendees = validated_data["attendee_ids"]
+
+        if episode.surgery_date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode surgery date cannot be after Follow Up date"
+                }
+            )
+
+        if episode.discharge.date > validated_data["date"]:
+            raise ValidationError(
+                {
+                    "error": "Episode Discharge date cannot be after Follow Up date"
+                }
+            )
+
+        follow_up = FollowUp.objects.create(
+            episode_id=episode.id,
+            date=validated_data["date"],
+            pain_severity=validated_data.get("pain_severity", ""),
+            mesh_awareness=validated_data["aware_of_mesh"],
+            seroma=validated_data["seroma"],
+            infection=validated_data["infection"],
+            numbness=validated_data["numbness"],
+        )
+
+        follow_up.attendees.set(attendees)
+
+        return follow_up
