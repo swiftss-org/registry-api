@@ -54,7 +54,6 @@ class EpisodeFactory(DjangoModelFactory):
 
     patient_hospital_mapping = SubFactory(PatientHospitalMappingFactory)
     surgery_date = LazyAttribute(lambda _: faker.date_object())
-    discharge_date = LazyAttribute(lambda _: faker.date_object())
     episode_type = LazyAttribute(
         lambda _: faker.random_element(Episode.EpisodeChoices.values)
     )

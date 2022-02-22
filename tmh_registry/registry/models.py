@@ -129,7 +129,6 @@ class Episode(Model):
     )
     created = DateTimeField(auto_now_add=True)
     surgery_date = DateField(null=True, blank=True)
-    discharge_date = DateField(null=True, blank=True)
     episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
     surgeons = ManyToManyField(MedicalPersonnel)
     comments = TextField(null=True, blank=True)
