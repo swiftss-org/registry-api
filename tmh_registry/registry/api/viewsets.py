@@ -79,7 +79,7 @@ class PatientFilterSet(FilterSet):
         operation_summary="Register a Patient",
         operation_description="Use this endpoint to register a patient. A PatientHospitalMapping will be created "
         "automatically for the newly created Patient and the provided Hospital.\n "
-        f"Accepted values for `gender` are `{Patient.Gender.labels}`. \n ",
+        f"\nAccepted values for `gender` are `{Patient.Gender.labels}`. \n ",
         responses={201: ReadPatientSerializer(many=True)},
     ),
 )
@@ -152,15 +152,17 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
     name="create",
     decorator=swagger_auto_schema(
         operation_summary="Register an Episode",
-        operation_description="Use this endpoint to register an episode. \n "
-        f"Accepted values for `episode_type` are `{Episode.EpisodeChoices.labels}`. \n "
-        f"Accepted values for `cepod` are `{Episode.CepodChoices.labels}`. \n "
-        f"Accepted values for `side` are `{Episode.SideChoices.labels}`. \n "
-        f"Accepted values for `occurence` are `{Episode.OccurenceChoices.labels}`. \n "
-        f"Accepted values for `type` are `{Episode.TypeChoices.labels}`. \n "
-        f"Accepted values for `complexity` are `{Episode.ComplexityChoices.labels}`. \n "
-        f"Accepted values for `mesh_type` are `{Episode.MeshTypeChoices.labels}`. \n "
-        f"Accepted values for `anaesthetic_type` are `{Episode.AnaestheticChoices.labels}`. \n ",
+        operation_description="Use this endpoint to register an episode. Keep in mind that you need to create a "
+        "`PatientHospitalMapping`(through the POST /patient-hospital-mappings/ endpoint) "
+        "if one does not already exist for this specific Patient/Hospital pair.\n "
+        f"\nAccepted values for `episode_type` are `{Episode.EpisodeChoices.labels}`. \n "
+        f"\nAccepted values for `cepod` are `{Episode.CepodChoices.labels}`. \n "
+        f"\nAccepted values for `side` are `{Episode.SideChoices.labels}`. \n "
+        f"\nAccepted values for `occurence` are `{Episode.OccurenceChoices.labels}`. \n "
+        f"\nAccepted values for `type` are `{Episode.TypeChoices.labels}`. \n "
+        f"\nAccepted values for `complexity` are `{Episode.ComplexityChoices.labels}`. \n "
+        f"\nAccepted values for `mesh_type` are `{Episode.MeshTypeChoices.labels}`. \n "
+        f"\nAccepted values for `anaesthetic_type` are `{Episode.AnaestheticChoices.labels}`. \n ",
         responses={201: EpisodeReadSerializer()},
     ),
 )
@@ -202,7 +204,8 @@ class DischargeViewset(CreateModelMixin, GenericViewSet):
     decorator=swagger_auto_schema(
         operation_summary="Register a Follow Up",
         operation_description="Use this endpoint to register a Follow Up. Multiple Follow Ups can be registered "
-        "for the same Episode.\n The accepted values for `pain_severity` are "
+        "for the same Episode.\n "
+        "\nThe accepted values for `pain_severity` are "
         f"`{FollowUp.PainSeverityChoices.labels}`.",
         responses={201: FollowUpReadSerializer()},
     ),
