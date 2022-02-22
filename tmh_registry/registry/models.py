@@ -29,8 +29,8 @@ class Hospital(Model):
 
 class Patient(TimeStampMixin):
     class Gender(TextChoices):
-        MALE = ("Male", "Male")
-        FEMALE = ("Female", "Female")
+        MALE = ("MALE", "Male")
+        FEMALE = ("FEMALE", "Female")
 
     full_name = CharField(max_length=255)
     national_id = CharField(max_length=20, null=True, blank=True, unique=True)
