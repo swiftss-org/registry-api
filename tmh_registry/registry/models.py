@@ -165,7 +165,7 @@ class Discharge(TimeStampMixin):
         verbose_name_plural = "Discharges"
 
 
-class FollowUp(Model):
+class FollowUp(TimeStampMixin):
     class PainSeverityChoices(TextChoices):
         NO_PAIN = ("NO_PAIN", "No Pain")
         MINIMAL = ("MINIMAL", "Minimal")
@@ -174,7 +174,7 @@ class FollowUp(Model):
         SEVERE = ("SEVERE", "Severe")
 
     episode = ForeignKey(Episode, on_delete=CASCADE)
-    follow_up_date = DateField()
+    date = DateField()
     pain_severity = CharField(
         max_length=16, choices=PainSeverityChoices.choices
     )
