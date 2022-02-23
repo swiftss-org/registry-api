@@ -9,7 +9,7 @@ from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
 
 from ..models import (
@@ -166,7 +166,7 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
         responses={201: EpisodeReadSerializer()},
     ),
 )
-class EpisodeViewset(CreateModelMixin, GenericViewSet):
+class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Episode.objects.all()
 
     def get_serializer_class(self):

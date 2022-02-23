@@ -18,10 +18,10 @@ from tmh_registry.registry.models import Episode, PatientHospitalMapping
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 
-class TestEpisodesViewSet(TestCase):
+class TestEpisodesPost(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestEpisodesViewSet, cls).setUpClass()
+        super(TestEpisodesPost, cls).setUpClass()
 
         cls.hospital = HospitalFactory()
 
