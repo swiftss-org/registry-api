@@ -32,7 +32,8 @@ class TestEpisodesGetDischarge(TestCase):
             f"/api/v1/episodes/{self.episode.id}/discharge/"
         )
 
-        self.assertEqual(HTTP_404_NOT_FOUND, response.status_code)
+        self.assertEqual(HTTP_200_OK, response.status_code)
+        self.assertEqual({}, response.data)
 
     def test_successful(self):
         discharge = DischargeFactory(episode=self.episode)

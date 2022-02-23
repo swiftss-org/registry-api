@@ -203,11 +203,11 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
             raise NotFound(f"Episode {pk=} not found.")
 
         try:
-            serializer = DischargeReadSerializer(episode.discharge)
+            data = DischargeReadSerializer(episode.discharge).data
         except AttributeError:
-            raise NotFound(f"Discharge for Episode {pk=} not found.")
+            data = {}
 
-        return Response(serializer.data)
+        return Response(data)
 
     @swagger_auto_schema(
         method="get",
