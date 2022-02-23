@@ -213,7 +213,7 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
         method="get",
         responses={
             200: openapi.Response(
-                "Returns a `Discharge` object.",
+                "Returns a `FollowUp` objects.",
                 DischargeReadSerializer,
             ),
         },
