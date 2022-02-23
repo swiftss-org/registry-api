@@ -75,7 +75,7 @@ class PatientFilterSet(FilterSet):
 
     class Meta:
         model = Patient
-        fields = ["hospital_id", "search_term"]
+        fields = ["hospital_id", "search_term", "ordering"]
 
 
 @method_decorator(
@@ -137,6 +137,9 @@ class PatientViewSet(
     def list(self, request, *args, **kwargs):
         print("====================PATIENT_LIST_ENDPOINT==================")
         print(f"{request.query_params=}")
+
+        queryset = self.filter_queryset(self.get_queryset())
+        print(queryset.query)
         return super().list(request, *args, **kwargs)
 
 
