@@ -134,6 +134,11 @@ class PatientViewSet(
 
         raise NotImplementedError
 
+    def list(self, request, *args, **kwargs):
+        print("====================PATIENT_LIST_ENDPOINT==================")
+        print(f"{request.query_params=}")
+        return super().list(request, *args, **kwargs)
+
 
 @method_decorator(
     name="create",
