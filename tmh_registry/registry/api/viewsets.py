@@ -3,10 +3,10 @@ from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django_filters import (  # pylint: disable=E0401
     CharFilter,
+    FilterSet,
     NumberFilter,
     OrderingFilter,
 )
-from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
 from drf_yasg import openapi
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
@@ -137,8 +137,11 @@ class PatientViewSet(
     def list(self, request, *args, **kwargs):
         print("====================PATIENT_LIST_ENDPOINT==================")
         print(f"{request.query_params=}")
+        print(f"{self.filter_backends=}")
 
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_backends[0]().filter_queryset(
+            request, self.queryset, self
+        )
         print(queryset.query)
         return super().list(request, *args, **kwargs)
 
