@@ -25,10 +25,19 @@ class HospitalSerializer(ModelSerializer):
 
 class EpisodeSerializer(ModelSerializer):
     surgeons = MedicalPersonnelSerializer(many=True)
+    episode_type = CharField(source="get_episode_type_display")
+    cepod = CharField(source="get_cepod_display")
+    side = CharField(source="get_side_display")
+    occurence = CharField(source="get_occurence_display")
+    type = CharField(source="get_type_display")
+    complexity = CharField(source="get_complexity_display")
+    mesh_type = CharField(source="get_mesh_type_display")
+    anaesthetic_type = CharField(source="get_anaesthetic_type_display")
 
     class Meta:
         model = Episode
         fields = [
+            "id",
             "surgery_date",
             "episode_type",
             "surgeons",
