@@ -3,7 +3,7 @@ from django.db import transaction
 from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from tmh_registry.users.models import MedicalPersonnel
+from ..models import MedicalPersonnel
 
 User = get_user_model()
 
@@ -11,7 +11,12 @@ User = get_user_model()
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["email"]
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -25,7 +30,12 @@ class UserSerializer(ModelSerializer):
 class UserReadSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["email"]
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
 
 
 class MedicalPersonnelSerializer(ModelSerializer):
