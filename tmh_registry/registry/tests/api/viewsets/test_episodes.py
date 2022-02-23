@@ -176,3 +176,14 @@ class TestEpisodesViewSet(TestCase):
                 Episode.AnaestheticChoices.choices, data["anaesthetic_type"]
             ),
         )
+
+    def test_create_successful_without_optional_fields(self):
+        data = self.get_episode_test_data()
+        data.pop("comments")
+        response = self.client.post(
+            "/api/v1/episodes/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_201_CREATED, response.status_code)
+
+        self.assertEqual(response.data["comments"], "")
