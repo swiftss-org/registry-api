@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django_filters import (  # pylint: disable=E0401
@@ -6,10 +7,14 @@ from django_filters import (  # pylint: disable=E0401
     OrderingFilter,
 )
 from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
+from drf_yasg import openapi
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from ..models import (
@@ -166,7 +171,7 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
         responses={201: EpisodeReadSerializer()},
     ),
 )
-class EpisodeViewset(CreateModelMixin, GenericViewSet):
+class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Episode.objects.all()
 
     def get_serializer_class(self):
@@ -176,6 +181,60 @@ class EpisodeViewset(CreateModelMixin, GenericViewSet):
             return EpisodeWriteSerializer
 
         raise NotImplementedError
+
+    @swagger_auto_schema(
+        method="get",
+        responses={
+            200: openapi.Response(
+                "Returns a `Discharge` object.",
+                DischargeReadSerializer,
+            ),
+        },
+    )
+    @action(
+        detail=True,
+        serializer_class=DischargeReadSerializer,
+        queryset=Discharge.objects.none(),
+    )
+    def discharge(self, request, pk=None):
+        try:
+            episode = Episode.objects.select_related("discharge").get(pk=pk)
+        except ObjectDoesNotExist:
+            raise NotFound(f"Episode {pk=} not found.")
+
+        try:
+            serializer = DischargeReadSerializer(episode.discharge)
+        except AttributeError:
+            raise NotFound(f"Discharge for Episode {pk=} not found.")
+
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        method="get",
+        responses={
+            200: openapi.Response(
+                "Returns `FollowUp` objects.",
+                FollowUpReadSerializer,
+            ),
+        },
+    )
+    @action(
+        detail=True,
+        serializer_class=FollowUpReadSerializer,
+        queryset=FollowUp.objects.none(),
+        url_path="follow-ups",
+    )
+    def follow_ups(self, request, pk=None):
+        try:
+            episode = Episode.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            raise NotFound(f"Episode {pk=} not found.")
+
+        follow_ups = FollowUp.objects.filter(episode_id=episode.id)
+
+        serializer = FollowUpReadSerializer(follow_ups, many=True)
+
+        return Response(serializer.data)
 
 
 @method_decorator(
