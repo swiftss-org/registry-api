@@ -123,8 +123,8 @@ class PatientViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    filterset_class = PatientFilterSet
     queryset = Patient.objects.all()
+    filterset_class = PatientFilterSet
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
