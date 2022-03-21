@@ -287,7 +287,8 @@ class TestPatientsViewSet(TestCase):
                 patient_id=self.patient.id,
             ).patient_hospital_id
             self.assertEqual(
-                int(patient_hospital_id), hospital_mapping["patient_hospital_id"]
+                int(patient_hospital_id),
+                hospital_mapping["patient_hospital_id"],
             )
 
     ########################

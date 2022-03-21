@@ -52,7 +52,9 @@ class PatientHospitalMappingFactory(DjangoModelFactory):
 
     patient = SubFactory(PatientFactory)
     hospital = SubFactory(HospitalFactory)
-    patient_hospital_id = LazyAttribute(lambda _: faker.numerify(text="#########"))
+    patient_hospital_id = LazyAttribute(
+        lambda _: faker.numerify(text="#########")
+    )
 
 
 class EpisodeFactory(DjangoModelFactory):

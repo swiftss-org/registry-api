@@ -59,10 +59,14 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
         fields = ["patient_hospital_id", "hospital_id"]
 
     def to_representation(self, instance):
-        data = super(PatientHospitalMappingPatientSerializer, self).to_representation(instance)
+        data = super(
+            PatientHospitalMappingPatientSerializer, self
+        ).to_representation(instance)
 
         data["patient_hospital_id"] = (
-            int(data["patient_hospital_id"]) if data["patient_hospital_id"] else None
+            int(data["patient_hospital_id"])
+            if data["patient_hospital_id"]
+            else None
         )
 
         return data
@@ -146,32 +150,32 @@ class CreatePatientSerializer(ModelSerializer):
     def create(self, validated_data):
         try:
             input_national_id = validated_data.get("national_id")
-            validated_data["national_id"] = int(input_national_id) if input_national_id else None
+            validated_data["national_id"] = (
+                int(input_national_id) if input_national_id else None
+            )
         except ValueError:
             raise ValidationError(
-                {
-                    "error": "The 'national_id' field should be an integer."
-                }
+                {"error": "The 'national_id' field should be an integer."}
             )
 
         try:
             input_phone_1 = validated_data.get("phone_1")
-            validated_data["phone_1"] = int(input_phone_1) if input_phone_1 else None
+            validated_data["phone_1"] = (
+                int(input_phone_1) if input_phone_1 else None
+            )
         except ValueError:
             raise ValidationError(
-                {
-                    "error": "The 'phone_1' field should be an integer."
-                }
+                {"error": "The 'phone_1' field should be an integer."}
             )
 
         try:
             input_phone_2 = validated_data.get("phone_2")
-            validated_data["phone_2"] = int(input_phone_2) if input_phone_2 else None
+            validated_data["phone_2"] = (
+                int(input_phone_2) if input_phone_2 else None
+            )
         except ValueError:
             raise ValidationError(
-                {
-                    "error": "The 'phone_2' field should be an integer."
-                }
+                {"error": "The 'phone_2' field should be an integer."}
             )
 
         if not validated_data.get("year_of_birth", None):
@@ -205,7 +209,9 @@ class CreatePatientSerializer(ModelSerializer):
 
         try:
             patient_hospital_id = validated_data.pop("patient_hospital_id")
-            patient_hospital_id = int(patient_hospital_id) if patient_hospital_id else None
+            patient_hospital_id = (
+                int(patient_hospital_id) if patient_hospital_id else None
+            )
         except ValueError:
             raise ValidationError(
                 {
@@ -259,10 +265,14 @@ class PatientHospitalMappingReadSerializer(ModelSerializer):
         fields = ["patient", "hospital", "patient_hospital_id"]
 
     def to_representation(self, instance):
-        data = super(PatientHospitalMappingReadSerializer, self).to_representation(instance)
+        data = super(
+            PatientHospitalMappingReadSerializer, self
+        ).to_representation(instance)
 
         data["patient_hospital_id"] = (
-            int(data["patient_hospital_id"]) if data["patient_hospital_id"] else None
+            int(data["patient_hospital_id"])
+            if data["patient_hospital_id"]
+            else None
         )
 
         return data
@@ -282,14 +292,18 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
 
     def create(self, validated_data):
         try:
-            validated_data["patient_hospital_id"] = int(validated_data.get("patient_hospital_id"))
+            validated_data["patient_hospital_id"] = int(
+                validated_data.get("patient_hospital_id")
+            )
         except ValueError:
             raise ValidationError(
                 {
                     "error": "The 'patient_hospital_id' field should be an integer."
                 }
             )
-        validated_data["patient_hospital_id"] = str(validated_data["patient_hospital_id"])
+        validated_data["patient_hospital_id"] = str(
+            validated_data["patient_hospital_id"]
+        )
         validated_data["patient_id"] = validated_data["patient_id"].id
         validated_data["hospital_id"] = validated_data["hospital_id"].id
 
