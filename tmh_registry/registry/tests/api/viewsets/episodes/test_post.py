@@ -100,7 +100,7 @@ class TestEpisodesPost(TestCase):
 
         self.assertEqual(
             response.data["patient_hospital_mapping"]["patient_hospital_id"],
-            self.patient_hospital_mapping.patient_hospital_id,
+            int(self.patient_hospital_mapping.patient_hospital_id),
         )
         self.assertEqual(response.data["surgery_date"], data["surgery_date"])
         self.assertEqual(response.data["episode_type"], data["episode_type"])

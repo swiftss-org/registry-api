@@ -58,6 +58,15 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
         model = PatientHospitalMapping
         fields = ["patient_hospital_id", "hospital_id"]
 
+    def to_representation(self, instance):
+        data = super(PatientHospitalMappingPatientSerializer, self).to_representation(instance)
+
+        data["patient_hospital_id"] = (
+            int(data["patient_hospital_id"]) if data["patient_hospital_id"] else None
+        )
+
+        return data
+
 
 class ReadPatientSerializer(ModelSerializer):
     age = IntegerField(allow_null=True)
@@ -135,6 +144,35 @@ class CreatePatientSerializer(ModelSerializer):
         return serializer.data
 
     def create(self, validated_data):
+        try:
+            input_national_id = validated_data.get("national_id")
+            validated_data["national_id"] = int(input_national_id) if input_national_id else None
+        except ValueError:
+            raise ValidationError(
+                {
+                    "error": "The 'national_id' field should be an integer."
+                }
+            )
+
+        try:
+            input_phone_1 = validated_data.get("phone_1")
+            validated_data["phone_1"] = int(input_phone_1) if input_phone_1 else None
+        except ValueError:
+            raise ValidationError(
+                {
+                    "error": "The 'phone_1' field should be an integer."
+                }
+            )
+
+        try:
+            input_phone_2 = validated_data.get("phone_2")
+            validated_data["phone_2"] = int(input_phone_2) if input_phone_2 else None
+        except ValueError:
+            raise ValidationError(
+                {
+                    "error": "The 'phone_2' field should be an integer."
+                }
+            )
 
         if not validated_data.get("year_of_birth", None):
             if validated_data["age"]:
@@ -165,7 +203,16 @@ class CreatePatientSerializer(ModelSerializer):
                 {"error": "The patient needs to be registered to a hospital."}
             )
 
-        patient_hospital_id = validated_data.pop("patient_hospital_id", None)
+        try:
+            patient_hospital_id = validated_data.pop("patient_hospital_id")
+            patient_hospital_id = int(patient_hospital_id) if patient_hospital_id else None
+        except ValueError:
+            raise ValidationError(
+                {
+                    "error": "The 'patient_hospital_id' field should be an integer."
+                }
+            )
+
         if patient_hospital_id:
             if PatientHospitalMapping.objects.filter(
                 hospital_id=hospital.id,
@@ -179,7 +226,7 @@ class CreatePatientSerializer(ModelSerializer):
                 )
         else:
             raise ValidationError(
-                {"error": "The patient needs to be registered to a hospital."}
+                {"error": "The 'patient_hospital_id' should be provided."}
             )
 
         validated_data["gender"] = (
@@ -211,6 +258,15 @@ class PatientHospitalMappingReadSerializer(ModelSerializer):
         model = PatientHospitalMapping
         fields = ["patient", "hospital", "patient_hospital_id"]
 
+    def to_representation(self, instance):
+        data = super(PatientHospitalMappingReadSerializer, self).to_representation(instance)
+
+        data["patient_hospital_id"] = (
+            int(data["patient_hospital_id"]) if data["patient_hospital_id"] else None
+        )
+
+        return data
+
 
 class PatientHospitalMappingWriteSerializer(ModelSerializer):
     patient_id = PrimaryKeyRelatedField(queryset=Patient.objects.all())
@@ -225,6 +281,15 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
         return serializer.data
 
     def create(self, validated_data):
+        try:
+            validated_data["patient_hospital_id"] = int(validated_data.get("patient_hospital_id"))
+        except ValueError:
+            raise ValidationError(
+                {
+                    "error": "The 'patient_hospital_id' field should be an integer."
+                }
+            )
+        validated_data["patient_hospital_id"] = str(validated_data["patient_hospital_id"])
         validated_data["patient_id"] = validated_data["patient_id"].id
         validated_data["hospital_id"] = validated_data["hospital_id"].id
 
