@@ -9,7 +9,7 @@ watchgod==0.7  # https://github.com/samuelcolvin/watchgod
 # ------------------------------------------------------------------------------
 mypy==0.790  # https://github.com/python/mypy
 django-stubs==1.8.0  # https://github.com/typeddjango/django-stubs
-pytest==6.1.2  # https://github.com/pytest-dev/pytest
+pytest==7.1.2  # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.4  # https://github.com/Frozenball/pytest-sugar
 mock==4.0.3 # https://pypi.org/project/mock/
 freezegun==1.1.0 # https://pypi.org/project/freezegun/0.1.11/
