@@ -152,6 +152,8 @@ class Episode(Model):
         max_length=16, choices=AnaestheticChoices.choices
     )
     diathermy_used = BooleanField()
+    antibiotic_used = BooleanField()
+    antibiotic_type = TextField(null=True, blank=True)
 
     def __str__(self):
         return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"

@@ -237,6 +237,7 @@ class TestPatientsViewSet(TestCase):
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertEqual(self.patient.id, response.data["id"])
         self.assertEqual(True, response.data["episodes"][0]["diathermy_used"])
+        self.assertEqual(True, response.data["episodes"][0]["antibiotic_used"])
 
     def test_get_patients_detail_unauthorized(self):
         self.client = APIClient()

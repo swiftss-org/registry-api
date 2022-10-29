@@ -52,6 +52,8 @@ class EpisodeSerializer(ModelSerializer):
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
 
@@ -381,6 +383,8 @@ class EpisodeReadSerializer(ModelSerializer):
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
 
@@ -423,6 +427,8 @@ class EpisodeWriteSerializer(ModelSerializer):
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
     def to_representation(self, instance):
@@ -487,6 +493,8 @@ class EpisodeWriteSerializer(ModelSerializer):
                     validated_data["anaesthetic_type"],
                 ),
                 diathermy_used=validated_data["diathermy_used"],
+                antibiotic_used=validated_data["antibiotic_used"],
+                antibiotic_type=validated_data.get("antibiotic_type", ""),
             )
         except IndexError:
             raise ValidationError(

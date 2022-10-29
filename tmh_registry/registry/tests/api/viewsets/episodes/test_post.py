@@ -49,6 +49,8 @@ class TestEpisodesPost(TestCase):
             "mesh_type": Episode.MeshTypeChoices.TNMHP.label,
             "anaesthetic_type": Episode.AnaestheticChoices.SPINAL.label,
             "diathermy_used": True,
+            "antibiotic_used": True,
+            "antibiotic_type": 'A random antibiotic',
         }
 
     def setUp(self) -> None:
@@ -126,6 +128,12 @@ class TestEpisodesPost(TestCase):
         )
         self.assertEqual(
             response.data["diathermy_used"], data["diathermy_used"]
+        )
+        self.assertEqual(
+            response.data["antibiotic_used"], data["antibiotic_used"]
+        )
+        self.assertEqual(
+            response.data["antibiotic_type"], data["antibiotic_type"]
         )
 
         # assert that values are stored in the db, not labels
