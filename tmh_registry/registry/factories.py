@@ -79,6 +79,9 @@ class EpisodeFactory(DjangoModelFactory):
     type = LazyAttribute(
         lambda _: faker.random_element(Episode.TypeChoices.values)
     )
+    size = LazyAttribute(
+        lambda _: faker.random_element(Episode.SizeChoices.values)
+    )
     complexity = LazyAttribute(
         lambda _: faker.random_element(Episode.ComplexityChoices.values)
     )

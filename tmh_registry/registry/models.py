@@ -109,6 +109,14 @@ class Episode(Model):
         INDIRECT = ("INDIRECT", "Indirect")
         PANTALOON = ("PANTALOON", "Pantaloon")
 
+    class SizeChoices(TextChoices):
+        VERY_SMALL = ('VERY_SMALL', 'Very Small (<1 finger breadth)')
+        SMALL = ('SMALL', 'Small (1-2 finger breadths)')
+        MEDIUM = ('MEDIUM', 'Medium (2-3 finger breadths)')
+        LARGE = ('LARGE', 'Large (3-4 finger breadths)')
+        VERY_LARGE = ('VERY_LARGE', 'Very Large (>4 finger breadths)')
+        MASSIVE = ('MASSIVE', 'Massive (extends beyond midpoint of thigh)')
+
     class ComplexityChoices(TextChoices):
         SIMPLE = ("SIMPLE", "Simple")
         INCARCERATED = ("INCARCERATED", "Incarcerated")
@@ -137,6 +145,7 @@ class Episode(Model):
     side = CharField(max_length=16, choices=SideChoices.choices)
     occurence = CharField(max_length=16, choices=OccurenceChoices.choices)
     type = CharField(max_length=16, choices=TypeChoices.choices)
+    size = CharField(max_length=16, choices=SizeChoices.choices)
     complexity = CharField(max_length=16, choices=ComplexityChoices.choices)
     mesh_type = CharField(max_length=16, choices=MeshTypeChoices.choices)
     anaesthetic_type = CharField(
