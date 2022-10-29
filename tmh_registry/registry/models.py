@@ -84,7 +84,6 @@ class Episode(Model):
         INGUINAL = ("INGUINAL", "Inguinal Mesh Hernia Repair")
         INCISIONAL = ("INCISIONAL", "Incisional Mesh Hernia Repair")
         FEMORAL = ("FEMORAL", "Femoral Mesh Hernia Repair")
-        HIATUS = ("HIATUS", "Hiatus Mesh Hernia Repair")
         UMBILICAL = (
             "UMBILICAL",
             "Umbilical/Periumbilicial Mesh Hernia Repair",

@@ -70,7 +70,7 @@ class TestEpisodesPost(TestCase):
 
     @parameterized.expand(
         [
-            ("episode_type", "hIaTuS"),
+            ("episode_type", "WRONG_OPTION"),
             ("cepod", "WRONG_OPTION"),
             ("side", "WRONG_OPTION"),
             ("occurence", "WRONG_OPTION"),
