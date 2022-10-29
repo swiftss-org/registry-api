@@ -94,6 +94,7 @@ class Episode(Model):
         EMERGENCY = ("EMERGENCY", "Emergency")
 
     class SideChoices(TextChoices):
+        NA = ("NA", "Not Applicable")
         LEFT = ("LEFT", "Left")
         RIGHT = ("RIGHT", "Right")
 
@@ -103,6 +104,7 @@ class Episode(Model):
         RERECURRENT = ("RERECURRENT", "Rerecurrent")
 
     class TypeChoices(TextChoices):
+        NA = ("NA", "Not Applicable")
         DIRECT = ("DIRECT", "Direct")
         INDIRECT = ("INDIRECT", "Indirect")
         PANTALOON = ("PANTALOON", "Pantaloon")
