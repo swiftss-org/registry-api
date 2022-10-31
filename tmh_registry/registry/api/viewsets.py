@@ -165,6 +165,7 @@ class PatientHospitalMappingViewset(CreateModelMixin, GenericViewSet):
         f"\nAccepted values for `side` are `{Episode.SideChoices.labels}`. \n "
         f"\nAccepted values for `occurence` are `{Episode.OccurenceChoices.labels}`. \n "
         f"\nAccepted values for `type` are `{Episode.TypeChoices.labels}`. \n "
+        f"\nAccepted values for `size` are `{Episode.SizeChoices.labels}`. \n "
         f"\nAccepted values for `complexity` are `{Episode.ComplexityChoices.labels}`. \n "
         f"\nAccepted values for `mesh_type` are `{Episode.MeshTypeChoices.labels}`. \n "
         f"\nAccepted values for `anaesthetic_type` are `{Episode.AnaestheticChoices.labels}`. \n ",

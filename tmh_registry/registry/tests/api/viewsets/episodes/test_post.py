@@ -44,10 +44,13 @@ class TestEpisodesPost(TestCase):
             "side": Episode.SideChoices.LEFT.label,
             "occurence": Episode.OccurenceChoices.RECURRENT.label,
             "type": Episode.TypeChoices.INDIRECT.label,
+            "size": Episode.SizeChoices.MEDIUM.label,
             "complexity": Episode.ComplexityChoices.INCARCERATED.label,
             "mesh_type": Episode.MeshTypeChoices.TNMHP.label,
             "anaesthetic_type": Episode.AnaestheticChoices.SPINAL.label,
             "diathermy_used": True,
+            "antibiotic_used": True,
+            "antibiotic_type": 'A random antibiotic',
         }
 
     def setUp(self) -> None:
@@ -70,11 +73,12 @@ class TestEpisodesPost(TestCase):
 
     @parameterized.expand(
         [
-            ("episode_type", "hIaTuS"),
+            ("episode_type", "WRONG_OPTION"),
             ("cepod", "WRONG_OPTION"),
             ("side", "WRONG_OPTION"),
             ("occurence", "WRONG_OPTION"),
             ("type", "WRONG_OPTION"),
+            ("size", "WRONG_OPTION"),
             ("complexity", "WRONG_OPTION"),
             ("mesh_type", "WRONG_OPTION"),
             ("anaesthetic_type", "WRONG_OPTION"),
@@ -116,6 +120,7 @@ class TestEpisodesPost(TestCase):
         self.assertEqual(response.data["side"], data["side"])
         self.assertEqual(response.data["occurence"], data["occurence"])
         self.assertEqual(response.data["type"], data["type"])
+        self.assertEqual(response.data["size"], data["size"])
         self.assertEqual(response.data["complexity"], data["complexity"])
         self.assertEqual(response.data["mesh_type"], data["mesh_type"])
         self.assertEqual(
@@ -123,6 +128,12 @@ class TestEpisodesPost(TestCase):
         )
         self.assertEqual(
             response.data["diathermy_used"], data["diathermy_used"]
+        )
+        self.assertEqual(
+            response.data["antibiotic_used"], data["antibiotic_used"]
+        )
+        self.assertEqual(
+            response.data["antibiotic_type"], data["antibiotic_type"]
         )
 
         # assert that values are stored in the db, not labels
@@ -156,6 +167,12 @@ class TestEpisodesPost(TestCase):
             episode.type,
             get_text_choice_value_from_label(
                 Episode.TypeChoices.choices, data["type"]
+            ),
+        )
+        self.assertEqual(
+            episode.size,
+            get_text_choice_value_from_label(
+                Episode.SizeChoices.choices, data["size"]
             ),
         )
         self.assertEqual(

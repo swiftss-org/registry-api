@@ -16,8 +16,16 @@ For local development, we use [Docker Compose](https://docs.docker.com/compose/)
 
 First install the prerequisite software:
 
-1. Install [Docker](https://hub.docker.com/search?q=&type=edition&offering=community&sort=updated_at&order=desc) and [Docker Compose](https://docs.docker.com/compose/install/)
-2. Install Python 3, pip, and [pre-commit](https://pre-commit.com/)
+1. Install [Docker](https://hub.docker.com/search?q=&type=edition&offering=community&sort=updated_at&order=desc) and [Docker Compose](https://docs.docker.com/compose/install/).
+1. Install Python 3 and pip.
+
+If you want to run _outside_ of Docker you will also need to:
+1. Install [PostgreSQL](https://www.postgresql.org/), even if you are not runninga local database this is required for `psycopg2`, the PostgreSQL database adapter for Python, to correctly install when you `make dep`.
+
+If you are on _Windows_ and not Linux (or other *nix) you will also need to have installed:
+1. [MSYS](https://www.msys2.org/) or an alternative set of Unix compatible tools that includes `make`.
+1. [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) which are required to install some of the Python [Django](https://www.djangoproject.com/) dependencies. 
+ 
 
 ### First time only
 
@@ -29,11 +37,22 @@ pyenv virtualenv registry-api
 pyenv activate registry-api
 ```
 
+Or if you prefer to use [virtualenv](https://virtualenv.pypa.io/en/latest/) directly without pyenv: 
+```
+# Linux 
+$ virtualenv venv
+$ activate venv
+
+# Windows
+> virtualenv venv
+> .\venv\Scripts\activate
+```
+
+
 Install project dependencies:
 ```
 make dep
 ```
-
 
 ### Start Developing
 
@@ -53,6 +72,12 @@ make test
 ```
 
 Everything you need for this project is under [Makefile](./Makefile). Take a look at the commands by running `make`.
+
+### Create a local user in Django
+Before you can login to the registry you will need to create an account via. the local Django admin console:
+1. Go ot the admin console on [http://localhost:8000/admin/](http://localhost:8000/admin/) or from Containers in Docker Desktop
+2. Enter the username and password from `.envs/.local/.django`
+3. Create a new user
 
 ### Setting up PyCharm (Optional)
 
@@ -83,6 +108,10 @@ Feel free to use any commit messages you like in the PR. However, please always 
 messages that follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
 
 # Troubleshooting
+
+### Accessing the PostgreSQL local database directly
+From within the Docker Terminal execute `psql -d tmh_registry -U admin` to get a local psql session.
+
 
 ### Permission Denied in migration files
 

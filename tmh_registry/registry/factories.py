@@ -79,6 +79,9 @@ class EpisodeFactory(DjangoModelFactory):
     type = LazyAttribute(
         lambda _: faker.random_element(Episode.TypeChoices.values)
     )
+    size = LazyAttribute(
+        lambda _: faker.random_element(Episode.SizeChoices.values)
+    )
     complexity = LazyAttribute(
         lambda _: faker.random_element(Episode.ComplexityChoices.values)
     )
@@ -89,6 +92,8 @@ class EpisodeFactory(DjangoModelFactory):
         lambda _: faker.random_element(Episode.AnaestheticChoices.values)
     )
     diathermy_used = True
+    antibiotic_used = True
+    antibiotic_type = LazyAttribute(lambda _: faker.sentence(nb_words=10))
 
     @post_generation
     def medical_personnel(self, create, extracted, **kwargs):

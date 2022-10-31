@@ -30,6 +30,7 @@ class EpisodeSerializer(ModelSerializer):
     side = CharField(source="get_side_display")
     occurence = CharField(source="get_occurence_display")
     type = CharField(source="get_type_display")
+    size = CharField(source="get_size_display")
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
@@ -46,10 +47,13 @@ class EpisodeSerializer(ModelSerializer):
             "side",
             "occurence",
             "type",
+            "size",
             "complexity",
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
 
@@ -355,6 +359,7 @@ class EpisodeReadSerializer(ModelSerializer):
     side = CharField(source="get_side_display")
     occurence = CharField(source="get_occurence_display")
     type = CharField(source="get_type_display")
+    size = CharField(source="get_size_display")
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
@@ -373,10 +378,13 @@ class EpisodeReadSerializer(ModelSerializer):
             "side",
             "occurence",
             "type",
+            "size",
             "complexity",
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
 
@@ -396,6 +404,7 @@ class EpisodeWriteSerializer(ModelSerializer):
     side = CharField()
     occurence = CharField()
     type = CharField()
+    size = CharField()
     complexity = CharField()
     mesh_type = CharField()
     anaesthetic_type = CharField()
@@ -413,10 +422,13 @@ class EpisodeWriteSerializer(ModelSerializer):
             "side",
             "occurence",
             "type",
+            "size",
             "complexity",
             "mesh_type",
             "anaesthetic_type",
             "diathermy_used",
+            "antibiotic_used",
+            "antibiotic_type",
         ]
 
     def to_representation(self, instance):
@@ -465,6 +477,9 @@ class EpisodeWriteSerializer(ModelSerializer):
                 type=get_text_choice_value_from_label(
                     Episode.TypeChoices.choices, validated_data["type"]
                 ),
+                size=get_text_choice_value_from_label(
+                    Episode.SizeChoices.choices, validated_data["size"]
+                ),
                 complexity=get_text_choice_value_from_label(
                     Episode.ComplexityChoices.choices,
                     validated_data["complexity"],
@@ -478,6 +493,8 @@ class EpisodeWriteSerializer(ModelSerializer):
                     validated_data["anaesthetic_type"],
                 ),
                 diathermy_used=validated_data["diathermy_used"],
+                antibiotic_used=validated_data["antibiotic_used"],
+                antibiotic_type=validated_data.get("antibiotic_type", ""),
             )
         except IndexError:
             raise ValidationError(
