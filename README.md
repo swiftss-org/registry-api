@@ -73,6 +73,28 @@ make test
 
 Everything you need for this project is under [Makefile](./Makefile). Take a look at the commands by running `make`.
 
+### Running within Docker
+To create the Docker image _without_ using the Makefile, for example if you are running on Windows without a compatible version of make installed:
+```
+# Build the Docker image
+> docker-compose -f local.yml build
+
+# Run the Docker image
+> docker-compose -f local.yml up -d
+
+# Execute the tests
+> docker-compose -f local.yml exec -T django bash -c "python manage.py test"
+```
+
+If you then change any of the models such that the database needs to be migrated:
+```
+# Make the migrations
+> docker-compose -f local.yml exec -T django bash -c "python manage.py makemigrations"
+ 
+# Execute the migraitons
+> docker-compose -f local.yml exec -T django bash -c "python manage.py migrate"
+```
+
 ### Create a local user in Django
 Before you can login to the registry you will need to create an account via. the local Django admin console:
 1. Go ot the admin console on [http://localhost:8000/admin/](http://localhost:8000/admin/) or from Containers in Docker Desktop
