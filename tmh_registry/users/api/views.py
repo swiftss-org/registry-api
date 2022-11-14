@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import UpdateAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -14,7 +15,7 @@ from rest_framework.views import APIView
 
 from tmh_registry.users.api.serializers import (
     SignInResponseSerializer,
-    SignInSerializer,
+    SignInSerializer, ChangePasswordSerializer,
 )
 
 logger = getLogger(__name__)
@@ -116,3 +117,17 @@ class SignInView(BaseUserManagementView):
         :rtype: Serializer
         """
         return SignInSerializer
+
+class ChangePasswordView(UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # if using drf authtoken, create a new token
+        if hasattr(user, 'auth_token'):
+            user.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=user)
+        # return new token
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
