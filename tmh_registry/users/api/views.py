@@ -4,7 +4,7 @@ from logging import getLogger
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import UpdateAPIView
@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 
 from tmh_registry.users.api.serializers import (
     SignInResponseSerializer,
-    SignInSerializer, ChangePasswordSerializer,
+    SignInSerializer, ChangePasswordSerializer
 )
 
 logger = getLogger(__name__)
@@ -119,11 +119,16 @@ class SignInView(BaseUserManagementView):
         return SignInSerializer
 
 class ChangePasswordView(UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as exc:
+            return Response({"errors": exc.detail}, status=status.HTTP_400_BAD_REQUEST)
+
         user = serializer.save()
         # if using drf authtoken, create a new token
         if hasattr(user, 'auth_token'):
