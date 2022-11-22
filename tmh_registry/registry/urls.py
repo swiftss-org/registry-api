@@ -21,3 +21,6 @@ router.register(r"follow-ups", FollowUpViewset)
 urlpatterns = [
     path("", include(router.urls)),
 ]
+
+# @ todo medical personel required (????)
+
