@@ -128,6 +128,8 @@ class CreatePatientSerializer(ModelSerializer):
     hospital_id = IntegerField(write_only=True)
     patient_hospital_id = IntegerField(write_only=True)
     year_of_birth = IntegerField(allow_null=True)
+    month_of_birth = IntegerField(write_only=True)
+    day_of_birth = IntegerField(write_only=True)
     gender = CharField(allow_null=True)
 
     class Meta:
@@ -516,7 +518,7 @@ class DischargeReadSerializer(ModelSerializer):
             "id",
             "episode",
             "date",
-            "aware_of_mesh",
+            "antibiotics_given",
             "infection",
         ]
 
@@ -531,7 +533,7 @@ class DischargeWriteSerializer(ModelSerializer):
         fields = [
             "episode_id",
             "date",
-            "aware_of_mesh",
+            "antibiotics_given",
             "infection",
         ]
 
@@ -552,7 +554,7 @@ class DischargeWriteSerializer(ModelSerializer):
         discharge = Discharge.objects.create(
             episode_id=episode.id,
             date=validated_data["date"],
-            aware_of_mesh=validated_data["aware_of_mesh"],
+            antibiotics_given=validated_data["antibiotics_given"],
             infection=validated_data["infection"],
         )
 

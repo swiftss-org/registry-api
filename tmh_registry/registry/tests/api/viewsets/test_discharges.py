@@ -25,7 +25,7 @@ class TestDischargeCreate(TestCase):
         return {
             "episode_id": self.episode.id,
             "date": "2022-02-22",
-            "aware_of_mesh": True,
+            "antibiotics_given": True,
             "infection": False,
         }
 
@@ -39,7 +39,7 @@ class TestDischargeCreate(TestCase):
 
         self.assertEqual(response.data["episode"]["id"], self.episode.id)
         self.assertEqual(response.data["date"], data["date"])
-        self.assertEqual(response.data["aware_of_mesh"], data["aware_of_mesh"])
+        self.assertEqual(response.data["antibiotics_given"], data["antibiotics_given"])
         self.assertEqual(response.data["infection"], data["infection"])
 
     def test_when_episode_id_does_not_exist(self):

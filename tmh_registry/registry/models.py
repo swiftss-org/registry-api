@@ -120,13 +120,15 @@ class Episode(Model):
     class ComplexityChoices(TextChoices):
         SIMPLE = ("SIMPLE", "Simple")
         INCARCERATED = ("INCARCERATED", "Incarcerated")
-        OBSTRUCTED = ("OBSTRUCTED", "Obstructed")
+        IRREDUCIBLE = ("IRREDUCIBLE", "Irreducible")
+        OBSTRUCTED = ("OBSTRUCTED", "With bowel obstruction")
         STRANGULATED = ("STRANGULATED", "Strangulated")
 
     class MeshTypeChoices(TextChoices):
         TNMHP = ("TNMHP", "TNMHP Mesh")
         KCMC = ("KCMC", "KCMC Generic Mesh")
         COMMERCIAL = ("COMMERCIAL", "Commercial Mesh")
+        INTERNATIONAL = ("INTERNATION", "Hernia International Mesh")
 
     class AnaestheticChoices(TextChoices):
         LOCAL = ("LOCAL", "Local Anaesthetic")
@@ -167,7 +169,7 @@ class Discharge(TimeStampMixin):
         Episode, on_delete=CASCADE, related_name="discharge"
     )
     date = DateField()
-    aware_of_mesh = BooleanField()
+    antibiotics_given = BooleanField()
     infection = BooleanField()
 
     def __str__(self):
