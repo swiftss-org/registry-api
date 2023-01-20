@@ -178,4 +178,4 @@ SWAGGER_SETTINGS = {
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https:\/\/tmh-registry-client.*heroku.*app\.com$", r"^http:\/\/localhost.*$"]
+    r"^https:\/\/tmh-registry-client.*heroku.*app\.com$", r"^http:\/\/localhost.*$", r"^https:\/\/registry.swiftss\.org$"]
