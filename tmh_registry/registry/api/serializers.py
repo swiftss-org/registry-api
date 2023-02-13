@@ -67,11 +67,11 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
             PatientHospitalMappingPatientSerializer, self
         ).to_representation(instance)
 
-        data["patient_hospital_id"] = (
-            int(data["patient_hospital_id"])
-            if data["patient_hospital_id"]
-            else None
-        )
+        # data["patient_hospital_id"] = (
+        #     int(data["patient_hospital_id"])
+        #     if data["patient_hospital_id"]
+        #     else None
+        # )
 
         return data
 
@@ -113,22 +113,24 @@ class ReadPatientSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super(ReadPatientSerializer, self).to_representation(instance)
 
-        data["national_id"] = (
-            int(data["national_id"]) if data["national_id"] else None
-        )
-        data["phone_1"] = int(data["phone_1"]) if data["phone_1"] else None
-        data["phone_2"] = int(data["phone_2"]) if data["phone_2"] else None
+        # data["national_id"] = (
+        #     int(data["national_id"]) if data["national_id"] else None
+        # )
+        # data["phone_1"] = int(data["phone_1"]) if data["phone_1"] else None
+        # data["phone_2"] = int(data["phone_2"]) if data["phone_2"] else None
         data["age"] = instance.age
-
         return data
 
 
 class CreatePatientSerializer(ModelSerializer):
     age = IntegerField(allow_null=True)
     hospital_id = IntegerField(write_only=True)
-    patient_hospital_id = IntegerField(write_only=True)
+    patient_hospital_id = CharField(write_only=True)
+    day_of_birth = IntegerField(allow_null=True)
+    month_of_birth = IntegerField(allow_null=True)
     year_of_birth = IntegerField(allow_null=True)
     gender = CharField(allow_null=True)
+    phone_1 = CharField(allow_null=True)
 
     class Meta:
         model = Patient
@@ -152,35 +154,6 @@ class CreatePatientSerializer(ModelSerializer):
         return serializer.data
 
     def create(self, validated_data):
-        try:
-            input_national_id = validated_data.get("national_id")
-            validated_data["national_id"] = (
-                int(input_national_id) if input_national_id else None
-            )
-        except ValueError:
-            raise ValidationError(
-                {"error": "The 'national_id' field should be an integer."}
-            )
-
-        try:
-            input_phone_1 = validated_data.get("phone_1")
-            validated_data["phone_1"] = (
-                int(input_phone_1) if input_phone_1 else None
-            )
-        except ValueError:
-            raise ValidationError(
-                {"error": "The 'phone_1' field should be an integer."}
-            )
-
-        try:
-            input_phone_2 = validated_data.get("phone_2")
-            validated_data["phone_2"] = (
-                int(input_phone_2) if input_phone_2 else None
-            )
-        except ValueError:
-            raise ValidationError(
-                {"error": "The 'phone_2' field should be an integer."}
-            )
 
         if not validated_data.get("year_of_birth", None):
             if validated_data["age"]:
@@ -211,17 +184,7 @@ class CreatePatientSerializer(ModelSerializer):
                 {"error": "The patient needs to be registered to a hospital."}
             )
 
-        try:
-            patient_hospital_id = validated_data.pop("patient_hospital_id")
-            patient_hospital_id = (
-                int(patient_hospital_id) if patient_hospital_id else None
-            )
-        except ValueError:
-            raise ValidationError(
-                {
-                    "error": "The 'patient_hospital_id' field should be an integer."
-                }
-            )
+        patient_hospital_id = validated_data.pop("patient_hospital_id")
 
         if patient_hospital_id:
             if PatientHospitalMapping.objects.filter(

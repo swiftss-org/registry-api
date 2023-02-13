@@ -119,14 +119,15 @@ class Episode(Model):
 
     class ComplexityChoices(TextChoices):
         SIMPLE = ("SIMPLE", "Simple")
-        INCARCERATED = ("INCARCERATED", "Incarcerated")
-        OBSTRUCTED = ("OBSTRUCTED", "Obstructed")
+        INCARCERATED = ("INCARCERATED", "Irreducible")
+        OBSTRUCTED = ("OBSTRUCTED", "With bowel obstruction")
         STRANGULATED = ("STRANGULATED", "Strangulated")
 
     class MeshTypeChoices(TextChoices):
         TNMHP = ("TNMHP", "TNMHP Mesh")
         KCMC = ("KCMC", "KCMC Generic Mesh")
         COMMERCIAL = ("COMMERCIAL", "Commercial Mesh")
+        INTERNATIONAL = ("INTERNATIONAL", "Hernia International Mesh")
 
     class AnaestheticChoices(TextChoices):
         LOCAL = ("LOCAL", "Local Anaesthetic")

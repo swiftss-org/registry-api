@@ -53,18 +53,18 @@ class TestPatientsViewSet(TestCase):
 
     def get_patient_test_data(self):
         return {
-            "full_name": "Joan Doe",
-            "national_id": 26683571435542132621,
+            "full_name": "Joan MIDDLE Doe",
+            "national_id": '02668357143554213261',
             "age": 23,  # wrong age
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
             "gender": "Female",
-            "phone_1": 234633241,
-            "phone_2": 324362141,
+            "phone_1": '00234633241',
+            "phone_2": '00324362141',
             "address": "16 Test Street, Test City, Test Country",
             "hospital_id": self.hospital.id,
-            "patient_hospital_id": 1111,
+            "patient_hospital_id": '001111',
         }
 
     ######################
@@ -83,7 +83,7 @@ class TestPatientsViewSet(TestCase):
             1, len(response.data["results"][0]["hospital_mappings"])
         )
         self.assertEqual(
-            int(self.patient_hospital_mapping.patient_hospital_id),
+            self.patient_hospital_mapping.patient_hospital_id,
             response.data["results"][0]["hospital_mappings"][0][
                 "patient_hospital_id"
             ],
@@ -225,7 +225,7 @@ class TestPatientsViewSet(TestCase):
             response.data["hospital_mappings"][0]["hospital_id"],
         )
         self.assertEqual(
-            int(patient_hospital_id),
+            patient_hospital_id,
             response.data["hospital_mappings"][0]["patient_hospital_id"],
         )
 
@@ -288,7 +288,7 @@ class TestPatientsViewSet(TestCase):
                 patient_id=self.patient.id,
             ).patient_hospital_id
             self.assertEqual(
-                int(patient_hospital_id),
+                patient_hospital_id,
                 hospital_mapping["patient_hospital_id"],
             )
 
@@ -298,6 +298,7 @@ class TestPatientsViewSet(TestCase):
 
     def test_create_patients_successful(self):
         data = self.get_patient_test_data()
+
         response = self.client.post(
             "/api/v1/patients/", data=data, format="json"
         )
@@ -309,6 +310,9 @@ class TestPatientsViewSet(TestCase):
             datetime.datetime.today().year - data["year_of_birth"],
             response.data["age"],
         )
+        self.assertEqual(data["year_of_birth"], response.data["year_of_birth"])
+        self.assertEqual(data["day_of_birth"], response.data["day_of_birth"])
+        self.assertEqual(data["month_of_birth"], response.data["month_of_birth"])
         self.assertEqual("Female", response.data["gender"])
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])
@@ -431,24 +435,6 @@ class TestPatientsViewSet(TestCase):
     def test_create_patient_without_hospital_id(self):
         data = self.get_patient_test_data()
         data.pop("hospital_id")
-
-        response = self.client.post(
-            "/api/v1/patients/", data=data, format="json"
-        )
-
-        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
-
-    @parameterized.expand(
-        [
-            ("national_id", "ABC12345"),
-            ("phone_1", "GR30697111111"),
-            ("phone_2", "GR30697122222"),
-            ("patient_hospital_id", "HOSP1234"),
-        ]
-    )
-    def test_create_patient_with_invalid_values(self, field, value):
-        data = self.get_patient_test_data()
-        data[field] = value
 
         response = self.client.post(
             "/api/v1/patients/", data=data, format="json"
