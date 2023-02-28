@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build the Stack
         run:  docker-compose -f local.yml build
       - name: Make DB Migrations
@@ -64,7 +64,7 @@ jobs:
       - precommit
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Push to Staging
         if: github.ref == 'refs/heads/develop'
