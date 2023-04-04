@@ -326,6 +326,7 @@ class EpisodeReadSerializer(ModelSerializer):
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
+    antibiotic_type = CharField(source="get_antibiotic_type_display")
 
     class Meta:
         model = Episode
@@ -371,6 +372,7 @@ class EpisodeWriteSerializer(ModelSerializer):
     complexity = CharField()
     mesh_type = CharField()
     anaesthetic_type = CharField()
+    antibiotic_type = CharField()
 
     class Meta:
         model = Episode
@@ -457,7 +459,11 @@ class EpisodeWriteSerializer(ModelSerializer):
                 ),
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
-                antibiotic_type=validated_data.get("antibiotic_type", ""),
+                antibiotic_type=get_text_choice_value_from_label(
+                    Episode.AntibioticChoices.choices,
+                    validated_data.get("antibiotic_type", "")
+                ),
+                # antibiotic_type="START_BEFORE"
             )
         except IndexError:
             raise ValidationError(

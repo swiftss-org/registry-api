@@ -134,6 +134,13 @@ class Episode(Model):
         SPINAL = ("SPINAL", "Spinal Anaesthetic")
         GENERAL = ("GENERAL", "General Anaesthetic")
 
+    class AntibioticChoices(TextChoices):
+        START_BEFORE = ("START_BEFORE", "IV at start / before surgery")
+        ONE_DAY_POST_OP_IV = ("ONE_DAY_POST_OP_IV", "+24hrs Post Op IV")
+        ONE_DAY_POST_OP_ORAL = ("ONE_DAY_POST_OP_ORAL", "24hrs Post Op Oral")
+        TWO_DAYS_POST_OP_IV = ("TWO_DAYS_POST_OP_IV", "+48hrs Post Op IV")
+        TWO_DAYS_POST_OP_ORAL = ("TWO_DAYS_POST_OP_ORAL", "+48hrs Post Op Oral")
+
     patient_hospital_mapping = ForeignKey(
         PatientHospitalMapping, on_delete=CASCADE
     )
@@ -154,7 +161,7 @@ class Episode(Model):
     )
     diathermy_used = BooleanField()
     antibiotic_used = BooleanField()
-    antibiotic_type = TextField(null=True, blank=True)
+    antibiotic_type = CharField(max_length=64, choices=AntibioticChoices.choices, null=True, blank=True)
 
     def __str__(self):
         return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"
