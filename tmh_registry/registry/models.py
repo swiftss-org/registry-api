@@ -205,6 +205,8 @@ class FollowUp(TimeStampMixin):
     seroma = BooleanField()
     infection = BooleanField()
     numbness = BooleanField()
+    further_surgery_need = BooleanField()
+    surgery_comments_box = TextField(null=True, blank=True)
 
     def __str__(self):
         return f"[{self.follow_up_date}] {self.episode}"

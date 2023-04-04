@@ -1,0 +1,2635 @@
+[{
+	"id": 1,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-10-04",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": false,
+	"surgery_comments_box": null
+}, {
+	"id": 3,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-02-01",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": true,
+	"surgery_comments_box": ""
+}, {
+	"id": 4,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-02-01",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": true,
+	"surgery_comments_box": "TEST 5000FFF"
+}, {
+	"id": 5,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-02-01",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": true,
+	"surgery_comments_box": "TEST 5000FFF2"
+}, {
+	"id": 6,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-02-01",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": true,
+	"surgery_comments_box": "TEST 423849023482390"
+}, {
+	"id": 7,
+	"episode": {
+		"id": 11,
+		"patient_hospital_mapping": {
+			"patient": {
+				"id": 1,
+				"full_name": "Diogenis Sidiropoulos",
+				"created_at": "2023-02-13",
+				"national_id": "12345",
+				"age": 29,
+				"day_of_birth": null,
+				"month_of_birth": null,
+				"year_of_birth": 1994,
+				"gender": "Male",
+				"phone_1": null,
+				"phone_2": null,
+				"address": null,
+				"hospital_mappings": [{
+					"patient_hospital_id": "123456",
+					"hospital_id": 1
+				}],
+				"episodes": [{
+					"id": 1,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "FFF",
+					"cepod": "Emergency",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Irreducible",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "FDF"
+				}, {
+					"id": 2,
+					"surgery_date": "2023-02-09",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "comments",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "fff"
+				}, {
+					"id": 3,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "fdfdsf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "KCMC Generic Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": "dfdf"
+				}, {
+					"id": 4,
+					"surgery_date": "2023-02-10",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "With bowel obstruction",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": false,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 5,
+					"surgery_date": "2023-02-13",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "hghfg",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "Hernia International Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": ""
+				}, {
+					"id": 7,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Small (1-2 finger breadths)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 8,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 3,
+						"user": {
+							"username": "dios231",
+							"first_name": "",
+							"last_name": "",
+							"email": ""
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dfdfsdfsdf",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 9,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 10,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 11,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": false,
+					"antibiotic_type": null
+				}, {
+					"id": 12,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 13,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 14,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "START_BEFORE"
+				}, {
+					"id": 15,
+					"surgery_date": "2023-04-04",
+					"episode_type": "Inguinal Mesh Hernia Repair",
+					"surgeons": [{
+						"id": 1,
+						"user": {
+							"username": "admin@admin.com",
+							"first_name": "",
+							"last_name": "",
+							"email": "admin@admin.com"
+						},
+						"level": "Lead Surgeon"
+					}],
+					"comments": "dsdsdsd",
+					"cepod": "Planned",
+					"side": "Not Applicable",
+					"occurence": "Primary",
+					"type": "Not Applicable",
+					"size": "Very Small (<1 finger breadth)",
+					"complexity": "Simple",
+					"mesh_type": "TNMHP Mesh",
+					"anaesthetic_type": "Local Anaesthetic",
+					"diathermy_used": true,
+					"antibiotic_used": true,
+					"antibiotic_type": "ONE_DAY_POST_OP_ORAL"
+				}]
+			},
+			"hospital": {
+				"id": 1,
+				"name": "TEST HOSPITAL",
+				"address": "ADDRESS OF TEST HOSPITAL"
+			},
+			"patient_hospital_id": 123456
+		},
+		"created": "2023-04-04T14:55:28.557215Z",
+		"surgery_date": "2023-04-04",
+		"episode_type": "Inguinal Mesh Hernia Repair",
+		"surgeons": [{
+			"id": 1,
+			"user": {
+				"username": "admin@admin.com",
+				"first_name": "",
+				"last_name": "",
+				"email": "admin@admin.com"
+			},
+			"level": "Lead Surgeon"
+		}],
+		"comments": "dsdsdsd",
+		"cepod": "Planned",
+		"side": "Not Applicable",
+		"occurence": "Primary",
+		"type": "Not Applicable",
+		"size": "Very Small (<1 finger breadth)",
+		"complexity": "Simple",
+		"mesh_type": "TNMHP Mesh",
+		"anaesthetic_type": "Local Anaesthetic",
+		"diathermy_used": true,
+		"antibiotic_used": false,
+		"antibiotic_type": null
+	},
+	"date": "2074-02-01",
+	"pain_severity": "No Pain",
+	"attendees": [{
+		"id": 1,
+		"user": {
+			"username": "admin@admin.com",
+			"first_name": "",
+			"last_name": "",
+			"email": "admin@admin.com"
+		},
+		"level": "Lead Surgeon"
+	}],
+	"mesh_awareness": true,
+	"seroma": true,
+	"infection": true,
+	"numbness": true,
+	"further_surgery_need": false,
+	"surgery_comments_box": "TEST 423849023482390"
+}]

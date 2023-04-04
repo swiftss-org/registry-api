@@ -1,6 +1,6 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, IntegerField
+from rest_framework.fields import CharField, IntegerField, BooleanField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
@@ -552,6 +552,8 @@ class FollowUpReadSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "further_surgery_need",
+            "surgery_comments_box"
         ]
 
 
@@ -563,6 +565,8 @@ class FollowUpWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     pain_severity = CharField()
+    surgery_comments_box = CharField(required=False)
+    further_surgery_need = BooleanField()
 
     class Meta:
         model = FollowUp
@@ -575,6 +579,8 @@ class FollowUpWriteSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "further_surgery_need",
+            "surgery_comments_box"
         ]
 
     def to_representation(self, instance):
@@ -613,6 +619,8 @@ class FollowUpWriteSerializer(ModelSerializer):
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
             numbness=validated_data["numbness"],
+            further_surgery_need=validated_data["further_surgery_need"],
+            surgery_comments_box=validated_data.get("surgery_comments_box", "")
         )
 
         follow_up.attendees.set(attendees)
