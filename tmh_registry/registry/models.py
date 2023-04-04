@@ -175,8 +175,10 @@ class Discharge(TimeStampMixin):
         Episode, on_delete=CASCADE, related_name="discharge"
     )
     date = DateField()
-    aware_of_mesh = BooleanField()
-    infection = BooleanField()
+    aware_of_mesh = BooleanField()  # antibiotics given on discharge
+    infection = CharField(max_length=64)  # Post-operative complications (comma separated values)
+    discharge_duration = CharField(max_length=16, null=True, blank=True)
+    comments = TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Episode {self.episode.id} Discharge {self.id} - {self.date}"

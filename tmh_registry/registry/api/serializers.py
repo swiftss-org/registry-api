@@ -487,6 +487,8 @@ class DischargeReadSerializer(ModelSerializer):
             "date",
             "aware_of_mesh",
             "infection",
+            "discharge_duration",
+            "comments"
         ]
 
 
@@ -494,6 +496,7 @@ class DischargeWriteSerializer(ModelSerializer):
     episode_id = PrimaryKeyRelatedField(
         write_only=True, queryset=Episode.objects.filter(discharge=None)
     )
+    comments = CharField(required=False)
 
     class Meta:
         model = Discharge
@@ -502,6 +505,8 @@ class DischargeWriteSerializer(ModelSerializer):
             "date",
             "aware_of_mesh",
             "infection",
+            "discharge_duration",
+            "comments"
         ]
 
     def to_representation(self, instance):
@@ -523,6 +528,8 @@ class DischargeWriteSerializer(ModelSerializer):
             date=validated_data["date"],
             aware_of_mesh=validated_data["aware_of_mesh"],
             infection=validated_data["infection"],
+            discharge_duration=validated_data["discharge_duration"],
+            comments=validated_data["comments"]
         )
 
         return discharge
