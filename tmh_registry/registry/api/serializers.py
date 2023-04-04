@@ -67,12 +67,6 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
             PatientHospitalMappingPatientSerializer, self
         ).to_representation(instance)
 
-        # data["patient_hospital_id"] = (
-        #     int(data["patient_hospital_id"])
-        #     if data["patient_hospital_id"]
-        #     else None
-        # )
-
         return data
 
 
@@ -326,7 +320,7 @@ class EpisodeReadSerializer(ModelSerializer):
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
-    antibiotic_type = CharField(source="get_antibiotic_type_display")
+    antibiotic_type = CharField()
 
     class Meta:
         model = Episode
@@ -459,11 +453,7 @@ class EpisodeWriteSerializer(ModelSerializer):
                 ),
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
-                antibiotic_type=get_text_choice_value_from_label(
-                    Episode.AntibioticChoices.choices,
-                    validated_data.get("antibiotic_type", "")
-                ),
-                # antibiotic_type="START_BEFORE"
+                antibiotic_type=validated_data["antibiotic_type"]
             )
         except IndexError:
             raise ValidationError(
@@ -496,7 +486,7 @@ class DischargeWriteSerializer(ModelSerializer):
     episode_id = PrimaryKeyRelatedField(
         write_only=True, queryset=Episode.objects.filter(discharge=None)
     )
-    comments = CharField(required=False)
+    comments = CharField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Discharge
@@ -529,7 +519,7 @@ class DischargeWriteSerializer(ModelSerializer):
             aware_of_mesh=validated_data["aware_of_mesh"],
             infection=validated_data["infection"],
             discharge_duration=validated_data["discharge_duration"],
-            comments=validated_data["comments"]
+            comments=validated_data.get("comments", "")
         )
 
         return discharge
@@ -565,7 +555,7 @@ class FollowUpWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     pain_severity = CharField()
-    surgery_comments_box = CharField(required=False)
+    surgery_comments_box = CharField(required=False, allow_blank=True, allow_null=True)
     further_surgery_need = BooleanField()
 
     class Meta:
