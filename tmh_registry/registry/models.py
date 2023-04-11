@@ -141,7 +141,6 @@ class Episode(Model):
     surgery_date = DateField(null=True, blank=True)
     episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
     surgeons = ManyToManyField(MedicalPersonnel)
-    comments = TextField(null=True, blank=True)
     cepod = CharField(max_length=16, choices=CepodChoices.choices)
     side = CharField(max_length=16, choices=SideChoices.choices)
     occurence = CharField(max_length=16, choices=OccurenceChoices.choices)

@@ -42,7 +42,6 @@ class EpisodeSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeons",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -331,7 +330,6 @@ class EpisodeReadSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeons",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -357,7 +355,6 @@ class EpisodeWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     episode_type = CharField()
-    comments = CharField(required=False)
     cepod = CharField()
     side = CharField()
     occurence = CharField()
@@ -376,7 +373,6 @@ class EpisodeWriteSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeon_ids",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -422,7 +418,6 @@ class EpisodeWriteSerializer(ModelSerializer):
                     Episode.EpisodeChoices.choices,
                     validated_data["episode_type"],
                 ),
-                comments=validated_data.get("comments", ""),
                 cepod=get_text_choice_value_from_label(
                     Episode.CepodChoices.choices, validated_data["cepod"]
                 ),
