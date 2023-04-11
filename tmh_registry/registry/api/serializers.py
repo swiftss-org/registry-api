@@ -519,7 +519,7 @@ class DischargeWriteSerializer(ModelSerializer):
             date=validated_data["date"],
             aware_of_mesh=validated_data["aware_of_mesh"],
             infection=validated_data.get("infection", ""),
-            discharge_duration=validated_data["discharge_duration"],
+            discharge_duration=validated_data.get("discharge_duration", ""),
             comments=validated_data.get("comments", "")
         )
 
