@@ -170,7 +170,7 @@ class Discharge(TimeStampMixin):
     date = DateField()
     aware_of_mesh = BooleanField()  # antibiotics given on discharge
     infection = CharField(max_length=64, null=True, blank=True)  # Post-operative complications (comma separated values)
-    discharge_duration = CharField(max_length=16, null=True, blank=True)
+    discharge_duration = PositiveIntegerField(null=True, blank=True)
     comments = TextField(null=True, blank=True)
 
     def __str__(self):
