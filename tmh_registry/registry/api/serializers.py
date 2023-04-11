@@ -366,7 +366,7 @@ class EpisodeWriteSerializer(ModelSerializer):
     complexity = CharField()
     mesh_type = CharField()
     anaesthetic_type = CharField()
-    antibiotic_type = CharField()
+    antibiotic_type = CharField(required=False)
 
     class Meta:
         model = Episode
@@ -453,7 +453,7 @@ class EpisodeWriteSerializer(ModelSerializer):
                 ),
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
-                antibiotic_type=validated_data["antibiotic_type"]
+                antibiotic_type=validated_data.get("antibiotic_type", "")
             )
         except IndexError:
             raise ValidationError(
@@ -487,6 +487,7 @@ class DischargeWriteSerializer(ModelSerializer):
         write_only=True, queryset=Episode.objects.filter(discharge=None)
     )
     comments = CharField(required=False, allow_null=True, allow_blank=True)
+    infection = CharField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Discharge
@@ -517,7 +518,7 @@ class DischargeWriteSerializer(ModelSerializer):
             episode_id=episode.id,
             date=validated_data["date"],
             aware_of_mesh=validated_data["aware_of_mesh"],
-            infection=validated_data["infection"],
+            infection=validated_data.get("infection", ""),
             discharge_duration=validated_data["discharge_duration"],
             comments=validated_data.get("comments", "")
         )
