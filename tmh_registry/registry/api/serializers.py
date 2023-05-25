@@ -1,6 +1,6 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, IntegerField
+from rest_framework.fields import CharField, IntegerField, BooleanField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
@@ -42,7 +42,6 @@ class EpisodeSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeons",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -66,12 +65,6 @@ class PatientHospitalMappingPatientSerializer(ModelSerializer):
         data = super(
             PatientHospitalMappingPatientSerializer, self
         ).to_representation(instance)
-
-        # data["patient_hospital_id"] = (
-        #     int(data["patient_hospital_id"])
-        #     if data["patient_hospital_id"]
-        #     else None
-        # )
 
         return data
 
@@ -326,6 +319,7 @@ class EpisodeReadSerializer(ModelSerializer):
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
+    antibiotic_type = CharField()
 
     class Meta:
         model = Episode
@@ -336,7 +330,6 @@ class EpisodeReadSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeons",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -362,7 +355,6 @@ class EpisodeWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     episode_type = CharField()
-    comments = CharField(required=False)
     cepod = CharField()
     side = CharField()
     occurence = CharField()
@@ -371,6 +363,7 @@ class EpisodeWriteSerializer(ModelSerializer):
     complexity = CharField()
     mesh_type = CharField()
     anaesthetic_type = CharField()
+    antibiotic_type = CharField(required=False)
 
     class Meta:
         model = Episode
@@ -380,7 +373,6 @@ class EpisodeWriteSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeon_ids",
-            "comments",
             "cepod",
             "side",
             "occurence",
@@ -426,7 +418,6 @@ class EpisodeWriteSerializer(ModelSerializer):
                     Episode.EpisodeChoices.choices,
                     validated_data["episode_type"],
                 ),
-                comments=validated_data.get("comments", ""),
                 cepod=get_text_choice_value_from_label(
                     Episode.CepodChoices.choices, validated_data["cepod"]
                 ),
@@ -457,7 +448,7 @@ class EpisodeWriteSerializer(ModelSerializer):
                 ),
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
-                antibiotic_type=validated_data.get("antibiotic_type", ""),
+                antibiotic_type=validated_data.get("antibiotic_type", "")
             )
         except IndexError:
             raise ValidationError(
@@ -481,6 +472,8 @@ class DischargeReadSerializer(ModelSerializer):
             "date",
             "aware_of_mesh",
             "infection",
+            "discharge_duration",
+            "comments"
         ]
 
 
@@ -488,6 +481,8 @@ class DischargeWriteSerializer(ModelSerializer):
     episode_id = PrimaryKeyRelatedField(
         write_only=True, queryset=Episode.objects.filter(discharge=None)
     )
+    comments = CharField(required=False, allow_null=True, allow_blank=True)
+    infection = CharField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Discharge
@@ -496,6 +491,8 @@ class DischargeWriteSerializer(ModelSerializer):
             "date",
             "aware_of_mesh",
             "infection",
+            "discharge_duration",
+            "comments"
         ]
 
     def to_representation(self, instance):
@@ -516,7 +513,9 @@ class DischargeWriteSerializer(ModelSerializer):
             episode_id=episode.id,
             date=validated_data["date"],
             aware_of_mesh=validated_data["aware_of_mesh"],
-            infection=validated_data["infection"],
+            infection=validated_data.get("infection", ""),
+            discharge_duration=validated_data.get("discharge_duration", None),
+            comments=validated_data.get("comments", "")
         )
 
         return discharge
@@ -539,6 +538,8 @@ class FollowUpReadSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "further_surgery_need",
+            "surgery_comments_box"
         ]
 
 
@@ -550,6 +551,8 @@ class FollowUpWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     pain_severity = CharField()
+    surgery_comments_box = CharField(required=False, allow_blank=True, allow_null=True)
+    further_surgery_need = BooleanField()
 
     class Meta:
         model = FollowUp
@@ -562,6 +565,8 @@ class FollowUpWriteSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "further_surgery_need",
+            "surgery_comments_box"
         ]
 
     def to_representation(self, instance):
@@ -600,6 +605,8 @@ class FollowUpWriteSerializer(ModelSerializer):
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
             numbness=validated_data["numbness"],
+            further_surgery_need=validated_data["further_surgery_need"],
+            surgery_comments_box=validated_data.get("surgery_comments_box", "")
         )
 
         follow_up.attendees.set(attendees)

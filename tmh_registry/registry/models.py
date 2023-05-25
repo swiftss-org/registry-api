@@ -141,7 +141,6 @@ class Episode(Model):
     surgery_date = DateField(null=True, blank=True)
     episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
     surgeons = ManyToManyField(MedicalPersonnel)
-    comments = TextField(null=True, blank=True)
     cepod = CharField(max_length=16, choices=CepodChoices.choices)
     side = CharField(max_length=16, choices=SideChoices.choices)
     occurence = CharField(max_length=16, choices=OccurenceChoices.choices)
@@ -154,7 +153,7 @@ class Episode(Model):
     )
     diathermy_used = BooleanField()
     antibiotic_used = BooleanField()
-    antibiotic_type = TextField(null=True, blank=True)
+    antibiotic_type = CharField(max_length=128, null=True, blank=True)
 
     def __str__(self):
         return f"({self.episode_type}) {self.patient_hospital_mapping.patient.full_name}"
@@ -168,8 +167,10 @@ class Discharge(TimeStampMixin):
         Episode, on_delete=CASCADE, related_name="discharge"
     )
     date = DateField()
-    aware_of_mesh = BooleanField()
-    infection = BooleanField()
+    aware_of_mesh = BooleanField()  # antibiotics given on discharge
+    infection = CharField(max_length=64, null=True, blank=True)  # Post-operative complications (comma separated values)
+    discharge_duration = PositiveIntegerField(null=True, blank=True)
+    comments = TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Episode {self.episode.id} Discharge {self.id} - {self.date}"
@@ -196,6 +197,8 @@ class FollowUp(TimeStampMixin):
     seroma = BooleanField()
     infection = BooleanField()
     numbness = BooleanField()
+    further_surgery_need = BooleanField()
+    surgery_comments_box = TextField(null=True, blank=True)
 
     def __str__(self):
         return f"[{self.follow_up_date}] {self.episode}"

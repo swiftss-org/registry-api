@@ -93,7 +93,9 @@ class EpisodeFactory(DjangoModelFactory):
     )
     diathermy_used = True
     antibiotic_used = True
-    antibiotic_type = LazyAttribute(lambda _: faker.sentence(nb_words=10))
+    antibiotic_type = LazyAttribute(
+        lambda _: faker.random_element(Episode.AntibioticChoices.values)
+    )
 
     @post_generation
     def medical_personnel(self, create, extracted, **kwargs):
