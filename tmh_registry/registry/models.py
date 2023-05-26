@@ -201,7 +201,7 @@ class FollowUp(TimeStampMixin):
     surgery_comments_box = TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"[{self.follow_up_date}] {self.episode}"
+        return f"[{self.date}] {self.episode}"
 
     class Meta:
         verbose_name_plural = "Follow Ups"
