@@ -88,6 +88,7 @@ class Episode(Model):
             "UMBILICAL",
             "Umbilical/Periumbilicial Mesh Hernia Repair",
         )
+        EPIGASTRIC = ("EPIGASTRIC", "Epigastric Hernia")
 
     class CepodChoices(TextChoices):
         PLANNED = ("PLANNED", "Planned")
