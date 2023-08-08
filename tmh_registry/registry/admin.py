@@ -4,9 +4,16 @@ from tmh_registry.registry.models import (
     Episode,
     Hospital,
     Patient,
-    PatientHospitalMapping,
+    PatientHospitalMapping, Discharge, FollowUp,
 )
 
+@admin.register(Discharge)
+class DischargeAdmin(admin.ModelAdmin):
+    model = Discharge
+
+@admin.register(FollowUp)
+class FollowUpAdmin(admin.ModelAdmin):
+    model = FollowUp
 
 @admin.register(Hospital)
 class HospitalAdmin(admin.ModelAdmin):
