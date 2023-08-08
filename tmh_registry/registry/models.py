@@ -174,7 +174,7 @@ class Discharge(TimeStampMixin):
     comments = TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"Episode {self.episode.id} Discharge {self.id} - {self.date}"
+        return f"Episode {self.episode} | Discharge {self.id} - {self.date}"
 
     class Meta:
         verbose_name_plural = "Discharges"
@@ -202,7 +202,7 @@ class FollowUp(TimeStampMixin):
     surgery_comments_box = TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"[{self.date}] {self.episode}"
+        return f"Episode {self.episode} | FollowUp {self.id} - {self.date}"
 
     class Meta:
         verbose_name_plural = "Follow Ups"
