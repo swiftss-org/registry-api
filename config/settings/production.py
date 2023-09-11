@@ -149,8 +149,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAdminUser",
-        "tmh_registry.users.api.permissions.IsMedicalPersonnel"
+        "tmh_registry.users.api.permissions.IsMedicalPersonnel",
     ),
     'EXCEPTION_HANDLER': 'tmh_registry.common.error_handling.error_handler',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
