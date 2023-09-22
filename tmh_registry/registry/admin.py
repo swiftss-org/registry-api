@@ -1,4 +1,9 @@
 from django.contrib import admin
+from import_export.admin import ExportMixin
+from import_export import resources
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
 
 from tmh_registry.registry.models import (
     Episode,
@@ -7,29 +12,46 @@ from tmh_registry.registry.models import (
     PatientHospitalMapping, Discharge, FollowUp,
 )
 
+
 @admin.register(Discharge)
-class DischargeAdmin(admin.ModelAdmin):
+class DischargeAdmin(ExportMixin, admin.ModelAdmin):
     model = Discharge
 
 @admin.register(FollowUp)
-class FollowUpAdmin(admin.ModelAdmin):
+class FollowUpAdmin(ExportMixin, admin.ModelAdmin):
     model = FollowUp
 
 @admin.register(Hospital)
-class HospitalAdmin(admin.ModelAdmin):
+class HospitalAdmin(ExportMixin, admin.ModelAdmin):
     model = Hospital
 
 
 @admin.register(Patient)
-class PatientAdmin(admin.ModelAdmin):
+class PatientAdmin(ExportMixin, admin.ModelAdmin):
     model = Patient
 
 
 @admin.register(PatientHospitalMapping)
-class PatientHospitalMappingAdmin(admin.ModelAdmin):
+class PatientHospitalMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = PatientHospitalMapping
 
 
 @admin.register(Episode)
-class EpisodeAdmin(admin.ModelAdmin):
+class EpisodeAdmin(ExportMixin, admin.ModelAdmin):
     model = Episode
+
+
+"""
+To allow CSV export on User model
+"""
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+class UserAdmin(ExportMixin, UserAdmin):
+    resource_class = UserResource
+    pass
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
