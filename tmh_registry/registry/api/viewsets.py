@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, CharField
 from django.utils.decorators import method_decorator
 from django_filters import (  # pylint: disable=E0401
     CharFilter,
@@ -7,6 +7,7 @@ from django_filters import (  # pylint: disable=E0401
     OrderingFilter,
 )
 from django_filters.rest_framework import FilterSet  # pylint: disable=E0401
+from django.db.models.functions import Cast
 from drf_yasg import openapi
 from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
@@ -67,10 +68,17 @@ class PatientFilterSet(FilterSet):
         return queryset
 
     def filter_search_term(self, queryset, name, value):
+        selected_hospital_id_value = self.data.get('hospital_id')
         if value:
+            patient_ids = PatientHospitalMapping.objects.annotate(
+                patient_hospital_id_str=Cast('patient_hospital_id', CharField())
+            ).filter(
+                Q(patient_hospital_id_str__contains=str(value)) & Q(hospital_id=selected_hospital_id_value)
+            ).values_list("patient_id", flat=True)
             queryset = queryset.filter(
-                Q(full_name__icontains=value) | Q(national_id__iexact=value)
+                Q(full_name__icontains=value) | Q(national_id__iexact=value) | Q(id__in=patient_ids)
             )
+            return queryset
         return queryset
 
     class Meta:
