@@ -196,11 +196,11 @@ class TestEpisodesPost(TestCase):
 
     def test_create_successful_without_optional_fields(self):
         data = self.get_episode_test_data()
-        data.pop("comments")
+        # data.pop("comments") TODO Sabi: should b reverted when comment is enabled
         response = self.client.post(
             "/api/v1/episodes/", data=data, format="json"
         )
 
         self.assertEqual(HTTP_201_CREATED, response.status_code)
 
-        self.assertEqual(response.data["comments"], "")
+        # self.assertEqual(response.data["comments"], "") TODO Sabi: should b reverted when comment is enabled
