@@ -32,7 +32,7 @@ If you are on _Windows_ and not Linux (or other *nix) you will also need to have
 Create a virtual environment for this project.
 
 If you are using [pyenv](https://github.com/pyenv/pyenv):
-```
+```shell
 pyenv virtualenv registry-api
 pyenv activate registry-api
 ```
@@ -50,25 +50,30 @@ $ activate venv
 
 
 Install project dependencies:
-```
+```shell
 make dep
 ```
 
 ### Start Developing
 
 Spin up the project:
-```
+```shell
 make run
 ```
 
 Run migrations (every time you update Django models):
-```
+```shell
 make migrate
 ```
 
 Run tests:
-```
+```shell
 make test
+```
+
+Run one test:
+```shell
+make test-one file=tmh_registry/registry/tests/api/viewsets/test_discharges.py test_name=TestDischargeCreate
 ```
 
 Everything you need for this project is under [Makefile](./Makefile). Take a look at the commands by running `make`.
