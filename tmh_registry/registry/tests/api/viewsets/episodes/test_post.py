@@ -39,7 +39,7 @@ class TestEpisodesPost(TestCase):
             "surgery_date": "2021-10-12",
             "episode_type": Episode.EpisodeChoices.UMBILICAL.label,
             "surgeon_ids": [self.medical_personnel.id],
-            "comments": "A random comment",
+            # "comments": "A random comment",
             "cepod": Episode.CepodChoices.PLANNED.label,
             "side": Episode.SideChoices.LEFT.label,
             "occurence": Episode.OccurenceChoices.RECURRENT.label,
@@ -115,7 +115,7 @@ class TestEpisodesPost(TestCase):
             self.medical_personnel.user.email,
         )
 
-        self.assertEqual(response.data["comments"], data["comments"])
+        # self.assertEqual(response.data["comments"], data["comments"])
         self.assertEqual(response.data["cepod"], data["cepod"])
         self.assertEqual(response.data["side"], data["side"])
         self.assertEqual(response.data["occurence"], data["occurence"])

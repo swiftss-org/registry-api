@@ -66,7 +66,7 @@ class EpisodeFactory(DjangoModelFactory):
     episode_type = LazyAttribute(
         lambda _: faker.random_element(Episode.EpisodeChoices.values)
     )
-    comments = LazyAttribute(lambda _: faker.sentence(nb_words=10))
+    # comments = LazyAttribute(lambda _: faker.sentence(nb_words=10))
     cepod = LazyAttribute(
         lambda _: faker.random_element(Episode.CepodChoices.values)
     )
@@ -93,9 +93,7 @@ class EpisodeFactory(DjangoModelFactory):
     )
     diathermy_used = True
     antibiotic_used = True
-    antibiotic_type = LazyAttribute(
-        lambda _: faker.random_element(Episode.AntibioticChoices.values)
-    )
+    antibiotic_type = LazyAttribute(lambda _: faker.sentence(nb_words=10))
 
     @post_generation
     def medical_personnel(self, create, extracted, **kwargs):
