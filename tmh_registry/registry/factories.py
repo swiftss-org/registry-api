@@ -131,6 +131,7 @@ class FollowUpFactory(DjangoModelFactory):
     seroma = LazyAttribute(lambda _: faker.boolean())
     infection = LazyAttribute(lambda _: faker.boolean())
     numbness = LazyAttribute(lambda _: faker.boolean())
+    further_surgery_need = LazyAttribute(lambda _: faker.boolean())
 
     @post_generation
     def attendees(self, create, extracted, **kwargs):
