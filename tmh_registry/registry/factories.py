@@ -115,7 +115,7 @@ class DischargeFactory(DjangoModelFactory):
     episode = SubFactory(EpisodeFactory)
     date = LazyAttribute(lambda _: faker.date_object())
     aware_of_mesh = LazyAttribute(lambda _: faker.boolean())
-    infection = LazyAttribute(lambda _: faker.boolean())
+    infection = LazyAttribute(lambda _: faker.sentence(nb_words=3))
 
 
 class FollowUpFactory(DjangoModelFactory):
