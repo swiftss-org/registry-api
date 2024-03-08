@@ -26,7 +26,7 @@ class TestDischargeCreate(TestCase):
             "episode_id": self.episode.id,
             "date": "2022-02-22",
             "aware_of_mesh": True,
-            "infection": False,
+            "infection": "Infection is present",
         }
 
     def test_successful(self):

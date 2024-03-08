@@ -39,7 +39,7 @@ class TestEpisodesPost(TestCase):
             "surgery_date": "2021-10-12",
             "episode_type": Episode.EpisodeChoices.UMBILICAL.label,
             "surgeon_ids": [self.medical_personnel.id],
-            "comments": "A random comment",
+            # "comments": "A random comment",
             "cepod": Episode.CepodChoices.PLANNED.label,
             "side": Episode.SideChoices.LEFT.label,
             "occurence": Episode.OccurenceChoices.RECURRENT.label,
@@ -115,7 +115,7 @@ class TestEpisodesPost(TestCase):
             self.medical_personnel.user.email,
         )
 
-        self.assertEqual(response.data["comments"], data["comments"])
+        # self.assertEqual(response.data["comments"], data["comments"])
         self.assertEqual(response.data["cepod"], data["cepod"])
         self.assertEqual(response.data["side"], data["side"])
         self.assertEqual(response.data["occurence"], data["occurence"])
@@ -196,11 +196,11 @@ class TestEpisodesPost(TestCase):
 
     def test_create_successful_without_optional_fields(self):
         data = self.get_episode_test_data()
-        data.pop("comments")
+        # data.pop("comments") TODO Sabi: should b reverted when comment is enabled
         response = self.client.post(
             "/api/v1/episodes/", data=data, format="json"
         )
 
         self.assertEqual(HTTP_201_CREATED, response.status_code)
 
-        self.assertEqual(response.data["comments"], "")
+        # self.assertEqual(response.data["comments"], "") TODO Sabi: should b reverted when comment is enabled

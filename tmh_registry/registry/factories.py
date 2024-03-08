@@ -66,7 +66,7 @@ class EpisodeFactory(DjangoModelFactory):
     episode_type = LazyAttribute(
         lambda _: faker.random_element(Episode.EpisodeChoices.values)
     )
-    comments = LazyAttribute(lambda _: faker.sentence(nb_words=10))
+    # comments = LazyAttribute(lambda _: faker.sentence(nb_words=10))
     cepod = LazyAttribute(
         lambda _: faker.random_element(Episode.CepodChoices.values)
     )
@@ -93,9 +93,7 @@ class EpisodeFactory(DjangoModelFactory):
     )
     diathermy_used = True
     antibiotic_used = True
-    antibiotic_type = LazyAttribute(
-        lambda _: faker.random_element(Episode.AntibioticChoices.values)
-    )
+    antibiotic_type = LazyAttribute(lambda _: faker.sentence(nb_words=10))
 
     @post_generation
     def medical_personnel(self, create, extracted, **kwargs):
@@ -117,7 +115,7 @@ class DischargeFactory(DjangoModelFactory):
     episode = SubFactory(EpisodeFactory)
     date = LazyAttribute(lambda _: faker.date_object())
     aware_of_mesh = LazyAttribute(lambda _: faker.boolean())
-    infection = LazyAttribute(lambda _: faker.boolean())
+    infection = LazyAttribute(lambda _: faker.sentence(nb_words=3))
 
 
 class FollowUpFactory(DjangoModelFactory):
@@ -133,6 +131,7 @@ class FollowUpFactory(DjangoModelFactory):
     seroma = LazyAttribute(lambda _: faker.boolean())
     infection = LazyAttribute(lambda _: faker.boolean())
     numbness = LazyAttribute(lambda _: faker.boolean())
+    further_surgery_need = LazyAttribute(lambda _: faker.boolean())
 
     @post_generation
     def attendees(self, create, extracted, **kwargs):
