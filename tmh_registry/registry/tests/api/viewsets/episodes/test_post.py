@@ -50,7 +50,7 @@ class TestEpisodesPost(TestCase):
             "anaesthetic_type": Episode.AnaestheticChoices.SPINAL.label,
             "diathermy_used": True,
             "antibiotic_used": True,
-            "antibiotic_type": 'A random antibiotic',
+            "antibiotic_type": "A random antibiotic",
         }
 
     def setUp(self) -> None:

@@ -6,13 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0021_auto_20230213_1528'),
+        ("registry", "0021_auto_20230213_1528"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='episode',
-            name='mesh_type',
-            field=models.CharField(choices=[('TNMHP', 'TNMHP Mesh'), ('KCMC', 'KCMC Generic Mesh'), ('COMMERCIAL', 'Commercial Mesh'), ('INTERNATIONAL', 'Hernia International Mesh')], max_length=16),
+            model_name="episode",
+            name="mesh_type",
+            field=models.CharField(
+                choices=[
+                    ("TNMHP", "TNMHP Mesh"),
+                    ("KCMC", "KCMC Generic Mesh"),
+                    ("COMMERCIAL", "Commercial Mesh"),
+                    ("INTERNATIONAL", "Hernia International Mesh"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

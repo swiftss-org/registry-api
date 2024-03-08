@@ -24,8 +24,8 @@ If you want to run _outside_ of Docker you will also need to:
 
 If you are on _Windows_ and not Linux (or other *nix) you will also need to have installed:
 1. [MSYS](https://www.msys2.org/) or an alternative set of Unix compatible tools that includes `make`.
-1. [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) which are required to install some of the Python [Django](https://www.djangoproject.com/) dependencies. 
- 
+1. [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) which are required to install some of the Python [Django](https://www.djangoproject.com/) dependencies.
+
 
 ### First time only
 
@@ -37,9 +37,9 @@ pyenv virtualenv registry-api
 pyenv activate registry-api
 ```
 
-Or if you prefer to use [virtualenv](https://virtualenv.pypa.io/en/latest/) directly without pyenv: 
+Or if you prefer to use [virtualenv](https://virtualenv.pypa.io/en/latest/) directly without pyenv:
 ```
-# Linux 
+# Linux
 $ virtualenv venv
 $ activate venv
 

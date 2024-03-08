@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0022_auto_20230525_0641'),
-        ('registry', '0032_remove_episode_comments'),
+        ("registry", "0022_auto_20230525_0641"),
+        ("registry", "0032_remove_episode_comments"),
     ]
 
-    operations = [
-    ]
+    operations = []

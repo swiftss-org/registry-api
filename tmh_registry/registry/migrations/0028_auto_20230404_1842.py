@@ -6,14 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0027_auto_20230404_1555'),
+        ("registry", "0027_auto_20230404_1555"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='episode',
-            name='antibiotic_type',
-            field=models.CharField(default='+24hrs Post Op Oral', max_length=128),
+            model_name="episode",
+            name="antibiotic_type",
+            field=models.CharField(
+                default="+24hrs Post Op Oral", max_length=128
+            ),
             preserve_default=False,
         ),
     ]

@@ -23,4 +23,3 @@ urlpatterns = [
 ]
 
 # @ todo medical personel required (????)
-

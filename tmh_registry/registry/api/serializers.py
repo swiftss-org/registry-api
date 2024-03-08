@@ -1,6 +1,6 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, IntegerField, BooleanField
+from rest_framework.fields import BooleanField, CharField, IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
@@ -150,9 +150,9 @@ class CreatePatientSerializer(ModelSerializer):
 
         if not validated_data.get("year_of_birth", None):
             if validated_data["age"]:
-                validated_data[
-                    "year_of_birth"
-                ] = Patient.get_year_of_birth_from_age(validated_data["age"])
+                validated_data["year_of_birth"] = (
+                    Patient.get_year_of_birth_from_age(validated_data["age"])
+                )
             else:
                 raise ValidationError(
                     {
@@ -448,7 +448,7 @@ class EpisodeWriteSerializer(ModelSerializer):
                 ),
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
-                antibiotic_type=validated_data.get("antibiotic_type", "")
+                antibiotic_type=validated_data.get("antibiotic_type", ""),
             )
         except IndexError:
             raise ValidationError(
@@ -473,7 +473,7 @@ class DischargeReadSerializer(ModelSerializer):
             "aware_of_mesh",
             "infection",
             "discharge_duration",
-            "comments"
+            "comments",
         ]
 
 
@@ -492,7 +492,7 @@ class DischargeWriteSerializer(ModelSerializer):
             "aware_of_mesh",
             "infection",
             "discharge_duration",
-            "comments"
+            "comments",
         ]
 
     def to_representation(self, instance):
@@ -515,7 +515,7 @@ class DischargeWriteSerializer(ModelSerializer):
             aware_of_mesh=validated_data["aware_of_mesh"],
             infection=validated_data.get("infection", ""),
             discharge_duration=validated_data.get("discharge_duration", None),
-            comments=validated_data.get("comments", "")
+            comments=validated_data.get("comments", ""),
         )
 
         return discharge
@@ -539,7 +539,7 @@ class FollowUpReadSerializer(ModelSerializer):
             "infection",
             "numbness",
             "further_surgery_need",
-            "surgery_comments_box"
+            "surgery_comments_box",
         ]
 
 
@@ -551,7 +551,9 @@ class FollowUpWriteSerializer(ModelSerializer):
         write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
     )
     pain_severity = CharField()
-    surgery_comments_box = CharField(required=False, allow_blank=True, allow_null=True)
+    surgery_comments_box = CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
     further_surgery_need = BooleanField()
 
     class Meta:
@@ -566,7 +568,7 @@ class FollowUpWriteSerializer(ModelSerializer):
             "infection",
             "numbness",
             "further_surgery_need",
-            "surgery_comments_box"
+            "surgery_comments_box",
         ]
 
     def to_representation(self, instance):
@@ -596,17 +598,21 @@ class FollowUpWriteSerializer(ModelSerializer):
         follow_up = FollowUp.objects.create(
             episode_id=episode.id,
             date=validated_data["date"],
-            pain_severity=get_text_choice_value_from_label(
-                FollowUp.PainSeverityChoices.choices, pain_severity
-            )
-            if pain_severity
-            else "",
+            pain_severity=(
+                get_text_choice_value_from_label(
+                    FollowUp.PainSeverityChoices.choices, pain_severity
+                )
+                if pain_severity
+                else ""
+            ),
             mesh_awareness=validated_data["mesh_awareness"],
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
             numbness=validated_data["numbness"],
             further_surgery_need=validated_data["further_surgery_need"],
-            surgery_comments_box=validated_data.get("surgery_comments_box", "")
+            surgery_comments_box=validated_data.get(
+                "surgery_comments_box", ""
+            ),
         )
 
         follow_up.attendees.set(attendees)
