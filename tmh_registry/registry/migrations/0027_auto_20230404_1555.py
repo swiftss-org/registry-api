@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0026_discharge_comments'),
+        ("registry", "0026_discharge_comments"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='followup',
-            name='further_surgery_need',
+            model_name="followup",
+            name="further_surgery_need",
             field=models.BooleanField(default=False),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='followup',
-            name='surgery_comments_box',
+            model_name="followup",
+            name="surgery_comments_box",
             field=models.TextField(blank=True, null=True),
         ),
     ]

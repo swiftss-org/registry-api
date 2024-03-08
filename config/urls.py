@@ -33,9 +33,9 @@ pages_urls = [
         TemplateView.as_view(
             template_name="pages/home.html",
             extra_context={
-                "only_token_auth": True
-                if "production" in module_type
-                else False
+                "only_token_auth": (
+                    True if "production" in module_type else False
+                )
             },
         ),
         name="home",

@@ -6,18 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0017_auto_20221029_1535'),
+        ("registry", "0017_auto_20221029_1535"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='episode',
-            name='side',
-            field=models.CharField(choices=[('NA', 'Not Applicable'), ('LEFT', 'Left'), ('RIGHT', 'Right')], max_length=16),
+            model_name="episode",
+            name="side",
+            field=models.CharField(
+                choices=[
+                    ("NA", "Not Applicable"),
+                    ("LEFT", "Left"),
+                    ("RIGHT", "Right"),
+                ],
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='episode',
-            name='type',
-            field=models.CharField(choices=[('NA', 'Not Applicable'), ('DIRECT', 'Direct'), ('INDIRECT', 'Indirect'), ('PANTALOON', 'Pantaloon')], max_length=16),
+            model_name="episode",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("NA", "Not Applicable"),
+                    ("DIRECT", "Direct"),
+                    ("INDIRECT", "Indirect"),
+                    ("PANTALOON", "Pantaloon"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

@@ -111,12 +111,12 @@ class Episode(Model):
         PANTALOON = ("PANTALOON", "Pantaloon")
 
     class SizeChoices(TextChoices):
-        VERY_SMALL = ('VERY_SMALL', 'Very Small (<1 finger breadth)')
-        SMALL = ('SMALL', 'Small (1-2 finger breadths)')
-        MEDIUM = ('MEDIUM', 'Medium (2-3 finger breadths)')
-        LARGE = ('LARGE', 'Large (3-4 finger breadths)')
-        VERY_LARGE = ('VERY_LARGE', 'Very Large (>4 finger breadths)')
-        MASSIVE = ('MASSIVE', 'Massive (extends beyond midpoint of thigh)')
+        VERY_SMALL = ("VERY_SMALL", "Very Small (<1 finger breadth)")
+        SMALL = ("SMALL", "Small (1-2 finger breadths)")
+        MEDIUM = ("MEDIUM", "Medium (2-3 finger breadths)")
+        LARGE = ("LARGE", "Large (3-4 finger breadths)")
+        VERY_LARGE = ("VERY_LARGE", "Very Large (>4 finger breadths)")
+        MASSIVE = ("MASSIVE", "Massive (extends beyond midpoint of thigh)")
 
     class ComplexityChoices(TextChoices):
         SIMPLE = ("SIMPLE", "Simple")
@@ -169,7 +169,9 @@ class Discharge(TimeStampMixin):
     )
     date = DateField()
     aware_of_mesh = BooleanField()  # antibiotics given on discharge
-    infection = CharField(max_length=64, null=True, blank=True)  # Post-operative complications (comma separated values)
+    infection = CharField(
+        max_length=64, null=True, blank=True
+    )  # Post-operative complications (comma separated values)
     discharge_duration = PositiveIntegerField(null=True, blank=True)
     comments = TextField(null=True, blank=True)
 

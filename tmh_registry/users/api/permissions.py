@@ -1,9 +1,8 @@
+import builtins
+
 from rest_framework import permissions
 
 from tmh_registry.users.models import MedicalPersonnel
-
-import traceback
-import logging
 
 
 class IsMedicalPersonnel(permissions.BasePermission):
@@ -14,6 +13,5 @@ class IsMedicalPersonnel(permissions.BasePermission):
             return request.user.medical_personnel.user.is_staff
         except MedicalPersonnel.DoesNotExist:
             return False
-        except Exception:
+        except builtins.Exception:
             return False
-

@@ -6,18 +6,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0021_auto_20230213_1528'),
+        ("registry", "0021_auto_20230213_1528"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='episode',
-            name='antibiotic_type',
-            field=models.CharField(blank=True, choices=[('START_BEFORE', 'IV at start / before surgery'), ('ONE_DAY_POST_OP_IV', '+24hrs Post Op IV'), ('ONE_DAY_POST_OP_ORAL', '24hrs Post Op Oral'), ('TWO_DAYS_POST_OP_IV', '+48hrs Post Op IV'), ('TWO_DAYS_POST_OP_ORAL', '+48hrs Post Op Oral')], max_length=64, null=True),
+            model_name="episode",
+            name="antibiotic_type",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("START_BEFORE", "IV at start / before surgery"),
+                    ("ONE_DAY_POST_OP_IV", "+24hrs Post Op IV"),
+                    ("ONE_DAY_POST_OP_ORAL", "24hrs Post Op Oral"),
+                    ("TWO_DAYS_POST_OP_IV", "+48hrs Post Op IV"),
+                    ("TWO_DAYS_POST_OP_ORAL", "+48hrs Post Op Oral"),
+                ],
+                max_length=64,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='episode',
-            name='mesh_type',
-            field=models.CharField(choices=[('TNMHP', 'TNMHP Mesh'), ('KCMC', 'KCMC Generic Mesh'), ('COMMERCIAL', 'Commercial Mesh'), ('INTERNATIONAL', 'Hernia International Mesh')], max_length=16),
+            model_name="episode",
+            name="mesh_type",
+            field=models.CharField(
+                choices=[
+                    ("TNMHP", "TNMHP Mesh"),
+                    ("KCMC", "KCMC Generic Mesh"),
+                    ("COMMERCIAL", "Commercial Mesh"),
+                    ("INTERNATIONAL", "Hernia International Mesh"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

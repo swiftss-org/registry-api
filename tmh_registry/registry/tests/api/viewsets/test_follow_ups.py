@@ -38,7 +38,7 @@ class TestFollowUpsCreate(TestCase):
             "seroma": True,
             "infection": False,
             "numbness": True,
-            "further_surgery_need": True
+            "further_surgery_need": True,
         }
 
     def test_successful(self):

@@ -1,7 +1,6 @@
 import datetime
 
 from django.test import TestCase
-from parameterized import parameterized
 from pytest import mark
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
@@ -54,17 +53,17 @@ class TestPatientsViewSet(TestCase):
     def get_patient_test_data(self):
         return {
             "full_name": "Joan MIDDLE Doe",
-            "national_id": '02668357143554213261',
+            "national_id": "02668357143554213261",
             "age": 23,  # wrong age
             "day_of_birth": 3,
             "month_of_birth": 10,
             "year_of_birth": 1994,
             "gender": "Female",
-            "phone_1": '00234633241',
-            "phone_2": '00324362141',
+            "phone_1": "00234633241",
+            "phone_2": "00324362141",
             "address": "16 Test Street, Test City, Test Country",
             "hospital_id": self.hospital.id,
-            "patient_hospital_id": '001111',
+            "patient_hospital_id": "001111",
         }
 
     ######################
@@ -312,7 +311,9 @@ class TestPatientsViewSet(TestCase):
         )
         self.assertEqual(data["year_of_birth"], response.data["year_of_birth"])
         self.assertEqual(data["day_of_birth"], response.data["day_of_birth"])
-        self.assertEqual(data["month_of_birth"], response.data["month_of_birth"])
+        self.assertEqual(
+            data["month_of_birth"], response.data["month_of_birth"]
+        )
         self.assertEqual("Female", response.data["gender"])
         self.assertEqual(data["phone_1"], response.data["phone_1"])
         self.assertEqual(data["phone_2"], response.data["phone_2"])

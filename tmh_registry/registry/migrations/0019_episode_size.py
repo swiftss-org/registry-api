@@ -6,14 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0018_auto_20221029_1546'),
+        ("registry", "0018_auto_20221029_1546"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='episode',
-            name='size',
-            field=models.CharField(choices=[('VERY_SMALL', 'Very Small (<1 finger breadth)'), ('SMALL', 'Small (1-2 finger breadths)'), ('MEDIUM', 'Medium (2-3 finger breadths)'), ('LARGE', 'Large (3-4 finger breadths)'), ('VERY_LARGE', 'Very Large (>4 finger breadths)'), ('MASSIVE', 'Massive (extends beyond midpoint of thigh)')], default='SMALL', max_length=16),
+            model_name="episode",
+            name="size",
+            field=models.CharField(
+                choices=[
+                    ("VERY_SMALL", "Very Small (<1 finger breadth)"),
+                    ("SMALL", "Small (1-2 finger breadths)"),
+                    ("MEDIUM", "Medium (2-3 finger breadths)"),
+                    ("LARGE", "Large (3-4 finger breadths)"),
+                    ("VERY_LARGE", "Very Large (>4 finger breadths)"),
+                    ("MASSIVE", "Massive (extends beyond midpoint of thigh)"),
+                ],
+                default="SMALL",
+                max_length=16,
+            ),
             preserve_default=False,
         ),
     ]
