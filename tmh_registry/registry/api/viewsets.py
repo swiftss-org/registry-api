@@ -76,7 +76,7 @@ class PatientFilterSet(FilterSet):
                 Q(patient_hospital_id_str__contains=str(value)) & Q(hospital_id=selected_hospital_id_value)
             ).values_list("patient_id", flat=True)
             queryset = queryset.filter(
-                Q(full_name__icontains=value) | Q(national_id__iexact=value) | Q(id__in=patient_ids)
+                Q(full_name__icontains=value) | Q(national_id__icontains=value) | Q(id__in=patient_ids)
             )
             return queryset
         return queryset
