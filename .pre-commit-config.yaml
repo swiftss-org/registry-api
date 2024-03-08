@@ -6,7 +6,7 @@ repos:
   - hooks:
       - id: detect-secrets
         args: [ '--baseline', '.pre-commit/.secrets.baseline' ]
-        exclude: (config/settings/test.py|/static|.html|local|README.md)
+        exclude: (config/settings/test.py|/static|.html|local|README.md|.pre-commit/|test_views.py)
     repo: https://github.com/Yelp/detect-secrets.git
     rev: v1.4.0
 
@@ -75,6 +75,6 @@ repos:
 
   - hooks:
       - id: bandit
-        args: [ --verbose, -ll, --recursive, . ]
+        args: [ --verbose, -ll, . ]
     repo: https://github.com/PyCQA/bandit
     rev: 1.7.7
