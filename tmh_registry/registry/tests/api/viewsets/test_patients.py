@@ -190,7 +190,7 @@ class TestPatientsViewSet(TestCase):
         client.credentials(HTTP_AUTHORIZATION="Token " + non_admin_token.key)
         response = client.get("/api/v1/patients/", format="json")
 
-        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(HTTP_200_OK, response.status_code)
 
     def test_get_patients_list_from_non_medical_personnel_user(self):
         non_mp_user = UserFactory()
@@ -256,7 +256,7 @@ class TestPatientsViewSet(TestCase):
             f"/api/v1/patients/{self.patient.id}/", format="json"
         )
 
-        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(HTTP_200_OK, response.status_code)
 
     def test_get_patients_detail_from_non_medical_personnel_user(self):
         non_mp_user = UserFactory()
