@@ -76,6 +76,11 @@ Run one test:
 make test-one file=tmh_registry/registry/tests/api/viewsets/test_discharges.py test_name=TestDischargeCreate
 ```
 
+Run checks before committing:
+```shell
+make pre-commit
+```
+
 Everything you need for this project is under [Makefile](./Makefile). Take a look at the commands by running `make`.
 
 ### Create a local user in Django

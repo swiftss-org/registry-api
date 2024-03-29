@@ -34,6 +34,7 @@ class EpisodeSerializer(ModelSerializer):
     complexity = CharField(source="get_complexity_display")
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
+    comments = CharField()
 
     class Meta:
         model = Episode
@@ -53,6 +54,7 @@ class EpisodeSerializer(ModelSerializer):
             "diathermy_used",
             "antibiotic_used",
             "antibiotic_type",
+            "comments",
         ]
 
 
@@ -320,6 +322,7 @@ class EpisodeReadSerializer(ModelSerializer):
     mesh_type = CharField(source="get_mesh_type_display")
     anaesthetic_type = CharField(source="get_anaesthetic_type_display")
     antibiotic_type = CharField()
+    comments = CharField()
 
     class Meta:
         model = Episode
@@ -341,6 +344,7 @@ class EpisodeReadSerializer(ModelSerializer):
             "diathermy_used",
             "antibiotic_used",
             "antibiotic_type",
+            "comments",
         ]
 
 
@@ -364,6 +368,7 @@ class EpisodeWriteSerializer(ModelSerializer):
     mesh_type = CharField()
     anaesthetic_type = CharField()
     antibiotic_type = CharField(required=False)
+    comments = CharField(required=False)
 
     class Meta:
         model = Episode
@@ -384,6 +389,7 @@ class EpisodeWriteSerializer(ModelSerializer):
             "diathermy_used",
             "antibiotic_used",
             "antibiotic_type",
+            "comments",
         ]
 
     def to_representation(self, instance):
@@ -449,6 +455,7 @@ class EpisodeWriteSerializer(ModelSerializer):
                 diathermy_used=validated_data["diathermy_used"],
                 antibiotic_used=validated_data["antibiotic_used"],
                 antibiotic_type=validated_data.get("antibiotic_type", ""),
+                comments=validated_data.get("comments", ""),
             )
         except IndexError:
             raise ValidationError(
