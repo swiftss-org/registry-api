@@ -10,8 +10,10 @@ class IsMedicalPersonnel(permissions.BasePermission):
 
     def has_permission(self, request, view):
         try:
-            return request.user.medical_personnel.user.is_staff
+            request.user.medical_personnel
         except MedicalPersonnel.DoesNotExist:
             return False
         except builtins.Exception:
             return False
+
+        return True

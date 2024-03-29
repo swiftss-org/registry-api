@@ -53,7 +53,7 @@ class TestHospitalsViewSet(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         response = self.client.get("/api/v1/hospitals/", format="json")
 
-        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(HTTP_200_OK, response.status_code)
 
     def test_get_hospitals_list_from_non_medical_personnel_user(self):
         self.non_mp_user = UserFactory()
@@ -95,7 +95,7 @@ class TestHospitalsViewSet(TestCase):
             f"/api/v1/hospitals/{self.hospital.id}/", format="json"
         )
 
-        self.assertEqual(HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(HTTP_200_OK, response.status_code)
 
     def test_get_hospitals_detail_from_non_medical_personnel_user(self):
         self.non_mp_user = UserFactory()
