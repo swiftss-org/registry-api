@@ -85,7 +85,7 @@ class PatientFilterSet(FilterSet):
             # pylint: disable=unsupported-binary-operation
             queryset = queryset.filter(
                 Q(full_name__icontains=value)
-                | Q(national_id__iexact=value)
+                | Q(national_id__icontains=value)
                 | Q(id__in=patient_ids)
                 # pylint: enable=unsupported-binary-operation
             )
