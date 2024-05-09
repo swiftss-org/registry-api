@@ -601,7 +601,6 @@ class FollowUpWriteSerializer(ModelSerializer):
             )
 
         pain_severity = validated_data.get("pain_severity", "")
-        print(f"{pain_severity=}")
         follow_up = FollowUp.objects.create(
             episode_id=episode.id,
             date=validated_data["date"],
