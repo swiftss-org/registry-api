@@ -48,6 +48,11 @@ $ activate venv
 > .\venv\Scripts\activate
 ```
 
+Run before committing/pushing:
+```shell
+./checkInCheck.sh
+```
+
 
 Install project dependencies:
 ```shell
