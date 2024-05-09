@@ -59,7 +59,7 @@ class TestPatientHospitalMappingViewset(TestCase):
         data = {
             "patient_id": mapping.patient.id,
             "hospital_id": mapping.hospital.id,
-            "patient_hospital_id": "whatever",
+            "patient_hospital_id": 45678,
         }
 
         response = self.client.post(
