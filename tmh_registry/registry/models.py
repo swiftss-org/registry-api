@@ -201,6 +201,7 @@ class FollowUp(TimeStampMixin):
     seroma = BooleanField()
     infection = BooleanField()
     numbness = BooleanField()
+    recurrence = BooleanField(null=True, blank=False)
     further_surgery_need = BooleanField()
     surgery_comments_box = TextField(null=True, blank=True)
 

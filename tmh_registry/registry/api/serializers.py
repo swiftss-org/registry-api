@@ -545,6 +545,7 @@ class FollowUpReadSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "recurrence",
             "further_surgery_need",
             "surgery_comments_box",
         ]
@@ -574,6 +575,7 @@ class FollowUpWriteSerializer(ModelSerializer):
             "seroma",
             "infection",
             "numbness",
+            "recurrence",
             "further_surgery_need",
             "surgery_comments_box",
         ]
@@ -615,6 +617,7 @@ class FollowUpWriteSerializer(ModelSerializer):
             seroma=validated_data["seroma"],
             infection=validated_data["infection"],
             numbness=validated_data["numbness"],
+            recurrence=validated_data["recurrence"],
             further_surgery_need=validated_data["further_surgery_need"],
             surgery_comments_box=validated_data.get(
                 "surgery_comments_box", ""

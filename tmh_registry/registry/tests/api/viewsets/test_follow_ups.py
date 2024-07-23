@@ -38,6 +38,7 @@ class TestFollowUpsCreate(TestCase):
             "seroma": True,
             "infection": False,
             "numbness": True,
+            "recurrence": True,
             "further_surgery_need": True,
         }
 
@@ -64,6 +65,7 @@ class TestFollowUpsCreate(TestCase):
         self.assertEqual(response.data["seroma"], data["seroma"])
         self.assertEqual(response.data["infection"], data["infection"])
         self.assertEqual(response.data["numbness"], data["numbness"])
+        self.assertEqual(response.data["recurrence"], data["recurrence"])
 
         # check value stored in db
         follow_up = FollowUp.objects.get(id=response.data["id"])
