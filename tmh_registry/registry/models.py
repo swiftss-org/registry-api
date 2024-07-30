@@ -73,11 +73,27 @@ class PatientHospitalMapping(Model):
             ("patient", "hospital"),
             ("hospital", "patient_hospital_id"),
         )
-        verbose_name_plural = "Patient-Hospital mappings"
+        verbose_name_plural = "Patient-Hospital Mappings"
 
     def __str__(self):
         return f"Patient {self.patient.full_name} ({self.patient_hospital_id}) - Hospital {self.hospital.name}"
 
+class PreferredHospital(Model):
+    medical_personnel = OneToOneField(
+        MedicalPersonnel, on_delete=CASCADE, related_name="preferred_hospital"
+    )
+    hospital = ForeignKey(
+        Hospital, on_delete=CASCADE, related_name="preferred_by_medical_personnel"
+    )
+
+    class Meta:
+        unique_together = (
+            ("medical_personnel", "hospital"),
+        )
+        verbose_name_plural = "Medical Personnel Preferred Hospitals"
+
+    def __str__(self):
+        return f"{self.medical_personnel.user.first_name} {self.medical_personnel.user.last_name} ({self.medical_personnel.user.username}) - Hospital {self.hospital.name}"
 
 class Episode(Model):
     class EpisodeChoices(TextChoices):

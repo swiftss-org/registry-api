@@ -15,6 +15,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -25,6 +26,7 @@ from ..models import (
     Hospital,
     Patient,
     PatientHospitalMapping,
+    PreferredHospital,
 )
 from .serializers import (
     CreatePatientSerializer,
@@ -37,14 +39,33 @@ from .serializers import (
     HospitalSerializer,
     PatientHospitalMappingReadSerializer,
     PatientHospitalMappingWriteSerializer,
+    PreferredHospitalReadSerializer,
     ReadPatientSerializer,
 )
+from ...users.models import MedicalPersonnel
 
 
 class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
 
+class PreferredHospitalViewSet(viewsets.GenericViewSet):
+    serializer_class = PreferredHospitalReadSerializer
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'])
+    def retrieve_for_current_user(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            medical_personnel = MedicalPersonnel.objects.get(user=user)
+        except MedicalPersonnel.DoesNotExist:
+            return Response({}, status=200)
+        try:
+            preferred_hospital = PreferredHospital.objects.get(medical_personnel=medical_personnel)
+        except PreferredHospital.DoesNotExist:
+            return Response({}, status=200)
+        serializer = self.get_serializer(preferred_hospital)
+        return Response(serializer.data)
 
 class PatientFilterSet(FilterSet):
     hospital_id = NumberFilter(

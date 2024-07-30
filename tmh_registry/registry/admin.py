@@ -11,6 +11,7 @@ from tmh_registry.registry.models import (
     Hospital,
     Patient,
     PatientHospitalMapping,
+    PreferredHospital,
 )
 
 
@@ -38,6 +39,9 @@ class PatientAdmin(ExportMixin, admin.ModelAdmin):
 class PatientHospitalMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = PatientHospitalMapping
 
+@admin.register(PreferredHospital)
+class PreferredHospitalAdmin(ExportMixin, admin.ModelAdmin):
+    model = PreferredHospital
 
 @admin.register(Episode)
 class EpisodeAdmin(ExportMixin, admin.ModelAdmin):
