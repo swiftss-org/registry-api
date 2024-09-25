@@ -246,6 +246,7 @@ class PatientHospitalMappingReadSerializer(ModelSerializer):
 
         return data
 
+
 class PreferredHospitalReadSerializer(ModelSerializer):
     hospital = SerializerMethodField()
 
@@ -257,12 +258,15 @@ class PreferredHospitalReadSerializer(ModelSerializer):
         request = self.context.get("request")
         if request and request.user:
             try:
-                medical_personnel = MedicalPersonnel.objects.get(user=request.user)
+                medical_personnel = MedicalPersonnel.objects.get(
+                    user=request.user
+                )
                 if obj.medical_personnel == medical_personnel:
                     return {"id": obj.hospital.id}
             except MedicalPersonnel.DoesNotExist:
                 pass
         return None
+
 
 class PatientHospitalMappingWriteSerializer(ModelSerializer):
     patient_id = PrimaryKeyRelatedField(queryset=Patient.objects.all())

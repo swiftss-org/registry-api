@@ -1,5 +1,6 @@
 from django.db import migrations
 
+
 def get_primary_surgeon_from_episode_surgeons(apps, schema_editor):
     Episode = apps.get_model("registry", "episode")
 
@@ -16,11 +17,13 @@ def get_primary_surgeon_from_episode_surgeons(apps, schema_editor):
             episode.tertiary_surgeon = surgeons[2]
         episode.save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ("registry", "0039_episode_primary_surgeon"),
     ]
 
-    operations = [migrations.RunPython(get_primary_surgeon_from_episode_surgeons)]
-
+    operations = [
+        migrations.RunPython(get_primary_surgeon_from_episode_surgeons)
+    ]

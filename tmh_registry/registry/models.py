@@ -2,6 +2,7 @@ import datetime
 
 from django.db.models import (
     CASCADE,
+    SET_DEFAULT,
     BooleanField,
     CharField,
     DateField,
@@ -12,7 +13,7 @@ from django.db.models import (
     OneToOneField,
     PositiveIntegerField,
     TextChoices,
-    TextField, SET_DEFAULT,
+    TextField,
 )
 
 from tmh_registry.common.models import TimeStampMixin
@@ -78,22 +79,24 @@ class PatientHospitalMapping(Model):
     def __str__(self):
         return f"Patient {self.patient.full_name} ({self.patient_hospital_id}) - Hospital {self.hospital.name}"
 
+
 class PreferredHospital(Model):
     medical_personnel = OneToOneField(
         MedicalPersonnel, on_delete=CASCADE, related_name="preferred_hospital"
     )
     hospital = ForeignKey(
-        Hospital, on_delete=CASCADE, related_name="preferred_by_medical_personnel"
+        Hospital,
+        on_delete=CASCADE,
+        related_name="preferred_by_medical_personnel",
     )
 
     class Meta:
-        unique_together = (
-            ("medical_personnel", "hospital"),
-        )
+        unique_together = (("medical_personnel", "hospital"),)
         verbose_name_plural = "Medical Personnel Preferred Hospitals"
 
     def __str__(self):
         return f"{self.medical_personnel.user.first_name} {self.medical_personnel.user.last_name} ({self.medical_personnel.user.username}) - Hospital {self.hospital.name}"
+
 
 class Episode(Model):
     class EpisodeChoices(TextChoices):
@@ -157,9 +160,30 @@ class Episode(Model):
     created = DateTimeField(auto_now_add=True)
     surgery_date = DateField(null=True, blank=True)
     episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
-    primary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="primary_surgeon")
-    secondary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="secondary_surgeon")
-    tertiary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="tertiary_surgeon")
+    primary_surgeon = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="primary_surgeon",
+    )
+    secondary_surgeon = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="secondary_surgeon",
+    )
+    tertiary_surgeon = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="tertiary_surgeon",
+    )
     surgeons = ManyToManyField(MedicalPersonnel)
     cepod = CharField(max_length=16, choices=CepodChoices.choices)
     side = CharField(max_length=16, choices=SideChoices.choices)
