@@ -12,7 +12,7 @@ from django.db.models import (
     OneToOneField,
     PositiveIntegerField,
     TextChoices,
-    TextField,
+    TextField, SET_DEFAULT,
 )
 
 from tmh_registry.common.models import TimeStampMixin
@@ -157,6 +157,9 @@ class Episode(Model):
     created = DateTimeField(auto_now_add=True)
     surgery_date = DateField(null=True, blank=True)
     episode_type = CharField(max_length=128, choices=EpisodeChoices.choices)
+    primary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="primary_surgeon")
+    secondary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="secondary_surgeon")
+    tertiary_surgeon = ForeignKey(MedicalPersonnel, on_delete=SET_DEFAULT, blank=True, null=True, default=None, related_name="tertiary_surgeon")
     surgeons = ManyToManyField(MedicalPersonnel)
     cepod = CharField(max_length=16, choices=CepodChoices.choices)
     side = CharField(max_length=16, choices=SideChoices.choices)
