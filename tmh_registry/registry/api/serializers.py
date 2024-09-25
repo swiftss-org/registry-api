@@ -35,6 +35,9 @@ class HospitalSerializer(ModelSerializer):
 
 
 class EpisodeSerializer(ModelSerializer):
+    primary_surgeon = MedicalPersonnelSerializer(many=False)
+    secondary_surgeon = MedicalPersonnelSerializer(many=False)
+    tertiary_surgeon = MedicalPersonnelSerializer(many=False)
     surgeons = MedicalPersonnelSerializer(many=True)
     episode_type = CharField(source="get_episode_type_display")
     cepod = CharField(source="get_cepod_display")
@@ -53,6 +56,9 @@ class EpisodeSerializer(ModelSerializer):
             "id",
             "surgery_date",
             "episode_type",
+            "primary_surgeon",
+            "secondary_surgeon",
+            "tertiary_surgeon",
             "surgeons",
             "cepod",
             "side",
@@ -343,6 +349,9 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
 
 class EpisodeReadSerializer(ModelSerializer):
     patient_hospital_mapping = PatientHospitalMappingReadSerializer()
+    primary_surgeon = MedicalPersonnelSerializer(many=False)
+    secondary_surgeon = MedicalPersonnelSerializer(many=False)
+    tertiary_surgeon = MedicalPersonnelSerializer(many=False)
     surgeons = MedicalPersonnelSerializer(many=True)
     episode_type = CharField(source="get_episode_type_display")
     cepod = CharField(source="get_cepod_display")
@@ -364,6 +373,9 @@ class EpisodeReadSerializer(ModelSerializer):
             "created",
             "surgery_date",
             "episode_type",
+            "primary_surgeon",
+            "secondary_surgeon",
+            "tertiary_surgeon",
             "surgeons",
             "cepod",
             "side",
