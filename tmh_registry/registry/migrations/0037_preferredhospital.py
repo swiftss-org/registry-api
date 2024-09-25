@@ -7,21 +7,43 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0008_auto_20210630_1407'),
-        ('registry', '0036_followup_recurrence'),
+        ("users", "0008_auto_20210630_1407"),
+        ("registry", "0036_followup_recurrence"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PreferredHospital',
+            name="PreferredHospital",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('hospital', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='preferred_by_medical_personnel', to='registry.hospital')),
-                ('medical_personnel', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='preferred_hospital', to='users.medicalpersonnel')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "hospital",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="preferred_by_medical_personnel",
+                        to="registry.hospital",
+                    ),
+                ),
+                (
+                    "medical_personnel",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="preferred_hospital",
+                        to="users.medicalpersonnel",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Medical Personnel Preferred Hospitals',
-                'unique_together': {('medical_personnel', 'hospital')},
+                "verbose_name_plural": "Medical Personnel Preferred Hospitals",
+                "unique_together": {("medical_personnel", "hospital")},
             },
         ),
     ]
