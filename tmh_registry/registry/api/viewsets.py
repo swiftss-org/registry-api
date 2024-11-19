@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import CharField, Q
+from django.db.models import CharField, Q, Count, Max
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django_filters import (  # pylint: disable=E0401
@@ -41,6 +41,7 @@ from .serializers import (
     PatientHospitalMappingWriteSerializer,
     PreferredHospitalReadSerializer,
     ReadPatientSerializer,
+    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer,
 )
 from ...users.models import MedicalPersonnel
 
@@ -66,6 +67,50 @@ class PreferredHospitalViewSet(viewsets.GenericViewSet):
             return Response({}, status=200)
         serializer = self.get_serializer(preferred_hospital)
         return Response(serializer.data)
+
+class SurgeonEpisodeSummaryViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SurgeonEpisodeSummarySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        try:
+            medical_personnel = MedicalPersonnel.objects.get(user=user)
+        except MedicalPersonnel.DoesNotExist:
+            return Episode.objects.none()
+
+        return Episode.objects.filter(surgeons=medical_personnel)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        stats = queryset.aggregate(
+            episode_count=Count('id'),
+            last_episode_date=Max('surgery_date')
+        )
+
+        serializer = self.get_serializer(stats)
+        return Response(serializer.data)
+
+class OwnedEpisodesViewSet(viewsets.ReadOnlyModelViewSet):
+    pagination_class = None
+    serializer_class = OwnedEpisodeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        try:
+            medical_personnel = MedicalPersonnel.objects.get(user=user)
+        except MedicalPersonnel.DoesNotExist:
+            return Episode.objects.none()
+
+        episodes = (
+            Episode.objects
+            .filter(surgeons=medical_personnel)
+            .select_related("patient_hospital_mapping__patient")
+            .prefetch_related( "discharge", "followup_set")
+        )
+        return episodes
 
 class PatientFilterSet(FilterSet):
     hospital_id = NumberFilter(

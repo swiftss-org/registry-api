@@ -1,8 +1,8 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import BooleanField, CharField, IntegerField
+from rest_framework.fields import BooleanField, CharField, IntegerField, DateField
 from rest_framework.relations import PrimaryKeyRelatedField
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField, Serializer
 
 from ...common.utils.functions import get_text_choice_value_from_label
 from ...users.api.serializers import MedicalPersonnelSerializer
@@ -645,3 +645,28 @@ class FollowUpWriteSerializer(ModelSerializer):
         follow_up.attendees.set(attendees)
 
         return follow_up
+
+class SurgeonEpisodeSummarySerializer(Serializer):
+    episode_count = IntegerField()
+    last_episode_date = DateField(allow_null=True)
+
+
+class OwnedEpisodeSerializer(ModelSerializer):
+    patient_name = CharField(source='patient_hospital_mapping.patient.full_name', read_only=True)
+    patient_id = CharField(source='patient_hospital_mapping.patient.id', read_only=True)
+    hospital_id = CharField(source='patient_hospital_mapping.hospital.id', read_only=True)
+    follow_up_dates = SerializerMethodField()
+    discharge = SerializerMethodField()
+
+    class Meta:
+        model = Episode
+        fields = ['id', 'surgery_date', 'patient_name', 'discharge', 'follow_up_dates', 'patient_id', 'hospital_id']
+
+    def get_follow_up_dates(self, obj):
+        # Return only the dates of follow-up objects as a list of strings
+        return [follow_up.date for follow_up in obj.followup_set.all()]
+
+    def get_discharge(self, obj):
+        # Return the discharge date if available, otherwise None
+        discharge = getattr(obj, 'discharge', None)
+        return discharge.date if discharge else None
