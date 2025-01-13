@@ -32,7 +32,7 @@ If you are on _Windows_ and not Linux (or other *nix) you will also need to have
 Create a virtual environment for this project.
 
 If you are using [pyenv](https://github.com/pyenv/pyenv):
-```shell
+```bash
 pyenv virtualenv registry-api
 pyenv activate registry-api
 ```
@@ -49,40 +49,40 @@ $ activate venv
 ```
 
 Run before committing/pushing:
-```shell
+```bash
 ./checkInCheck.sh
 ```
 
 
 Install project dependencies:
-```shell
+```bash
 make dep
 ```
 
 ### Start Developing
 
 Spin up the project:
-```shell
+```bash
 make run
 ```
 
 Run migrations (every time you update Django models):
-```shell
+```bash
 make migrate
 ```
 
 Run tests:
-```shell
+```bash
 make test
 ```
 
 Run one test:
-```shell
+```bash
 make test-one file=tmh_registry/registry/tests/api/viewsets/test_discharges.py test_name=TestDischargeCreate
 ```
 
 Run checks before committing:
-```shell
+```bash
 make pre-commit
 ```
 
@@ -90,7 +90,7 @@ Everything you need for this project is under [Makefile](./Makefile). Take a loo
 
 ### Create a local user in Django
 Before you can login to the registry you will need to create an account via. the local Django admin console:
-1. Go ot the admin console on [http://localhost:8000/admin/](http://localhost:8000/admin/) or from Containers in Docker Desktop
+1. Go to the admin console on [http://localhost:8000/admin/](http://localhost:8000/admin/) or from Containers in Docker Desktop
 2. Enter the username and password from `.envs/.local/.django`
 3. Create a new user
 
