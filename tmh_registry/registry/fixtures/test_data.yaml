@@ -1,0 +1,167 @@
+
+- model: auth.User
+  pk: 2
+  fields:
+    password: 123456
+    last_login: null
+    is_superuser: false
+    username: sur@doctor.co.uk
+    first_name: Sur
+    last_name: Doctor
+    email: sur@doctor.co.uk
+    is_staff: false
+    is_active: true
+    date_joined: 2024-09-11T00:00:00Z
+
+- model: auth.User
+  pk: 3
+  fields:
+    password: 123456
+    last_login: null
+    is_superuser: false
+    username: sur2@doctor.co.uk
+    first_name: Sur 2
+    last_name: Doctor
+    email: sur2@doctor.co.uk
+    is_staff: false
+    is_active: true
+    date_joined: 2024-09-11T00:00:00Z
+
+- model: auth.User
+  pk: 4
+  fields:
+    password: 123456
+    last_login: null
+    is_superuser: false
+    username: sur3@doctor.co.uk
+    first_name: Sur 3
+    last_name: Doctor
+    email: sur3@doctor.co.uk
+    is_staff: false
+    is_active: true
+    date_joined: 2024-09-11T00:00:00Z
+
+- model: users.MedicalPersonnel
+  pk: 2
+  fields:
+    user_id: 2
+    level: Lead Surgeon
+
+- model: users.MedicalPersonnel
+  pk: 3
+  fields:
+    user_id: 3
+    level: Lead Surgeon
+
+- model: users.MedicalPersonnel
+  pk: 4
+  fields:
+    user_id: 4
+    level: Lead Surgeon
+
+- model: registry.Hospital
+  pk: 10
+  fields:
+    name: Test Hospital
+    address: Here and there Address
+
+- model: registry.Hospital
+  pk: 11
+  fields:
+    name: Different Hospital
+    address: Nowhere
+
+
+- model: registry.Patient
+  pk: 100
+  fields:
+    full_name: Patient Boy
+    national_id: National Id
+    day_of_birth: 18
+    month_of_birth: 3
+    year_of_birth: 2002
+    gender: MALE
+    phone_1: 0123456789
+    phone_2: 9876543210
+    address: All the way
+    created_at: 2024-09-11
+    updated_at: 2024-09-11
+
+- model: registry.PatientHospitalMapping
+  pk: 1000
+  fields:
+    patient_id: 100
+    hospital_id: 10
+    patient_hospital_id: 1100
+
+- model: registry.Episode
+  pk: 10000
+  fields:
+    patient_hospital_mapping: 1000
+    created: 2024-09-11T00:00:00Z
+    surgery_date: 2024-09-11T00:00:00Z
+    episode_type: INGUINAL
+    primary_surgeon_id: null
+    secondary_surgeon_id: null
+    tertiary_surgeon_id: null
+    surgeons: [ 1, 2, 3, 4 ]
+    cepod: PLANNED
+    side: LEFT
+    occurence: PRIMARY
+    type: DIRECT
+    size: VERY_SMALL
+    complexity: SIMPLE
+    mesh_type: TNMHP
+    anaesthetic_type: LOCAL
+    diathermy_used: false
+    antibiotic_used: false
+    antibiotic_type: null
+    comments: Comment here
+
+- model: registry.Episode
+  pk: 10001
+  fields:
+    patient_hospital_mapping: 1000
+    created: 2024-09-11T00:00:00Z
+    surgery_date: 2024-09-11T00:00:00Z
+    episode_type: INGUINAL
+    primary_surgeon_id: null
+    secondary_surgeon_id: null
+    tertiary_surgeon_id: null
+    surgeons: [ 1, 2 ]
+    cepod: PLANNED
+    side: LEFT
+    occurence: PRIMARY
+    type: DIRECT
+    size: VERY_SMALL
+    complexity: SIMPLE
+    mesh_type: TNMHP
+    anaesthetic_type: LOCAL
+    diathermy_used: false
+    antibiotic_used: false
+    antibiotic_type: null
+    comments: Comment here
+
+- model: registry.Episode
+  pk: 10002
+  fields:
+    patient_hospital_mapping: 1000
+    created: 2024-09-11T00:00:00Z
+    surgery_date: 2024-09-11T00:00:00Z
+    episode_type: INGUINAL
+    primary_surgeon_id: null
+    secondary_surgeon_id: null
+    tertiary_surgeon_id: null
+    surgeons: []
+    cepod: PLANNED
+    side: LEFT
+    occurence: PRIMARY
+    type: DIRECT
+    size: VERY_SMALL
+    complexity: SIMPLE
+    mesh_type: TNMHP
+    anaesthetic_type: LOCAL
+    diathermy_used: false
+    antibiotic_used: false
+    antibiotic_type: null
+    comments: Comment here

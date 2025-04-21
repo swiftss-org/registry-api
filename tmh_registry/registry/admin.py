@@ -39,9 +39,11 @@ class PatientAdmin(ExportMixin, admin.ModelAdmin):
 class PatientHospitalMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = PatientHospitalMapping
 
+
 @admin.register(PreferredHospital)
 class PreferredHospitalAdmin(ExportMixin, admin.ModelAdmin):
     model = PreferredHospital
+
 
 @admin.register(Episode)
 class EpisodeAdmin(ExportMixin, admin.ModelAdmin):
