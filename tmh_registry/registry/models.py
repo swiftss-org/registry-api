@@ -226,3 +226,50 @@ class FollowUp(TimeStampMixin):
 
     class Meta:
         verbose_name_plural = "Follow Ups"
+
+class Zone(Model):
+    name = CharField(max_length=255, unique=True)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Zones"
+
+class Region(Model):
+    name = CharField(max_length=255, unique=True)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Regions"
+
+class HospitalRegionMapping(Model):
+    hospital = OneToOneField(
+        Hospital,
+        on_delete=CASCADE,
+        related_name="region_mapping"
+    )
+    region = ForeignKey(
+        Region,
+        on_delete=CASCADE,
+        related_name="hospital_mappings"
+    )
+    def __str__(self):
+        return f"{self.hospital.name} - {self.region.name}"
+    class Meta:
+        verbose_name_plural = "Hospital-Region Mappings"
+
+class RegionZoneMapping(Model):
+    region = OneToOneField(
+        Region,
+        on_delete=CASCADE,
+        related_name="zone_mapping"
+    )
+    zone = ForeignKey(
+        Zone,
+        on_delete=CASCADE,
+        related_name="region_mappings"
+    )
+    def __str__(self):
+        return f"{self.region.name} - {self.zone.name}"
+    class Meta:
+        verbose_name_plural = "Region-Zone Mappings"
+

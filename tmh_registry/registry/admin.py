@@ -12,6 +12,10 @@ from tmh_registry.registry.models import (
     Patient,
     PatientHospitalMapping,
     PreferredHospital,
+    Zone,
+    Region,
+    HospitalRegionMapping,
+    RegionZoneMapping,
 )
 
 
@@ -46,6 +50,22 @@ class PreferredHospitalAdmin(ExportMixin, admin.ModelAdmin):
 @admin.register(Episode)
 class EpisodeAdmin(ExportMixin, admin.ModelAdmin):
     model = Episode
+
+@admin.register(Zone)
+class ZoneAdmin(ExportMixin, admin.ModelAdmin):
+    model = Zone
+
+@admin.register(Region)
+class RegionAdmin(ExportMixin, admin.ModelAdmin):
+    model = Region
+
+@admin.register(HospitalRegionMapping)
+class HospitalRegionMappingAdmin(ExportMixin, admin.ModelAdmin):
+    model = HospitalRegionMapping
+
+@admin.register(RegionZoneMapping)
+class RegionZoneMappingAdmin(ExportMixin, admin.ModelAdmin):
+    model = RegionZoneMapping
 
 
 """
