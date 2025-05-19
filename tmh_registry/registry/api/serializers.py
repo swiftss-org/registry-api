@@ -670,3 +670,45 @@ class OwnedEpisodeSerializer(ModelSerializer):
         # Return the discharge date if available, otherwise None
         discharge = getattr(obj, 'discharge', None)
         return discharge.date if discharge else None
+
+
+class UnlinkedPatientSerializer(ModelSerializer):
+    full_name = CharField()
+    id = CharField()
+    hospital_id = SerializerMethodField()
+    patient_hospital_id = SerializerMethodField()
+
+    class Meta:
+        model = Patient
+        fields = ['id', 'full_name', 'hospital_id', 'patient_hospital_id']
+
+    def get_hospital_id(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return None
+
+        try:
+            medical_personnel = request.user.medical_personnel
+            preferred_hospital = medical_personnel.preferred_hospital.hospital
+        except Exception:
+            return None
+
+        return preferred_hospital.id
+
+    def get_patient_hospital_id(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return None
+
+        try:
+            medical_personnel = request.user.medical_personnel
+            preferred_hospital = medical_personnel.preferred_hospital.hospital
+        except Exception:
+            return None
+
+        mapping = PatientHospitalMapping.objects.filter(
+            patient=obj,
+            hospital=preferred_hospital
+        ).first()
+
+        return mapping.patient_hospital_id if mapping else None

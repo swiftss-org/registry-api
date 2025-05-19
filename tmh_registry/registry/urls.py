@@ -10,7 +10,7 @@ from .api.viewsets import (
     PatientViewSet,
     PreferredHospitalViewSet,
     SurgeonEpisodeSummaryViewSet,
-    OwnedEpisodesViewSet,
+    OwnedEpisodesViewSet, UnlinkedPatientsViewSet,
 )
 
 router = DefaultRouter()
@@ -23,6 +23,7 @@ router.register(r"follow-ups", FollowUpViewset)
 router.register(r"preferred-hospital", PreferredHospitalViewSet, basename='preferred-hospital')
 router.register(r'surgeon-episode-summary', SurgeonEpisodeSummaryViewSet, basename='surgeon-episode-summary')
 router.register(r"owned-episodes", OwnedEpisodesViewSet, basename='owned-episodes')
+router.register(r'unlinked-patients', UnlinkedPatientsViewSet, basename='unlinked-patients')
 
 
 urlpatterns = [

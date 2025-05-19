@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import CharField, Q, Count, Max
+from django.db.models import CharField, Q, Count, Max, OuterRef, Exists
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django_filters import (  # pylint: disable=E0401
@@ -41,7 +41,7 @@ from .serializers import (
     PatientHospitalMappingWriteSerializer,
     PreferredHospitalReadSerializer,
     ReadPatientSerializer,
-    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer,
+    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer, UnlinkedPatientSerializer,
 )
 from ...users.models import MedicalPersonnel
 
@@ -365,3 +365,39 @@ class FollowUpViewset(CreateModelMixin, GenericViewSet):
             return FollowUpWriteSerializer
 
         raise NotImplementedError
+
+
+class UnlinkedPatientsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = UnlinkedPatientSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        user = self.request.user
+
+        try:
+            medical_personnel = user.medical_personnel
+            preferred_hospital = medical_personnel.preferred_hospital.hospital
+        except (MedicalPersonnel.DoesNotExist, PreferredHospital.DoesNotExist):
+            return Patient.objects.none()
+
+        # Subquery: check if any Episode exists for a given patient in the preferred hospital
+        has_episode_subquery = Episode.objects.filter(
+            patient_hospital_mapping__patient=OuterRef('pk'),
+            patient_hospital_mapping__hospital=preferred_hospital
+        )
+
+        patients = Patient.objects.filter(
+            hospital_mappings__hospital=preferred_hospital
+        ).annotate(
+            has_episode=Exists(has_episode_subquery)
+        ).filter(
+            has_episode=False
+        ).distinct().prefetch_related('hospital_mappings')
+
+        return patients
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
