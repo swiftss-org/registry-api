@@ -14,7 +14,7 @@ from ..models import (
     Hospital,
     Patient,
     PatientHospitalMapping,
-    PreferredHospital,
+    PreferredHospital, Announcement,
 )
 
 
@@ -712,3 +712,8 @@ class UnlinkedPatientSerializer(ModelSerializer):
         ).first()
 
         return mapping.patient_hospital_id if mapping else None
+
+class AnnouncementSerializer(ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = ["id", "announcement_text", "display_from", "display_until", "created_at"]

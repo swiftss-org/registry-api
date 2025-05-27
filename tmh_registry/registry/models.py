@@ -273,3 +273,11 @@ class RegionZoneMapping(Model):
     class Meta:
         verbose_name_plural = "Region-Zone Mappings"
 
+class Announcement(Model):
+    announcement_text = TextField()
+    display_from = DateTimeField(null=True, blank=True)
+    display_until = DateTimeField(null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Announcement ({self.created_at}): {self.announcement_text[:50]}"

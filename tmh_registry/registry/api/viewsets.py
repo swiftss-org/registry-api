@@ -17,7 +17,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
+from django.utils.timezone import now
 
 from ..models import (
     Discharge,
@@ -27,6 +28,7 @@ from ..models import (
     Patient,
     PatientHospitalMapping,
     PreferredHospital,
+    Announcement,
 )
 from .serializers import (
     CreatePatientSerializer,
@@ -41,7 +43,7 @@ from .serializers import (
     PatientHospitalMappingWriteSerializer,
     PreferredHospitalReadSerializer,
     ReadPatientSerializer,
-    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer, UnlinkedPatientSerializer,
+    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer, UnlinkedPatientSerializer, AnnouncementSerializer,
 )
 from ...users.models import MedicalPersonnel
 
@@ -401,3 +403,13 @@ class UnlinkedPatientsViewSet(viewsets.ReadOnlyModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+
+class AnnouncementViewSet(ReadOnlyModelViewSet):
+    serializer_class = AnnouncementSerializer
+
+    def get_queryset(self):
+        current_time = now()
+        return Announcement.objects.filter(
+            Q(display_from__lte=current_time) | Q(display_from__isnull=True),
+            Q(display_until__gte=current_time) | Q(display_until__isnull=True)
+        ).order_by("-created_at")

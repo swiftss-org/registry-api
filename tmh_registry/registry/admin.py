@@ -15,7 +15,7 @@ from tmh_registry.registry.models import (
     Zone,
     Region,
     HospitalRegionMapping,
-    RegionZoneMapping,
+    RegionZoneMapping, Announcement,
 )
 
 
@@ -67,7 +67,9 @@ class HospitalRegionMappingAdmin(ExportMixin, admin.ModelAdmin):
 class RegionZoneMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = RegionZoneMapping
 
-
+@admin.register(Announcement)
+class AnnouncementAdmin(ExportMixin, admin.ModelAdmin):
+    model = Announcement
 """
 To allow CSV export on User model
 """
