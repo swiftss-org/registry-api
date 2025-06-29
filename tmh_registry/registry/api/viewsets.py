@@ -52,11 +52,12 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
 
+
 class PreferredHospitalViewSet(viewsets.GenericViewSet):
     serializer_class = PreferredHospitalReadSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def retrieve_for_current_user(self, request, *args, **kwargs):
         user = request.user
         try:
@@ -64,7 +65,9 @@ class PreferredHospitalViewSet(viewsets.GenericViewSet):
         except MedicalPersonnel.DoesNotExist:
             return Response({}, status=200)
         try:
-            preferred_hospital = PreferredHospital.objects.get(medical_personnel=medical_personnel)
+            preferred_hospital = PreferredHospital.objects.get(
+                medical_personnel=medical_personnel
+            )
         except PreferredHospital.DoesNotExist:
             return Response({}, status=200)
         serializer = self.get_serializer(preferred_hospital)
