@@ -270,7 +270,7 @@ REST_FRAMEWORK = {
         "tmh_registry.users.api.permissions.IsMedicalPersonnel",
     ),
     'EXCEPTION_HANDLER': 'tmh_registry.common.error_handling.error_handler',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
