@@ -17,8 +17,9 @@ from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
 
 from ..models import (
     Discharge,
@@ -306,6 +307,23 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
             ),
         },
     )
+
+    @action(detail=False, methods=["get"])
+    def stats(self, request):
+        period = request.query_params.get("period")  # e.g., "7d", "30d"
+        episodes = Episode.objects.all()
+
+        if period:
+            try:
+                days = int(period.rstrip("d"))
+                start_date = now() - timedelta(days=days)
+                episodes = episodes.filter(surgery_date__gte=start_date)
+            except ValueError:
+                pass
+
+        total_count = episodes.count()
+        return Response({"total_episodes": total_count})
+
     @action(
         detail=True,
         serializer_class=FollowUpReadSerializer,
