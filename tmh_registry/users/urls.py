@@ -1,6 +1,5 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
 from tmh_registry.users.api.views import ChangePasswordView, SignInView
 from tmh_registry.users.api.viewsets import MedicalPersonnelViewSet
 

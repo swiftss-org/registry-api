@@ -3,7 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from import_export import resources
 from import_export.admin import ExportMixin
-
 from tmh_registry.registry.models import (
     Announcement,
     Discharge,

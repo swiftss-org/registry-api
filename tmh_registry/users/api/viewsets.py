@@ -9,7 +9,6 @@ from rest_framework.mixins import (
 )
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
 from tmh_registry.users.api.serializers import (
     MedicalPersonnelSerializer,
     UserReadSerializer,

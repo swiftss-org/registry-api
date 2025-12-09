@@ -1,6 +1,5 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
 from tmh_registry.users.api.viewsets import UserViewSet
 
 router = DefaultRouter()

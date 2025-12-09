@@ -14,7 +14,6 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
-
 from tmh_registry.common.models import TimeStampMixin
 from tmh_registry.users.models import MedicalPersonnel
 

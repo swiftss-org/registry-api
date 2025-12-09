@@ -4,7 +4,6 @@ from pytest import mark
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_403_FORBIDDEN
 from rest_framework.test import APIClient
-
 from tmh_registry.users.api.serializers import UserSerializer
 from tmh_registry.users.factories import UserFactory
 

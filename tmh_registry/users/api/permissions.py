@@ -1,7 +1,6 @@
 import builtins
 
 from rest_framework import permissions
-
 from tmh_registry.users.models import MedicalPersonnel
 
 
