@@ -44,17 +44,17 @@ jobs:
       - name: Checkout Code Repository
         uses: actions/checkout@v2
       - name: Build the Stack
-        run:  docker-compose -f local.yml build
+        run:  docker compose -f local.yml build
       - name: Make DB Migrations
-        run:  docker-compose -f local.yml run --rm django python manage.py migrate
+        run:  docker compose -f local.yml run --rm django python manage.py migrate
       - name: Run the Stack
-        run:  docker-compose -f local.yml up -d
+        run:  docker compose -f local.yml up -d
       - name: Run Django Tests
-        run: docker-compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
+        run: docker compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
       - name: Print Coverage
-        run: docker-compose -f local.yml exec -T django coverage report
+        run: docker compose -f local.yml exec -T django coverage report
       - name: Tear down the Stack
-        run: docker-compose -f local.yml down
+        run: docker compose -f local.yml down
 
   deploy:
     runs-on: ubuntu-latest
