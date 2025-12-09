@@ -19,24 +19,24 @@ pre-commit:
 	pre-commit run --all-files
 
 build:
-	docker-compose -f ${COMPOSE_ENV}.yml build
+	docker compose -f ${COMPOSE_ENV}.yml build
 
 run: build
-	docker-compose -f ${COMPOSE_ENV}.yml up -d
+	docker compose -f ${COMPOSE_ENV}.yml up -d
 
 migrate:
-	docker-compose -f ${COMPOSE_ENV}.yml exec -T django bash -c "python manage.py makemigrations && python manage.py migrate"
+	docker compose -f ${COMPOSE_ENV}.yml exec -T django bash -c "python manage.py makemigrations && python manage.py migrate"
 
 test:
-	docker-compose -f ${COMPOSE_ENV}.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest ${target} --disable-pytest-warnings;
+	docker compose -f ${COMPOSE_ENV}.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest ${target} --disable-pytest-warnings;
 
 test-one:
-	docker-compose -f ${COMPOSE_ENV}.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest ${file} -k ${test_name} --disable-pytest-warnings;
+	docker compose -f ${COMPOSE_ENV}.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest ${file} -k ${test_name} --disable-pytest-warnings;
 
 cover:
-	docker-compose -f ${COMPOSE_ENV}.yml exec -T django coverage report
+	docker compose -f ${COMPOSE_ENV}.yml exec -T django coverage report
 
 teardown:
-	docker-compose -f ${COMPOSE_ENV}.yml down -v
+	docker compose -f ${COMPOSE_ENV}.yml down -v
 
 recreate: teardown run
