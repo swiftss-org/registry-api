@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model, password_validation
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
-from rest_framework.fields import CharField
+from rest_framework.fields import CharField, SerializerMethodField
 from rest_framework.serializers import (
     ModelSerializer,
     Serializer,
@@ -33,6 +33,8 @@ class UserSerializer(ModelSerializer):
 
 
 class UserReadSerializer(ModelSerializer):
+    medical_personnel = SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -40,9 +42,19 @@ class UserReadSerializer(ModelSerializer):
             "first_name",
             "last_name",
             "email",
-            "is_staff",
-            "is_superuser",
+            "medical_personnel",
         ]
+
+    def get_medical_personnel(self, user):
+        try:
+            mp = MedicalPersonnel.objects.get(user=user)
+        except MedicalPersonnel.DoesNotExist:
+            return None
+
+        return {
+            "level": mp.level,
+            "level_display": mp.get_level_display()
+        }
 
 
 class MedicalPersonnelSerializer(ModelSerializer):
