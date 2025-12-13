@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import CharField, Q, Count, Max, OuterRef, Exists
 from django.db.models.functions import Cast
@@ -307,22 +309,60 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
             ),
         },
     )
-
     @action(detail=False, methods=["get"])
     def stats(self, request):
-        period = request.query_params.get("period")  # e.g., "7d", "30d"
+        period = request.query_params.get("period")
+        group_by = request.query_params.get("group_by")
+
+        response: dict[str, Any] = {}
+
+        # ---- ALL HOSPITALS TOTAL (same as before) ----
         episodes = Episode.objects.all()
 
         if period:
             try:
                 days = int(period.rstrip("d"))
-                start_date = now() - timedelta(days=days)
+                start_date = now().date() - timedelta(days=days)
                 episodes = episodes.filter(surgery_date__gte=start_date)
             except ValueError:
                 pass
 
-        total_count = episodes.count()
-        return Response({"total_episodes": total_count})
+        response["total_episodes"] = episodes.count()
+
+        # ---- PER HOSPITAL (INCLUDING ZERO COUNTS) ----
+        if group_by == "hospital":
+            # Build episode filter for Count()
+            episode_filter = Q(
+                patient_mappings__episode__isnull=False
+            )
+
+            if period:
+                episode_filter &= Q(
+                    patient_mappings__episode__surgery_date__gte=start_date
+                )
+
+            hospitals = (
+                Hospital.objects
+                .annotate(
+                    total_episodes=Count(
+                        "patient_mappings__episode",
+                        filter=episode_filter,
+                        distinct=True,
+                    )
+                )
+                .order_by("name")
+            )
+
+            response["by_hospital"] = [
+                {
+                    "hospital_id": hospital.id,
+                    "hospital_name": hospital.name,
+                    "total_episodes": hospital.total_episodes,
+                }
+                for hospital in hospitals
+            ]
+
+        return Response(response)
 
     @action(
         detail=True,
