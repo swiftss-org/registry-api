@@ -10,7 +10,9 @@ class MedicalPersonnel(models.Model):
 
     class Level(TextChoices):
         SURGEON = ("SURGEON", "Surgeon")
-        LEAD_SURGEON = ("LEAD_SURGEON", "Lead Surgeon")
+        LEAD_SURGEON = ("LEAD_SURGEON", "Centre Lead")  # renamed display only
+        REGIONAL_LEAD = ("REGIONAL_LEAD", "Regional Lead")
+        ZONAL_LEAD = ("ZONAL_LEAD", "Zonal Lead")
         NATIONAL_LEAD = ("NATIONAL_LEAD", "National Lead")
 
     user = models.OneToOneField(
@@ -24,7 +26,7 @@ class MedicalPersonnel(models.Model):
     level = models.CharField(
         max_length=255,
         choices=Level.choices,
-        default=Level.LEAD_SURGEON,
+        default=Level.SURGEON,
     )
 
     class Meta:
