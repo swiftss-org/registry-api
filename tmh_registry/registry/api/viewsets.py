@@ -306,6 +306,24 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
 
         return Response(data)
 
+    @action(
+        detail=True,
+        serializer_class=FollowUpReadSerializer,
+        queryset=FollowUp.objects.none(),
+        url_path="follow-ups",
+    )
+    def follow_ups(self, request, pk=None):
+        try:
+            episode = Episode.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            raise NotFound(f"Episode {pk=} not found.")
+
+        follow_ups = FollowUp.objects.filter(episode_id=episode.id)
+
+        serializer = FollowUpReadSerializer(follow_ups, many=True)
+
+        return Response(serializer.data)
+
     @swagger_auto_schema(
         method="get",
         responses={
@@ -317,7 +335,7 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     )
     @action(detail=False, methods=["get"])
     def stats(self, request):
-        period = request.query_params.get("period")
+        # period = request.query_params.get("period")
         group_by = request.query_params.get("group_by")
 
         response: dict[str, Any] = {}
@@ -335,21 +353,31 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
         # All hospital statistics
         response["global"] = {
             "total_episodes": all_episodes.count(),
-            "past_year_episodes": all_episodes.filter(surgery_date__gte=past_year).count(),
-            "past_month_episodes": all_episodes.filter(surgery_date__gte=past_month).count(),
-            "past_week_episodes": all_episodes.filter(surgery_date__gte=past_week).count(),
+            "past_year_episodes": all_episodes.filter(
+                surgery_date__gte=past_year
+            ).count(),
+            "past_month_episodes": all_episodes.filter(
+                surgery_date__gte=past_month
+            ).count(),
+            "past_week_episodes": all_episodes.filter(
+                surgery_date__gte=past_week
+            ).count(),
             "last_episode_date": all_episodes.aggregate(
                 last=Max("surgery_date")
             )["last"],
             "patients_without_episode": Patient.objects.filter(
                 hospital_mappings__isnull=False
-            ).annotate(
+            )
+            .annotate(
                 has_episode=Exists(
                     Episode.objects.filter(
                         patient_hospital_mapping__patient=OuterRef("pk")
                     )
                 )
-            ).filter(has_episode=False).distinct().count(),
+            )
+            .filter(has_episode=False)
+            .distinct()
+            .count(),
         }
 
         # Hospital specific statistics
@@ -365,35 +393,45 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
                 )
 
                 # Patients without episode
-                patients_without_episode = Patient.objects.filter(
-                    hospital_mappings__hospital=hospital
-                ).annotate(
-                    has_episode=Exists(
-                        Episode.objects.filter(
-                            patient_hospital_mapping__patient=OuterRef("pk"),
-                            patient_hospital_mapping__hospital=hospital,
+                patients_without_episode = (
+                    Patient.objects.filter(
+                        hospital_mappings__hospital=hospital
+                    )
+                    .annotate(
+                        has_episode=Exists(
+                            Episode.objects.filter(
+                                patient_hospital_mapping__patient=OuterRef(
+                                    "pk"
+                                ),
+                                patient_hospital_mapping__hospital=hospital,
+                            )
                         )
                     )
-                ).filter(has_episode=False).distinct().count()
+                    .filter(has_episode=False)
+                    .distinct()
+                    .count()
+                )
 
-                hospital_rows.append({
-                    "hospital_id": hospital.id,
-                    "hospital_name": hospital.name,
-                    "total_episodes": hospital_episodes.count(),
-                    "past_year_episodes": hospital_episodes.filter(
-                        surgery_date__gte=past_year
-                    ).count(),
-                    "past_month_episodes": hospital_episodes.filter(
-                        surgery_date__gte=past_month
-                    ).count(),
-                    "past_week_episodes": hospital_episodes.filter(
-                        surgery_date__gte=past_week
-                    ).count(),
-                    "last_episode_date": hospital_episodes.aggregate(
-                        last=Max("surgery_date")
-                    )["last"],
-                    "patients_without_episode": patients_without_episode,
-                })
+                hospital_rows.append(
+                    {
+                        "hospital_id": hospital.id,
+                        "hospital_name": hospital.name,
+                        "total_episodes": hospital_episodes.count(),
+                        "past_year_episodes": hospital_episodes.filter(
+                            surgery_date__gte=past_year
+                        ).count(),
+                        "past_month_episodes": hospital_episodes.filter(
+                            surgery_date__gte=past_month
+                        ).count(),
+                        "past_week_episodes": hospital_episodes.filter(
+                            surgery_date__gte=past_week
+                        ).count(),
+                        "last_episode_date": hospital_episodes.aggregate(
+                            last=Max("surgery_date")
+                        )["last"],
+                        "patients_without_episode": patients_without_episode,
+                    }
+                )
 
             response["by_hospital"] = hospital_rows
 

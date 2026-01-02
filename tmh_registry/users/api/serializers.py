@@ -51,10 +51,7 @@ class UserReadSerializer(ModelSerializer):
         except MedicalPersonnel.DoesNotExist:
             return None
 
-        return {
-            "level": mp.level,
-            "level_display": mp.get_level_display()
-        }
+        return {"level": mp.level, "level_display": mp.get_level_display()}
 
 
 class MedicalPersonnelSerializer(ModelSerializer):
