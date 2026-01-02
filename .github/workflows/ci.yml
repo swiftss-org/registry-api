@@ -44,17 +44,17 @@ jobs:
       - name: Checkout Code Repository
         uses: actions/checkout@v2
       - name: Build the Stack
-        run:  docker-compose -f local.yml build
+        run:  docker compose -f local.yml build
       - name: Make DB Migrations
-        run:  docker-compose -f local.yml run --rm django python manage.py migrate
+        run:  docker compose -f local.yml run --rm django python manage.py migrate
       - name: Run the Stack
-        run:  docker-compose -f local.yml up -d
+        run:  docker compose -f local.yml up -d
       - name: Run Django Tests
-        run: docker-compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
+        run: docker compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
       - name: Print Coverage
-        run: docker-compose -f local.yml exec -T django coverage report
+        run: docker compose -f local.yml exec -T django coverage report
       - name: Tear down the Stack
-        run: docker-compose -f local.yml down
+        run: docker compose -f local.yml down
 
   deploy:
     runs-on: ubuntu-latest
@@ -85,6 +85,40 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_PROD_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           remote_branch: master
+
+
+  publish-docker-image:
+    name: Publish Docker image to ghcr.io
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    needs:
+      - unittest
+      - precommit
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./compose/production/django/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   bump:
     if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"

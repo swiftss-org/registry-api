@@ -3,7 +3,6 @@ from django.test import RequestFactory, TestCase
 from mock import MagicMock
 from pytest import mark
 from rest_framework import status
-
 from tmh_registry.users.api.serializers import (
     UserReadSerializer,
     UserSerializer,

@@ -2,7 +2,6 @@ from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from rest_framework.test import APIClient
-
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 from .....factories import EpisodeFactory

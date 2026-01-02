@@ -6,7 +6,6 @@ from mock import patch
 from pytest import mark
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-
 from tmh_registry.users.api.views import SignInView
 
 

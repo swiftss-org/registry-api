@@ -1,9 +1,10 @@
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import CharField, Q, Count, Max, OuterRef, Exists
+from django.db.models import CharField, Count, Exists, Max, OuterRef, Q
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now, timedelta
 from django_filters import (  # pylint: disable=E0401
     CharFilter,
     NumberFilter,
@@ -19,11 +20,11 @@ from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
-from django.utils.timezone import now, timedelta
 
+from ...users.models import MedicalPersonnel
 from ..models import (
+    Announcement,
     Discharge,
     Episode,
     FollowUp,
@@ -31,9 +32,9 @@ from ..models import (
     Patient,
     PatientHospitalMapping,
     PreferredHospital,
-    Announcement,
 )
 from .serializers import (
+    AnnouncementSerializer,
     CreatePatientSerializer,
     DischargeReadSerializer,
     DischargeWriteSerializer,
@@ -42,24 +43,26 @@ from .serializers import (
     FollowUpReadSerializer,
     FollowUpWriteSerializer,
     HospitalSerializer,
+    OwnedEpisodeSerializer,
     PatientHospitalMappingReadSerializer,
     PatientHospitalMappingWriteSerializer,
     PreferredHospitalReadSerializer,
     ReadPatientSerializer,
-    SurgeonEpisodeSummarySerializer, OwnedEpisodeSerializer, UnlinkedPatientSerializer, AnnouncementSerializer,
+    SurgeonEpisodeSummarySerializer,
+    UnlinkedPatientSerializer,
 )
-from ...users.models import MedicalPersonnel
 
 
 class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
 
+
 class PreferredHospitalViewSet(viewsets.GenericViewSet):
     serializer_class = PreferredHospitalReadSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def retrieve_for_current_user(self, request, *args, **kwargs):
         user = request.user
         try:
@@ -67,11 +70,14 @@ class PreferredHospitalViewSet(viewsets.GenericViewSet):
         except MedicalPersonnel.DoesNotExist:
             return Response({}, status=200)
         try:
-            preferred_hospital = PreferredHospital.objects.get(medical_personnel=medical_personnel)
+            preferred_hospital = PreferredHospital.objects.get(
+                medical_personnel=medical_personnel
+            )
         except PreferredHospital.DoesNotExist:
             return Response({}, status=200)
         serializer = self.get_serializer(preferred_hospital)
         return Response(serializer.data)
+
 
 class SurgeonEpisodeSummaryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SurgeonEpisodeSummarySerializer
@@ -90,12 +96,12 @@ class SurgeonEpisodeSummaryViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.get_queryset()
 
         stats = queryset.aggregate(
-            episode_count=Count('id'),
-            last_episode_date=Max('surgery_date')
+            episode_count=Count("id"), last_episode_date=Max("surgery_date")
         )
 
         serializer = self.get_serializer(stats)
         return Response(serializer.data)
+
 
 class OwnedEpisodesViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
@@ -110,12 +116,12 @@ class OwnedEpisodesViewSet(viewsets.ReadOnlyModelViewSet):
             return Episode.objects.none()
 
         episodes = (
-            Episode.objects
-            .filter(surgeons=medical_personnel)
+            Episode.objects.filter(surgeons=medical_personnel)
             .select_related("patient_hospital_mapping__patient")
-            .prefetch_related( "discharge", "followup_set")
+            .prefetch_related("discharge", "followup_set")
         )
         return episodes
+
 
 class PatientFilterSet(FilterSet):
     hospital_id = NumberFilter(
@@ -309,7 +315,6 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
             ),
         },
     )
-
     @action(detail=False, methods=["get"])
     def stats(self, request):
         period = request.query_params.get("period")
@@ -455,24 +460,27 @@ class UnlinkedPatientsViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Subquery: check if any Episode exists for a given patient in the preferred hospital
         has_episode_subquery = Episode.objects.filter(
-            patient_hospital_mapping__patient=OuterRef('pk'),
-            patient_hospital_mapping__hospital=preferred_hospital
+            patient_hospital_mapping__patient=OuterRef("pk"),
+            patient_hospital_mapping__hospital=preferred_hospital,
         )
 
-        patients = Patient.objects.filter(
-            hospital_mappings__hospital=preferred_hospital
-        ).annotate(
-            has_episode=Exists(has_episode_subquery)
-        ).filter(
-            has_episode=False
-        ).distinct().prefetch_related('hospital_mappings')
+        patients = (
+            Patient.objects.filter(
+                hospital_mappings__hospital=preferred_hospital
+            )
+            .annotate(has_episode=Exists(has_episode_subquery))
+            .filter(has_episode=False)
+            .distinct()
+            .prefetch_related("hospital_mappings")
+        )
 
         return patients
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context['request'] = self.request
+        context["request"] = self.request
         return context
+
 
 class AnnouncementViewSet(ReadOnlyModelViewSet):
     serializer_class = AnnouncementSerializer
@@ -481,5 +489,5 @@ class AnnouncementViewSet(ReadOnlyModelViewSet):
         current_time = now()
         return Announcement.objects.filter(
             Q(display_from__lte=current_time) | Q(display_from__isnull=True),
-            Q(display_until__gte=current_time) | Q(display_until__isnull=True)
+            Q(display_until__gte=current_time) | Q(display_until__isnull=True),
         ).order_by("-created_at")

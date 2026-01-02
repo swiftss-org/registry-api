@@ -20,7 +20,6 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
     HTTP_405_METHOD_NOT_ALLOWED,
 )
-
 from tmh_registry.common.error_handling import (
     error_handler,
     get_exception_handling_dict,

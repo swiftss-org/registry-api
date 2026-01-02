@@ -2,7 +2,6 @@ from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.test import APIClient
-
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 from ....factories import (

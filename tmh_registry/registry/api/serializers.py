@@ -1,20 +1,30 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import BooleanField, CharField, IntegerField, DateField
+from rest_framework.fields import (
+    BooleanField,
+    CharField,
+    DateField,
+    IntegerField,
+)
 from rest_framework.relations import PrimaryKeyRelatedField
-from rest_framework.serializers import ModelSerializer, SerializerMethodField, Serializer
+from rest_framework.serializers import (
+    ModelSerializer,
+    Serializer,
+    SerializerMethodField,
+)
 
 from ...common.utils.functions import get_text_choice_value_from_label
 from ...users.api.serializers import MedicalPersonnelSerializer
 from ...users.models import MedicalPersonnel
 from ..models import (
+    Announcement,
     Discharge,
     Episode,
     FollowUp,
     Hospital,
     Patient,
     PatientHospitalMapping,
-    PreferredHospital, Announcement,
+    PreferredHospital,
 )
 
 
@@ -240,6 +250,7 @@ class PatientHospitalMappingReadSerializer(ModelSerializer):
 
         return data
 
+
 class PreferredHospitalReadSerializer(ModelSerializer):
     hospital = SerializerMethodField()
 
@@ -251,12 +262,15 @@ class PreferredHospitalReadSerializer(ModelSerializer):
         request = self.context.get("request")
         if request and request.user:
             try:
-                medical_personnel = MedicalPersonnel.objects.get(user=request.user)
+                medical_personnel = MedicalPersonnel.objects.get(
+                    user=request.user
+                )
                 if obj.medical_personnel == medical_personnel:
                     return {"id": obj.hospital.id}
             except MedicalPersonnel.DoesNotExist:
                 pass
         return None
+
 
 class PatientHospitalMappingWriteSerializer(ModelSerializer):
     patient_id = PrimaryKeyRelatedField(queryset=Patient.objects.all())
@@ -646,21 +660,36 @@ class FollowUpWriteSerializer(ModelSerializer):
 
         return follow_up
 
+
 class SurgeonEpisodeSummarySerializer(Serializer):
     episode_count = IntegerField()
     last_episode_date = DateField(allow_null=True)
 
 
 class OwnedEpisodeSerializer(ModelSerializer):
-    patient_name = CharField(source='patient_hospital_mapping.patient.full_name', read_only=True)
-    patient_id = CharField(source='patient_hospital_mapping.patient.id', read_only=True)
-    hospital_id = CharField(source='patient_hospital_mapping.hospital.id', read_only=True)
+    patient_name = CharField(
+        source="patient_hospital_mapping.patient.full_name", read_only=True
+    )
+    patient_id = CharField(
+        source="patient_hospital_mapping.patient.id", read_only=True
+    )
+    hospital_id = CharField(
+        source="patient_hospital_mapping.hospital.id", read_only=True
+    )
     follow_up_dates = SerializerMethodField()
     discharge = SerializerMethodField()
 
     class Meta:
         model = Episode
-        fields = ['id', 'surgery_date', 'patient_name', 'discharge', 'follow_up_dates', 'patient_id', 'hospital_id']
+        fields = [
+            "id",
+            "surgery_date",
+            "patient_name",
+            "discharge",
+            "follow_up_dates",
+            "patient_id",
+            "hospital_id",
+        ]
 
     def get_follow_up_dates(self, obj):
         # Return only the dates of follow-up objects as a list of strings
@@ -668,7 +697,7 @@ class OwnedEpisodeSerializer(ModelSerializer):
 
     def get_discharge(self, obj):
         # Return the discharge date if available, otherwise None
-        discharge = getattr(obj, 'discharge', None)
+        discharge = getattr(obj, "discharge", None)
         return discharge.date if discharge else None
 
 
@@ -680,10 +709,10 @@ class UnlinkedPatientSerializer(ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ['id', 'full_name', 'hospital_id', 'patient_hospital_id']
+        fields = ["id", "full_name", "hospital_id", "patient_hospital_id"]
 
     def get_hospital_id(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if not request:
             return None
 
@@ -696,7 +725,7 @@ class UnlinkedPatientSerializer(ModelSerializer):
         return preferred_hospital.id
 
     def get_patient_hospital_id(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if not request:
             return None
 
@@ -707,13 +736,19 @@ class UnlinkedPatientSerializer(ModelSerializer):
             return None
 
         mapping = PatientHospitalMapping.objects.filter(
-            patient=obj,
-            hospital=preferred_hospital
+            patient=obj, hospital=preferred_hospital
         ).first()
 
         return mapping.patient_hospital_id if mapping else None
 
+
 class AnnouncementSerializer(ModelSerializer):
     class Meta:
         model = Announcement
-        fields = ["id", "announcement_text", "display_from", "display_until", "created_at"]
+        fields = [
+            "id",
+            "announcement_text",
+            "display_from",
+            "display_until",
+            "created_at",
+        ]

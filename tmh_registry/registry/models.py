@@ -14,7 +14,6 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
-
 from tmh_registry.common.models import TimeStampMixin
 from tmh_registry.users.models import MedicalPersonnel
 
@@ -78,22 +77,24 @@ class PatientHospitalMapping(Model):
     def __str__(self):
         return f"Patient {self.patient.full_name} ({self.patient_hospital_id}) - Hospital {self.hospital.name}"
 
+
 class PreferredHospital(Model):
     medical_personnel = OneToOneField(
         MedicalPersonnel, on_delete=CASCADE, related_name="preferred_hospital"
     )
     hospital = ForeignKey(
-        Hospital, on_delete=CASCADE, related_name="preferred_by_medical_personnel"
+        Hospital,
+        on_delete=CASCADE,
+        related_name="preferred_by_medical_personnel",
     )
 
     class Meta:
-        unique_together = (
-            ("medical_personnel", "hospital"),
-        )
+        unique_together = (("medical_personnel", "hospital"),)
         verbose_name_plural = "Medical Personnel Preferred Hospitals"
 
     def __str__(self):
         return f"{self.medical_personnel.user.first_name} {self.medical_personnel.user.last_name} ({self.medical_personnel.user.username}) - Hospital {self.hospital.name}"
+
 
 class Episode(Model):
     class EpisodeChoices(TextChoices):
@@ -227,51 +228,54 @@ class FollowUp(TimeStampMixin):
     class Meta:
         verbose_name_plural = "Follow Ups"
 
+
 class Zone(Model):
     name = CharField(max_length=255, unique=True)
+
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name_plural = "Zones"
 
+
 class Region(Model):
     name = CharField(max_length=255, unique=True)
+
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name_plural = "Regions"
 
+
 class HospitalRegionMapping(Model):
     hospital = OneToOneField(
-        Hospital,
-        on_delete=CASCADE,
-        related_name="region_mapping"
+        Hospital, on_delete=CASCADE, related_name="region_mapping"
     )
     region = ForeignKey(
-        Region,
-        on_delete=CASCADE,
-        related_name="hospital_mappings"
+        Region, on_delete=CASCADE, related_name="hospital_mappings"
     )
+
     def __str__(self):
         return f"{self.hospital.name} - {self.region.name}"
+
     class Meta:
         verbose_name_plural = "Hospital-Region Mappings"
 
+
 class RegionZoneMapping(Model):
     region = OneToOneField(
-        Region,
-        on_delete=CASCADE,
-        related_name="zone_mapping"
+        Region, on_delete=CASCADE, related_name="zone_mapping"
     )
-    zone = ForeignKey(
-        Zone,
-        on_delete=CASCADE,
-        related_name="region_mappings"
-    )
+    zone = ForeignKey(Zone, on_delete=CASCADE, related_name="region_mappings")
+
     def __str__(self):
         return f"{self.region.name} - {self.zone.name}"
+
     class Meta:
         verbose_name_plural = "Region-Zone Mappings"
+
 
 class Announcement(Model):
     announcement_text = TextField()
@@ -280,4 +284,6 @@ class Announcement(Model):
     created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Announcement ({self.created_at}): {self.announcement_text[:50]}"
+        return (
+            f"Announcement ({self.created_at}): {self.announcement_text[:50]}"
+        )

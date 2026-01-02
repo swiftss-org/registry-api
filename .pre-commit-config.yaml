@@ -36,7 +36,7 @@ repos:
     repo: local
 
   - hooks:
-      - exclude: (/settings/)
+      - exclude: (/settings/|/migrations/)
         id: black
         args:
           - --config=.pre-commit/pyproject.toml
@@ -52,12 +52,13 @@ repos:
           - --config=.pre-commit/setup.cfg
         id: flake8
         language_version: python3
+        exclude: (/settings/|/migrations/)
     repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
 
   - hooks:
       - entry: pylint --rcfile=.pre-commit/.pylintrc
-        exclude: (/settings/)
+        exclude: (/settings/|/migrations/)
         files: \.py$
         id: system
         language: system
@@ -66,6 +67,7 @@ repos:
 
   - hooks:
       - id: commitizen
+        exclude: (/settings/|/migrations/)
         stages:
           - commit-msg
         args:
@@ -76,5 +78,6 @@ repos:
   - hooks:
       - id: bandit
         args: [ --verbose, -ll, . ]
+        exclude: (/settings/|/migrations/)
     repo: https://github.com/PyCQA/bandit
     rev: 1.7.7
