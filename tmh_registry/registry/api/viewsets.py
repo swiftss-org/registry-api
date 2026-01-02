@@ -306,6 +306,24 @@ class EpisodeViewset(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
 
         return Response(data)
 
+    @action(
+        detail=True,
+        serializer_class=FollowUpReadSerializer,
+        queryset=FollowUp.objects.none(),
+        url_path="follow-ups",
+    )
+    def follow_ups(self, request, pk=None):
+        try:
+            episode = Episode.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            raise NotFound(f"Episode {pk=} not found.")
+
+        follow_ups = FollowUp.objects.filter(episode_id=episode.id)
+
+        serializer = FollowUpReadSerializer(follow_ups, many=True)
+
+        return Response(serializer.data)
+
     @swagger_auto_schema(
         method="get",
         responses={
