@@ -9,15 +9,12 @@ from .....factories import DischargeFactory, EpisodeFactory
 
 class TestEpisodesGetDischarge(TestCase):
     @classmethod
-    def setUpClass(cls) -> None:
-        super(TestEpisodesGetDischarge, cls).setUpClass()
-
+    def setUpTestData(cls) -> None:
         cls.episode = EpisodeFactory()
-
         cls.medical_personnel = MedicalPersonnelFactory()
-        cls.token = Token.objects.create(user=cls.medical_personnel.user)
 
     def setUp(self) -> None:
+        self.token = Token.objects.create(user=self.medical_personnel.user)
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 

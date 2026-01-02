@@ -19,9 +19,7 @@ from tmh_registry.users.factories import MedicalPersonnelFactory
 
 class TestEpisodesPost(TestCase):
     @classmethod
-    def setUpClass(cls) -> None:
-        super(TestEpisodesPost, cls).setUpClass()
-
+    def setUpTestData(cls) -> None:
         cls.hospital = HospitalFactory()
 
         cls.patient = PatientFactory(full_name="John Doe")
@@ -29,7 +27,15 @@ class TestEpisodesPost(TestCase):
         cls.patient.save()
 
         cls.medical_personnel = MedicalPersonnelFactory()
-        cls.token = Token.objects.create(user=cls.medical_personnel.user)
+
+    def setUp(self) -> None:
+        self.token = Token.objects.create(user=self.medical_personnel.user)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+
+        self.patient_hospital_mapping = PatientHospitalMappingFactory(
+            patient=self.patient, hospital=self.hospital
+        )
 
     def get_episode_test_data(self):
         return {
@@ -51,14 +57,6 @@ class TestEpisodesPost(TestCase):
             "antibiotic_used": True,
             "antibiotic_type": "A random antibiotic",
         }
-
-    def setUp(self) -> None:
-        self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
-
-        self.patient_hospital_mapping = PatientHospitalMappingFactory(
-            patient=self.patient, hospital=self.hospital
-        )
 
     def test_create_episode_when_no_patient_hospital_mapping_exists(self):
         PatientHospitalMapping.objects.all().delete()
