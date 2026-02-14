@@ -91,24 +91,14 @@ class SignInView(BaseUserManagementView):
         :rtype: django.response
         """
         serializer = self.get_valid_serializer(request)
-
-        username = serializer.data.get("username")
-        password = serializer.data.get("password")
-
-        user_obj = User.objects.filter(username=username).first()
-        if user_obj:
-            add_info = f"User exists: {username}, is_active: {user_obj.is_active}, is_superuser: {user_obj.is_superuser}, is_staff: {user_obj.is_staff}"
-        else:
-            add_info = f"User NOT found in database: {username}"
-
         user = authenticate(
-            username=username,
-            password=password,
+            username=(serializer.data.get("username")),
+            password=(serializer.data.get("password")),
         )
 
         if not user:
             raise Exception(
-                f"The username and/or password provided are invalid: {add_info}",
+                f"The username and/or password provided are invalid",
                 status.HTTP_400_BAD_REQUEST,
             )
 
