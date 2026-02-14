@@ -131,6 +131,10 @@ def get_exception_handling_dict(exc):
             "handling_function": stringify_exception,
             "status": HTTP_400_BAD_REQUEST,
         }
+    return {
+        "handling_function": stringify_exception,
+        "status": code,
+    }
 
 
 def error_handler(exc, context):

@@ -92,12 +92,28 @@ class SignInView(BaseUserManagementView):
         """
         serializer = self.get_valid_serializer(request)
 
+        username = serializer.data.get("username")
+        password = serializer.data.get("password")
+
+        logger.info(f"Login attempt for username: {username}")
+        user_obj = User.objects.filter(username=username).first()
+        if user_obj:
+            logger.info(
+                f"User exists: {username}, "
+                f"is_active: {user_obj.is_active}, "
+                f"is_superuser: {user_obj.is_superuser}, "
+                f"is_staff: {user_obj.is_staff}"
+            )
+        else:
+            logger.warning(f"User NOT found in database: {username}")
+
         user = authenticate(
-            username=serializer.data.get("username"),
-            password=serializer.data.get("password"),
+            username=username,
+            password=password,
         )
 
         if not user:
+            logger.warning(f"Authentication failed for user: {username}")
             raise Exception(
                 "The username and/or password provided are invalid",
                 status.HTTP_400_BAD_REQUEST,
