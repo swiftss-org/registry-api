@@ -22,61 +22,73 @@ from tmh_registry.registry.models import (
 @admin.register(Discharge)
 class DischargeAdmin(ExportMixin, admin.ModelAdmin):
     model = Discharge
+    search_help_text = ""
 
 
 @admin.register(FollowUp)
 class FollowUpAdmin(ExportMixin, admin.ModelAdmin):
     model = FollowUp
+    search_help_text = ""
 
 
 @admin.register(Hospital)
 class HospitalAdmin(ExportMixin, admin.ModelAdmin):
     model = Hospital
+    search_help_text = ""
 
 
 @admin.register(Patient)
 class PatientAdmin(ExportMixin, admin.ModelAdmin):
     model = Patient
+    search_help_text = ""
 
 
 @admin.register(PatientHospitalMapping)
 class PatientHospitalMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = PatientHospitalMapping
+    search_help_text = ""
 
 
 @admin.register(PreferredHospital)
 class PreferredHospitalAdmin(ExportMixin, admin.ModelAdmin):
     model = PreferredHospital
+    search_help_text = ""
 
 
 @admin.register(Episode)
 class EpisodeAdmin(ExportMixin, admin.ModelAdmin):
     model = Episode
+    search_help_text = ""
 
 
 @admin.register(Zone)
 class ZoneAdmin(ExportMixin, admin.ModelAdmin):
     model = Zone
+    search_help_text = ""
 
 
 @admin.register(Region)
 class RegionAdmin(ExportMixin, admin.ModelAdmin):
     model = Region
+    search_help_text = ""
 
 
 @admin.register(HospitalRegionMapping)
 class HospitalRegionMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = HospitalRegionMapping
+    search_help_text = ""
 
 
 @admin.register(RegionZoneMapping)
 class RegionZoneMappingAdmin(ExportMixin, admin.ModelAdmin):
     model = RegionZoneMapping
+    search_help_text = ""
 
 
 @admin.register(Announcement)
 class AnnouncementAdmin(ExportMixin, admin.ModelAdmin):
     model = Announcement
+    search_help_text = ""
 
 
 """
@@ -92,6 +104,7 @@ class UserResource(resources.ModelResource):
 
 class UserAdmin(ExportMixin, UserAdmin):
     resource_class = UserResource
+    search_help_text = ""
 
 
 admin.site.unregister(User)
