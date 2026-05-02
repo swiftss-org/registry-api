@@ -43,7 +43,7 @@ class TestEpisodesPost(TestCase):
             "hospital_id": self.hospital.id,
             "surgery_date": "2021-10-12",
             "episode_type": Episode.EpisodeChoices.UMBILICAL.label,
-            "surgeon_ids": [self.medical_personnel.id],
+            "primary_surgeon_id": self.medical_personnel.id,
             # "comments": "A random comment",
             "cepod": Episode.CepodChoices.PLANNED.label,
             "side": Episode.SideChoices.LEFT.label,
@@ -109,6 +109,11 @@ class TestEpisodesPost(TestCase):
         self.assertEqual(len(response.data["surgeons"]), 1)
         self.assertEqual(
             response.data["surgeons"][0]["user"]["email"],
+            self.medical_personnel.user.email,
+        )
+        
+        self.assertEqual(
+            response.data["primary_surgeon"]["user"]["email"],
             self.medical_personnel.user.email,
         )
 
@@ -190,6 +195,37 @@ class TestEpisodesPost(TestCase):
                 Episode.AnaestheticChoices.choices, data["anaesthetic_type"]
             ),
         )
+
+    def test_create_episode_with_surgeon_ids_fallback(self):
+        data = self.get_episode_test_data()
+        data.pop("primary_surgeon_id")
+        data["surgeon_ids"] = [self.medical_personnel.id]
+
+        response = self.client.post(
+            "/api/v1/episodes/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_201_CREATED, response.status_code)
+
+        episode = Episode.objects.get(id=response.data["id"])
+        self.assertEqual(episode.primary_surgeon.id, self.medical_personnel.id)
+        self.assertEqual(episode.surgeons.count(), 1)
+
+    def test_create_episode_with_multiple_explicit_surgeons(self):
+        medical_personnel_2 = MedicalPersonnelFactory()
+        data = self.get_episode_test_data()
+        data["secondary_surgeon_id"] = medical_personnel_2.id
+
+        response = self.client.post(
+            "/api/v1/episodes/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_201_CREATED, response.status_code)
+
+        episode = Episode.objects.get(id=response.data["id"])
+        self.assertEqual(episode.primary_surgeon.id, self.medical_personnel.id)
+        self.assertEqual(episode.secondary_surgeon.id, medical_personnel_2.id)
+        self.assertEqual(episode.surgeons.count(), 2)
 
     def test_create_successful_without_optional_fields(self):
         data = self.get_episode_test_data()

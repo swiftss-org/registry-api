@@ -400,7 +400,19 @@ class EpisodeWriteSerializer(ModelSerializer):
         write_only=True, queryset=Hospital.objects.all()
     )
     surgeon_ids = PrimaryKeyRelatedField(
-        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+        write_only=True, many=True, queryset=MedicalPersonnel.objects.all(), required=False
+    )
+    primary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+    )
+    secondary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+    )
+    tertiary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+    )
+    quaternary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
     )
     episode_type = CharField()
     cepod = CharField()
@@ -422,6 +434,10 @@ class EpisodeWriteSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeon_ids",
+            "primary_surgeon_id",
+            "secondary_surgeon_id",
+            "tertiary_surgeon_id",
+            "quaternary_surgeon_id",
             "cepod",
             "side",
             "occurence",
@@ -443,7 +459,18 @@ class EpisodeWriteSerializer(ModelSerializer):
     def create(self, validated_data):
         patient = validated_data["patient_id"]
         hospital = validated_data["hospital_id"]
-        surgeons = validated_data["surgeon_ids"]
+        surgeons = validated_data.get("surgeon_ids", [])
+
+        primary_surgeon = validated_data.get("primary_surgeon_id")
+        secondary_surgeon = validated_data.get("secondary_surgeon_id")
+        tertiary_surgeon = validated_data.get("tertiary_surgeon_id")
+        quaternary_surgeon = validated_data.get("quaternary_surgeon_id")
+
+        if not primary_surgeon and surgeons:
+            primary_surgeon = surgeons[0] if len(surgeons) > 0 else None
+            secondary_surgeon = surgeons[1] if len(surgeons) > 1 else None
+            tertiary_surgeon = surgeons[2] if len(surgeons) > 2 else None
+            quaternary_surgeon = surgeons[3] if len(surgeons) > 3 else None
 
         patient_hospital_mapping = PatientHospitalMapping.objects.filter(
             patient_id=patient.id,
@@ -463,6 +490,10 @@ class EpisodeWriteSerializer(ModelSerializer):
         try:
             episode = Episode.objects.create(
                 patient_hospital_mapping=patient_hospital_mapping,
+                primary_surgeon=primary_surgeon,
+                secondary_surgeon=secondary_surgeon,
+                tertiary_surgeon=tertiary_surgeon,
+                quaternary_surgeon=quaternary_surgeon,
                 surgery_date=validated_data["surgery_date"],
                 episode_type=get_text_choice_value_from_label(
                     Episode.EpisodeChoices.choices,
@@ -508,6 +539,10 @@ class EpisodeWriteSerializer(ModelSerializer):
 
         if surgeons:
             episode.surgeons.set(surgeons)
+        elif primary_surgeon:
+            # If front-end already sent primary_surgeon, ensure all sent surgeons are captured in the m2m field
+            all_surgeons = [s for s in [primary_surgeon, secondary_surgeon, tertiary_surgeon, quaternary_surgeon] if s is not None]
+            episode.surgeons.set(all_surgeons)
 
         return episode
 
