@@ -400,19 +400,34 @@ class EpisodeWriteSerializer(ModelSerializer):
         write_only=True, queryset=Hospital.objects.all()
     )
     surgeon_ids = PrimaryKeyRelatedField(
-        write_only=True, many=True, queryset=MedicalPersonnel.objects.all(), required=False
+        write_only=True,
+        many=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
     )
     primary_surgeon_id = PrimaryKeyRelatedField(
-        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     secondary_surgeon_id = PrimaryKeyRelatedField(
-        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     tertiary_surgeon_id = PrimaryKeyRelatedField(
-        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     quaternary_surgeon_id = PrimaryKeyRelatedField(
-        write_only=True, queryset=MedicalPersonnel.objects.all(), required=False, allow_null=True
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     episode_type = CharField()
     cepod = CharField()
@@ -541,7 +556,16 @@ class EpisodeWriteSerializer(ModelSerializer):
             episode.surgeons.set(surgeons)
         elif primary_surgeon:
             # If front-end already sent primary_surgeon, ensure all sent surgeons are captured in the m2m field
-            all_surgeons = [s for s in [primary_surgeon, secondary_surgeon, tertiary_surgeon, quaternary_surgeon] if s is not None]
+            all_surgeons = [
+                s
+                for s in [
+                    primary_surgeon,
+                    secondary_surgeon,
+                    tertiary_surgeon,
+                    quaternary_surgeon,
+                ]
+                if s is not None
+            ]
             episode.surgeons.set(all_surgeons)
 
         return episode

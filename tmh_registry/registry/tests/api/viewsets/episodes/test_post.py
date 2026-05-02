@@ -111,7 +111,7 @@ class TestEpisodesPost(TestCase):
             response.data["surgeons"][0]["user"]["email"],
             self.medical_personnel.user.email,
         )
-        
+
         self.assertEqual(
             response.data["primary_surgeon"]["user"]["email"],
             self.medical_personnel.user.email,
