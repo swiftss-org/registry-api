@@ -43,4 +43,4 @@ recreate: teardown run
 
 # DO NOT USE IT IN PRODUCTION as it wipes all the data
 load-test-data:
-	docker-compose -f local.yml exec -T django python manage.py loaddata test_data.yaml
+	docker compose -f local.yml exec -T django python manage.py loaddata test_data.yaml
