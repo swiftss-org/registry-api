@@ -24,11 +24,9 @@ class Command(BaseCommand):
                 if len(surgeons) > 2:
                     episode.tertiary_surgeon = surgeons[2]
                 if len(surgeons) > 3:
-                    episode.quaternary_surgeon = surgeons[3]
-                if len(surgeons) > 4:
                     self.stdout.write(
                         self.style.ERROR(
-                            f"Episode {episode.id} has more than 4 surgeons. It has {len(surgeons)} surgeons."
+                            f"Episode {episode.id} has more than 3 surgeons. It has {len(surgeons)} surgeons."
                         )
                     )
 
@@ -41,7 +39,6 @@ class Command(BaseCommand):
                     "primary_surgeon",
                     "secondary_surgeon",
                     "tertiary_surgeon",
-                    "quaternary_surgeon",
                 ],
             )
             self.stdout.write(
