@@ -90,6 +90,7 @@ class SurgeonEpisodeSummaryViewSet(viewsets.ReadOnlyModelViewSet):
         except MedicalPersonnel.DoesNotExist:
             return Episode.objects.none()
 
+        # pylint: disable=unsupported-binary-operation
         return Episode.objects.filter(
             Q(surgeons=medical_personnel)
             | Q(primary_surgeon=medical_personnel)
@@ -120,6 +121,7 @@ class OwnedEpisodesViewSet(viewsets.ReadOnlyModelViewSet):
         except MedicalPersonnel.DoesNotExist:
             return Episode.objects.none()
 
+        # pylint: disable=unsupported-binary-operation
         episodes = (
             Episode.objects.filter(
                 Q(surgeons=medical_personnel)
