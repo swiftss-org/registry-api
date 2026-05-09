@@ -423,12 +423,6 @@ class EpisodeWriteSerializer(ModelSerializer):
         required=False,
         allow_null=True,
     )
-    quaternary_surgeon_id = PrimaryKeyRelatedField(
-        write_only=True,
-        queryset=MedicalPersonnel.objects.all(),
-        required=False,
-        allow_null=True,
-    )
     episode_type = CharField()
     cepod = CharField()
     side = CharField()
@@ -452,7 +446,6 @@ class EpisodeWriteSerializer(ModelSerializer):
             "primary_surgeon_id",
             "secondary_surgeon_id",
             "tertiary_surgeon_id",
-            "quaternary_surgeon_id",
             "cepod",
             "side",
             "occurence",
@@ -479,13 +472,11 @@ class EpisodeWriteSerializer(ModelSerializer):
         primary_surgeon = validated_data.get("primary_surgeon_id")
         secondary_surgeon = validated_data.get("secondary_surgeon_id")
         tertiary_surgeon = validated_data.get("tertiary_surgeon_id")
-        quaternary_surgeon = validated_data.get("quaternary_surgeon_id")
 
         if not primary_surgeon and surgeons:
             primary_surgeon = surgeons[0] if len(surgeons) > 0 else None
             secondary_surgeon = surgeons[1] if len(surgeons) > 1 else None
             tertiary_surgeon = surgeons[2] if len(surgeons) > 2 else None
-            quaternary_surgeon = surgeons[3] if len(surgeons) > 3 else None
 
         patient_hospital_mapping = PatientHospitalMapping.objects.filter(
             patient_id=patient.id,
@@ -508,7 +499,6 @@ class EpisodeWriteSerializer(ModelSerializer):
                 primary_surgeon=primary_surgeon,
                 secondary_surgeon=secondary_surgeon,
                 tertiary_surgeon=tertiary_surgeon,
-                quaternary_surgeon=quaternary_surgeon,
                 surgery_date=validated_data["surgery_date"],
                 episode_type=get_text_choice_value_from_label(
                     Episode.EpisodeChoices.choices,
@@ -562,7 +552,6 @@ class EpisodeWriteSerializer(ModelSerializer):
                     primary_surgeon,
                     secondary_surgeon,
                     tertiary_surgeon,
-                    quaternary_surgeon,
                 ]
                 if s is not None
             ]

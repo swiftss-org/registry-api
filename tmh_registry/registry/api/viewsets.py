@@ -90,7 +90,12 @@ class SurgeonEpisodeSummaryViewSet(viewsets.ReadOnlyModelViewSet):
         except MedicalPersonnel.DoesNotExist:
             return Episode.objects.none()
 
-        return Episode.objects.filter(surgeons=medical_personnel)
+        return Episode.objects.filter(
+            Q(surgeons=medical_personnel)
+            | Q(primary_surgeon=medical_personnel)
+            | Q(secondary_surgeon=medical_personnel)
+            | Q(tertiary_surgeon=medical_personnel)
+        ).distinct()
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -116,7 +121,13 @@ class OwnedEpisodesViewSet(viewsets.ReadOnlyModelViewSet):
             return Episode.objects.none()
 
         episodes = (
-            Episode.objects.filter(surgeons=medical_personnel)
+            Episode.objects.filter(
+                Q(surgeons=medical_personnel)
+                | Q(primary_surgeon=medical_personnel)
+                | Q(secondary_surgeon=medical_personnel)
+                | Q(tertiary_surgeon=medical_personnel)
+            )
+            .distinct()
             .select_related("patient_hospital_mapping__patient")
             .prefetch_related("discharge", "followup_set")
         )
