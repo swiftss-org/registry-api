@@ -91,7 +91,9 @@ class Command(BaseCommand):
 
         # 2. Validate that the attendees ManyToMany field count has not decreased for any follow-up
         validation_failed = False
-        updated_followups = FollowUp.objects.prefetch_related("attendees").all()
+        updated_followups = FollowUp.objects.prefetch_related(
+            "attendees"
+        ).all()
         for followup in updated_followups:
             current_count = followup.attendees.count()
             original_count = original_attendee_counts.get(followup.id, 0)
