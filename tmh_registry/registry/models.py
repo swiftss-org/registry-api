@@ -246,6 +246,30 @@ class FollowUp(TimeStampMixin):
     pain_severity = CharField(
         max_length=16, choices=PainSeverityChoices.choices
     )
+    primary_attendee = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="followup_primary_attendee",
+    )
+    secondary_attendee = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="followup_secondary_attendee",
+    )
+    tertiary_attendee = ForeignKey(
+        MedicalPersonnel,
+        on_delete=SET_DEFAULT,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="followup_tertiary_attendee",
+    )
     attendees = ManyToManyField(MedicalPersonnel)
     mesh_awareness = BooleanField()
     seroma = BooleanField()
