@@ -31,7 +31,7 @@ class TestFollowUpsCreate(TestCase):
         return {
             "episode_id": self.episode.id,
             "date": "2022-02-22",
-            "attendee_ids": [self.medical_personnel.id],
+            "primary_attendee_id": self.medical_personnel.id,
             "pain_severity": "Mild",
             "mesh_awareness": False,
             "seroma": True,
@@ -52,7 +52,8 @@ class TestFollowUpsCreate(TestCase):
         self.assertEqual(response.data["episode"]["id"], self.episode.id)
         self.assertEqual(response.data["date"], data["date"])
         self.assertEqual(
-            response.data["attendees"][0]["id"], data["attendee_ids"][0]
+            response.data["primary_attendee"]["id"],
+            data["primary_attendee_id"],
         )
         self.assertEqual(
             response.data["pain_severity"],
@@ -74,6 +75,46 @@ class TestFollowUpsCreate(TestCase):
                 FollowUp.PainSeverityChoices.choices, data["pain_severity"]
             ),
         )
+        self.assertEqual(
+            follow_up.primary_attendee.id, self.medical_personnel.id
+        )
+
+    def test_create_followup_with_attendee_ids_fallback(self):
+        data = self.get_follow_up_data()
+        data.pop("primary_attendee_id")
+        data["attendee_ids"] = [self.medical_personnel.id]
+
+        response = self.client.post(
+            "/api/v1/follow-ups/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_201_CREATED, response.status_code)
+
+        follow_up = FollowUp.objects.get(id=response.data["id"])
+        self.assertEqual(
+            follow_up.primary_attendee.id, self.medical_personnel.id
+        )
+        self.assertEqual(follow_up.attendees.count(), 1)
+
+    def test_create_followup_with_multiple_explicit_attendees(self):
+        medical_personnel_2 = MedicalPersonnelFactory()
+        data = self.get_follow_up_data()
+        data["secondary_attendee_id"] = medical_personnel_2.id
+
+        response = self.client.post(
+            "/api/v1/follow-ups/", data=data, format="json"
+        )
+
+        self.assertEqual(HTTP_201_CREATED, response.status_code)
+
+        follow_up = FollowUp.objects.get(id=response.data["id"])
+        self.assertEqual(
+            follow_up.primary_attendee.id, self.medical_personnel.id
+        )
+        self.assertEqual(
+            follow_up.secondary_attendee.id, medical_personnel_2.id
+        )
+        self.assertEqual(follow_up.attendees.count(), 2)
 
     def test_when_episode_id_does_not_exist(self):
         data = self.get_follow_up_data()
