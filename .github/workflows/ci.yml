@@ -32,7 +32,7 @@ jobs:
           python-version: 3.10.11
           architecture: x64
       - name: Checkout Repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v6
       - name: Install dependencies
         run: pip install -r requirements/local.txt
       - name: Run precommit
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Build the Stack
         run:  docker compose -f local.yml build
       - name: Make DB Migrations
@@ -65,11 +65,11 @@ jobs:
       - precommit
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v6
 
       - name: Push to Staging
         if: github.ref == 'refs/heads/develop'
-        uses: akhileshns/heroku-deploy@v3.12.12
+        uses: akhileshns/heroku-deploy@v3.15.15
 
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
@@ -79,7 +79,7 @@ jobs:
 
       - name: Push to Production
         if: github.ref == 'refs/heads/main'
-        uses: akhileshns/heroku-deploy@v3.12.12
+        uses: akhileshns/heroku-deploy@v3.15.15
 
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
@@ -97,10 +97,10 @@ jobs:
       - precommit
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -108,12 +108,12 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./compose/production/django/Dockerfile
@@ -130,7 +130,7 @@ jobs:
       - deploy
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v6
       - name: Install dependencies
         uses: actions/setup-node@v2.4.1
         with:
