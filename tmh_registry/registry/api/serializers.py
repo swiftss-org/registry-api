@@ -35,6 +35,9 @@ class HospitalSerializer(ModelSerializer):
 
 
 class EpisodeSerializer(ModelSerializer):
+    primary_surgeon = MedicalPersonnelSerializer(many=False)
+    secondary_surgeon = MedicalPersonnelSerializer(many=False)
+    tertiary_surgeon = MedicalPersonnelSerializer(many=False)
     surgeons = MedicalPersonnelSerializer(many=True)
     episode_type = CharField(source="get_episode_type_display")
     cepod = CharField(source="get_cepod_display")
@@ -53,6 +56,9 @@ class EpisodeSerializer(ModelSerializer):
             "id",
             "surgery_date",
             "episode_type",
+            "primary_surgeon",
+            "secondary_surgeon",
+            "tertiary_surgeon",
             "surgeons",
             "cepod",
             "side",
@@ -343,6 +349,9 @@ class PatientHospitalMappingWriteSerializer(ModelSerializer):
 
 class EpisodeReadSerializer(ModelSerializer):
     patient_hospital_mapping = PatientHospitalMappingReadSerializer()
+    primary_surgeon = MedicalPersonnelSerializer(many=False)
+    secondary_surgeon = MedicalPersonnelSerializer(many=False)
+    tertiary_surgeon = MedicalPersonnelSerializer(many=False)
     surgeons = MedicalPersonnelSerializer(many=True)
     episode_type = CharField(source="get_episode_type_display")
     cepod = CharField(source="get_cepod_display")
@@ -364,6 +373,9 @@ class EpisodeReadSerializer(ModelSerializer):
             "created",
             "surgery_date",
             "episode_type",
+            "primary_surgeon",
+            "secondary_surgeon",
+            "tertiary_surgeon",
             "surgeons",
             "cepod",
             "side",
@@ -388,7 +400,28 @@ class EpisodeWriteSerializer(ModelSerializer):
         write_only=True, queryset=Hospital.objects.all()
     )
     surgeon_ids = PrimaryKeyRelatedField(
-        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+        write_only=True,
+        many=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+    )
+    primary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
+    )
+    secondary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
+    )
+    tertiary_surgeon_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     episode_type = CharField()
     cepod = CharField()
@@ -410,6 +443,9 @@ class EpisodeWriteSerializer(ModelSerializer):
             "surgery_date",
             "episode_type",
             "surgeon_ids",
+            "primary_surgeon_id",
+            "secondary_surgeon_id",
+            "tertiary_surgeon_id",
             "cepod",
             "side",
             "occurence",
@@ -431,7 +467,16 @@ class EpisodeWriteSerializer(ModelSerializer):
     def create(self, validated_data):
         patient = validated_data["patient_id"]
         hospital = validated_data["hospital_id"]
-        surgeons = validated_data["surgeon_ids"]
+        surgeons = validated_data.get("surgeon_ids", [])
+
+        primary_surgeon = validated_data.get("primary_surgeon_id")
+        secondary_surgeon = validated_data.get("secondary_surgeon_id")
+        tertiary_surgeon = validated_data.get("tertiary_surgeon_id")
+
+        if not primary_surgeon and surgeons:
+            primary_surgeon = surgeons[0] if len(surgeons) > 0 else None
+            secondary_surgeon = surgeons[1] if len(surgeons) > 1 else None
+            tertiary_surgeon = surgeons[2] if len(surgeons) > 2 else None
 
         patient_hospital_mapping = PatientHospitalMapping.objects.filter(
             patient_id=patient.id,
@@ -451,6 +496,9 @@ class EpisodeWriteSerializer(ModelSerializer):
         try:
             episode = Episode.objects.create(
                 patient_hospital_mapping=patient_hospital_mapping,
+                primary_surgeon=primary_surgeon,
+                secondary_surgeon=secondary_surgeon,
+                tertiary_surgeon=tertiary_surgeon,
                 surgery_date=validated_data["surgery_date"],
                 episode_type=get_text_choice_value_from_label(
                     Episode.EpisodeChoices.choices,
@@ -496,6 +544,18 @@ class EpisodeWriteSerializer(ModelSerializer):
 
         if surgeons:
             episode.surgeons.set(surgeons)
+        elif primary_surgeon:
+            # If front-end already sent primary_surgeon, ensure all sent surgeons are captured in the m2m field
+            all_surgeons = [
+                s
+                for s in [
+                    primary_surgeon,
+                    secondary_surgeon,
+                    tertiary_surgeon,
+                ]
+                if s is not None
+            ]
+            episode.surgeons.set(all_surgeons)
 
         return episode
 
@@ -563,6 +623,9 @@ class DischargeWriteSerializer(ModelSerializer):
 class FollowUpReadSerializer(ModelSerializer):
     episode = EpisodeReadSerializer()
     pain_severity = CharField(source="get_pain_severity_display")
+    primary_attendee = MedicalPersonnelSerializer(many=False)
+    secondary_attendee = MedicalPersonnelSerializer(many=False)
+    tertiary_attendee = MedicalPersonnelSerializer(many=False)
     attendees = MedicalPersonnelSerializer(many=True)
 
     class Meta:
@@ -572,6 +635,9 @@ class FollowUpReadSerializer(ModelSerializer):
             "episode",
             "date",
             "pain_severity",
+            "primary_attendee",
+            "secondary_attendee",
+            "tertiary_attendee",
             "attendees",
             "mesh_awareness",
             "seroma",
@@ -588,7 +654,28 @@ class FollowUpWriteSerializer(ModelSerializer):
         write_only=True, queryset=Episode.objects.exclude(discharge=None)
     )
     attendee_ids = PrimaryKeyRelatedField(
-        write_only=True, many=True, queryset=MedicalPersonnel.objects.all()
+        write_only=True,
+        many=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+    )
+    primary_attendee_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
+    )
+    secondary_attendee_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
+    )
+    tertiary_attendee_id = PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=MedicalPersonnel.objects.all(),
+        required=False,
+        allow_null=True,
     )
     pain_severity = CharField()
     surgery_comments_box = CharField(
@@ -603,6 +690,9 @@ class FollowUpWriteSerializer(ModelSerializer):
             "date",
             "pain_severity",
             "attendee_ids",
+            "primary_attendee_id",
+            "secondary_attendee_id",
+            "tertiary_attendee_id",
             "mesh_awareness",
             "seroma",
             "infection",
@@ -618,7 +708,16 @@ class FollowUpWriteSerializer(ModelSerializer):
 
     def create(self, validated_data):
         episode = validated_data["episode_id"]
-        attendees = validated_data["attendee_ids"]
+        attendees = validated_data.get("attendee_ids", [])
+
+        primary_attendee = validated_data.get("primary_attendee_id")
+        secondary_attendee = validated_data.get("secondary_attendee_id")
+        tertiary_attendee = validated_data.get("tertiary_attendee_id")
+
+        if not primary_attendee and attendees:
+            primary_attendee = attendees[0] if len(attendees) > 0 else None
+            secondary_attendee = attendees[1] if len(attendees) > 1 else None
+            tertiary_attendee = attendees[2] if len(attendees) > 2 else None
 
         if episode.surgery_date > validated_data["date"]:
             raise ValidationError(
@@ -638,6 +737,9 @@ class FollowUpWriteSerializer(ModelSerializer):
         follow_up = FollowUp.objects.create(
             episode_id=episode.id,
             date=validated_data["date"],
+            primary_attendee=primary_attendee,
+            secondary_attendee=secondary_attendee,
+            tertiary_attendee=tertiary_attendee,
             pain_severity=(
                 get_text_choice_value_from_label(
                     FollowUp.PainSeverityChoices.choices, pain_severity
@@ -656,7 +758,20 @@ class FollowUpWriteSerializer(ModelSerializer):
             ),
         )
 
-        follow_up.attendees.set(attendees)
+        if attendees:
+            follow_up.attendees.set(attendees)
+        elif primary_attendee:
+            # Ensure all sent attendees are captured in the m2m field
+            all_attendees = [
+                a
+                for a in [
+                    primary_attendee,
+                    secondary_attendee,
+                    tertiary_attendee,
+                ]
+                if a is not None
+            ]
+            follow_up.attendees.set(all_attendees)
 
         return follow_up
 

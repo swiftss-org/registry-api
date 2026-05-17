@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registry', '0035_episode_comments'),
+        ("registry", "0035_episode_comments"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='followup',
-            name='recurrence',
+            model_name="followup",
+            name="recurrence",
             field=models.BooleanField(null=True),
         ),
     ]
