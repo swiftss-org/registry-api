@@ -47,16 +47,4 @@ class Migration(migrations.Migration):
                 to="users.medicalpersonnel",
             ),
         ),
-        migrations.AddField(
-            model_name="episode",
-            name="quaternary_surgeon",
-            field=models.ForeignKey(
-                blank=True,
-                default=None,
-                null=True,
-                on_delete=django.db.models.deletion.SET_DEFAULT,
-                related_name="quaternary_surgeon",
-                to="users.medicalpersonnel",
-            ),
-        ),
     ]

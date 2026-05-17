@@ -183,14 +183,6 @@ class Episode(Model):
         default=None,
         related_name="tertiary_surgeon",
     )
-    quaternary_surgeon = ForeignKey(
-        MedicalPersonnel,
-        on_delete=SET_DEFAULT,
-        blank=True,
-        null=True,
-        default=None,
-        related_name="quaternary_surgeon",
-    )
     surgeons = ManyToManyField(MedicalPersonnel)
     cepod = CharField(max_length=16, choices=CepodChoices.choices)
     side = CharField(max_length=16, choices=SideChoices.choices)
