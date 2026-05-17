@@ -3,12 +3,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APIClient
 from tmh_registry.users.factories import MedicalPersonnelFactory
+
 from .....factories import (
     EpisodeFactory,
-    PatientHospitalMappingFactory,
+    HospitalFactory,
     PatientFactory,
-    HospitalFactory
+    PatientHospitalMappingFactory,
 )
+
 
 class TestEpisodesGetStats(TestCase):
     @classmethod
@@ -22,12 +24,18 @@ class TestEpisodesGetStats(TestCase):
         # Create patients
         cls.patient_1 = PatientFactory()
         cls.patient_2 = PatientFactory()
-        cls.patient_3 = PatientFactory() # Patient without episode
+        cls.patient_3 = PatientFactory()  # Patient without episode
 
         # Create mappings
-        cls.mapping_1 = PatientHospitalMappingFactory(patient=cls.patient_1, hospital=cls.hospital_1)
-        cls.mapping_2 = PatientHospitalMappingFactory(patient=cls.patient_2, hospital=cls.hospital_2)
-        cls.mapping_3 = PatientHospitalMappingFactory(patient=cls.patient_3, hospital=cls.hospital_1)
+        cls.mapping_1 = PatientHospitalMappingFactory(
+            patient=cls.patient_1, hospital=cls.hospital_1
+        )
+        cls.mapping_2 = PatientHospitalMappingFactory(
+            patient=cls.patient_2, hospital=cls.hospital_2
+        )
+        cls.mapping_3 = PatientHospitalMappingFactory(
+            patient=cls.patient_3, hospital=cls.hospital_1
+        )
 
         # Create episodes
         cls.episode_1 = EpisodeFactory(patient_hospital_mapping=cls.mapping_1)
@@ -57,10 +65,14 @@ class TestEpisodesGetStats(TestCase):
         self.assertIn("by_hospital", data)
         by_hospital = data["by_hospital"]
 
-        h1_stats = next(h for h in by_hospital if h["hospital_id"] == self.hospital_1.id)
+        h1_stats = next(
+            h for h in by_hospital if h["hospital_id"] == self.hospital_1.id
+        )
         self.assertEqual(h1_stats["total_episodes"], 2)
         self.assertEqual(h1_stats["patients_without_episode"], 1)
 
-        h2_stats = next(h for h in by_hospital if h["hospital_id"] == self.hospital_2.id)
+        h2_stats = next(
+            h for h in by_hospital if h["hospital_id"] == self.hospital_2.id
+        )
         self.assertEqual(h2_stats["total_episodes"], 1)
         self.assertEqual(h2_stats["patients_without_episode"], 0)

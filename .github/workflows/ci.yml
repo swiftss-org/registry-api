@@ -53,7 +53,10 @@ jobs:
       - name: Run Django Tests
         run: docker compose -f local.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest --disable-pytest-warnings;
       - name: Print Coverage
-        run: docker compose -f local.yml exec -T django coverage report
+        run: |
+          docker compose -f local.yml exec -T django coverage report
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          docker compose -f local.yml exec -T django coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
       - name: Tear down the Stack
         run: docker compose -f local.yml down
 

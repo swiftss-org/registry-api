@@ -2,14 +2,15 @@ from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APIClient
-from tmh_registry.users.factories import MedicalPersonnelFactory
-from tmh_registry.registry.models import PreferredHospital
 from tmh_registry.registry.factories import (
     EpisodeFactory,
-    PatientHospitalMappingFactory,
+    HospitalFactory,
     PatientFactory,
-    HospitalFactory
+    PatientHospitalMappingFactory,
 )
+from tmh_registry.registry.models import PreferredHospital
+from tmh_registry.users.factories import MedicalPersonnelFactory
+
 
 class TestUnlinkedPatientsGet(TestCase):
     @classmethod
@@ -19,22 +20,27 @@ class TestUnlinkedPatientsGet(TestCase):
         cls.other_hospital = HospitalFactory()
 
         PreferredHospital.objects.create(
-            medical_personnel=cls.medical_personnel,
-            hospital=cls.hospital
+            medical_personnel=cls.medical_personnel, hospital=cls.hospital
         )
 
         # Patient 1: Linked to preferred hospital, has episode -> SHOULD NOT BE RETURNED
         cls.patient_1 = PatientFactory()
-        cls.mapping_1 = PatientHospitalMappingFactory(patient=cls.patient_1, hospital=cls.hospital)
+        cls.mapping_1 = PatientHospitalMappingFactory(
+            patient=cls.patient_1, hospital=cls.hospital
+        )
         EpisodeFactory(patient_hospital_mapping=cls.mapping_1)
 
         # Patient 2: Linked to preferred hospital, NO episode -> SHOULD BE RETURNED
         cls.patient_2 = PatientFactory()
-        PatientHospitalMappingFactory(patient=cls.patient_2, hospital=cls.hospital)
+        PatientHospitalMappingFactory(
+            patient=cls.patient_2, hospital=cls.hospital
+        )
 
         # Patient 3: Linked to other hospital, NO episode -> SHOULD NOT BE RETURNED
         cls.patient_3 = PatientFactory()
-        PatientHospitalMappingFactory(patient=cls.patient_3, hospital=cls.other_hospital)
+        PatientHospitalMappingFactory(
+            patient=cls.patient_3, hospital=cls.other_hospital
+        )
 
     def setUp(self) -> None:
         self.token = Token.objects.create(user=self.medical_personnel.user)
