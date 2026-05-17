@@ -1,8 +1,13 @@
 import io
+
 from django.core.management import call_command
 from django.test import TestCase
-from tmh_registry.registry.models import Episode
-from tmh_registry.registry.factories import EpisodeFactory, HospitalFactory, PatientFactory, PatientHospitalMappingFactory
+from tmh_registry.registry.factories import (
+    EpisodeFactory,
+    HospitalFactory,
+    PatientFactory,
+    PatientHospitalMappingFactory,
+)
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 
@@ -10,8 +15,10 @@ class TestPopulateSurgeonsCommand(TestCase):
     def setUp(self):
         self.hospital = HospitalFactory()
         self.patient = PatientFactory()
-        self.mapping = PatientHospitalMappingFactory(patient=self.patient, hospital=self.hospital)
-        
+        self.mapping = PatientHospitalMappingFactory(
+            patient=self.patient, hospital=self.hospital
+        )
+
         # Create medical personnel
         self.surgeons = [MedicalPersonnelFactory() for _ in range(5)]
 
@@ -35,7 +42,7 @@ class TestPopulateSurgeonsCommand(TestCase):
 
         out = io.StringIO()
         call_command("populate_surgeons", stdout=out)
-        
+
         # Refresh from db
         ep0.refresh_from_db()
         ep1.refresh_from_db()
@@ -67,13 +74,13 @@ class TestPopulateSurgeonsCommand(TestCase):
         self.assertEqual(ep4.primary_surgeon.id, self.surgeons[0].id)
         self.assertEqual(ep4.secondary_surgeon.id, self.surgeons[1].id)
         self.assertEqual(ep4.tertiary_surgeon.id, self.surgeons[2].id)
-        
+
         # Check M2M field counts are untouched
         self.assertEqual(ep0.surgeons.count(), 0)
         self.assertEqual(ep1.surgeons.count(), 1)
         self.assertEqual(ep2.surgeons.count(), 2)
         self.assertEqual(ep3.surgeons.count(), 3)
         self.assertEqual(ep4.surgeons.count(), 4)
-        
+
         # Ensure validation passed (validation verifies no M2M counts decreased)
         self.assertIn("Validation passed", out.getvalue())

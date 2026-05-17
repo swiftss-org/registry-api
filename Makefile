@@ -18,7 +18,7 @@ dep:
 pre-commit:
 	pre-commit run --all-files
 
-build:
+build: pre-commit
 	docker compose -f ${COMPOSE_ENV}.yml build
 
 run: build
@@ -27,7 +27,7 @@ run: build
 migrate:
 	docker compose -f ${COMPOSE_ENV}.yml exec -T django bash -c "python manage.py makemigrations && python manage.py migrate"
 
-test:
+test: pre-commit
 	docker compose -f ${COMPOSE_ENV}.yml exec -T django coverage run --rcfile=.pre-commit/setup.cfg -m pytest ${target} --disable-pytest-warnings;
 
 test-one:

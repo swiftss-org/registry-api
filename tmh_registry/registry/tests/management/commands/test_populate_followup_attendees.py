@@ -1,15 +1,15 @@
 import io
+
 from django.core.management import call_command
 from django.test import TestCase
-from tmh_registry.registry.models import FollowUp
-from tmh_registry.registry.factories import FollowUpFactory, EpisodeFactory
+from tmh_registry.registry.factories import EpisodeFactory, FollowUpFactory
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 
 class TestPopulateFollowUpAttendeesCommand(TestCase):
     def setUp(self):
         self.episode = EpisodeFactory()
-        
+
         # Create medical personnel
         self.attendees = [MedicalPersonnelFactory() for _ in range(5)]
 
@@ -33,7 +33,7 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
 
         out = io.StringIO()
         call_command("populate_followup_attendees", stdout=out)
-        
+
         # Refresh from db
         fu0.refresh_from_db()
         fu1.refresh_from_db()
@@ -65,13 +65,13 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
         self.assertEqual(fu4.primary_attendee.id, self.attendees[0].id)
         self.assertEqual(fu4.secondary_attendee.id, self.attendees[1].id)
         self.assertEqual(fu4.tertiary_attendee.id, self.attendees[2].id)
-        
+
         # Check M2M field counts are untouched
         self.assertEqual(fu0.attendees.count(), 0)
         self.assertEqual(fu1.attendees.count(), 1)
         self.assertEqual(fu2.attendees.count(), 2)
         self.assertEqual(fu3.attendees.count(), 3)
         self.assertEqual(fu4.attendees.count(), 4)
-        
+
         # Ensure validation passed (validation verifies no M2M counts decreased)
         self.assertIn("Validation passed", out.getvalue())
