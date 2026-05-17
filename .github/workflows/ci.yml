@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - 'feat/**'
+      - 'feature/**'
       - 'ci/**'
       - 'issue/**'
       - 'main'
