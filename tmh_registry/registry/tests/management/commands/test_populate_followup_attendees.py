@@ -17,8 +17,6 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
         followup = FollowUpFactory(
             episode=self.episode,
             primary_attendee=None,
-            secondary_attendee=None,
-            tertiary_attendee=None,
         )
         followup.attendees.set(self.attendees[:num_attendees])
         return followup
@@ -43,28 +41,18 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
 
         # Check fu0
         self.assertIsNone(fu0.primary_attendee)
-        self.assertIsNone(fu0.secondary_attendee)
-        self.assertIsNone(fu0.tertiary_attendee)
 
         # Check fu1
         self.assertEqual(fu1.primary_attendee.id, self.attendees[0].id)
-        self.assertIsNone(fu1.secondary_attendee)
-        self.assertIsNone(fu1.tertiary_attendee)
 
         # Check fu2
         self.assertEqual(fu2.primary_attendee.id, self.attendees[0].id)
-        self.assertEqual(fu2.secondary_attendee.id, self.attendees[1].id)
-        self.assertIsNone(fu2.tertiary_attendee)
 
         # Check fu3
         self.assertEqual(fu3.primary_attendee.id, self.attendees[0].id)
-        self.assertEqual(fu3.secondary_attendee.id, self.attendees[1].id)
-        self.assertEqual(fu3.tertiary_attendee.id, self.attendees[2].id)
 
-        # Check fu4 (should map first 3, print error, and ignore the 4th)
+        # Check fu4
         self.assertEqual(fu4.primary_attendee.id, self.attendees[0].id)
-        self.assertEqual(fu4.secondary_attendee.id, self.attendees[1].id)
-        self.assertEqual(fu4.tertiary_attendee.id, self.attendees[2].id)
 
         # Check M2M field counts are untouched
         self.assertEqual(fu0.attendees.count(), 0)

@@ -624,8 +624,6 @@ class FollowUpReadSerializer(ModelSerializer):
     episode = EpisodeReadSerializer()
     pain_severity = CharField(source="get_pain_severity_display")
     primary_attendee = MedicalPersonnelSerializer(many=False)
-    secondary_attendee = MedicalPersonnelSerializer(many=False)
-    tertiary_attendee = MedicalPersonnelSerializer(many=False)
     attendees = MedicalPersonnelSerializer(many=True)
 
     class Meta:
@@ -636,8 +634,6 @@ class FollowUpReadSerializer(ModelSerializer):
             "date",
             "pain_severity",
             "primary_attendee",
-            "secondary_attendee",
-            "tertiary_attendee",
             "attendees",
             "mesh_awareness",
             "seroma",
@@ -665,18 +661,6 @@ class FollowUpWriteSerializer(ModelSerializer):
         required=False,
         allow_null=True,
     )
-    secondary_attendee_id = PrimaryKeyRelatedField(
-        write_only=True,
-        queryset=MedicalPersonnel.objects.all(),
-        required=False,
-        allow_null=True,
-    )
-    tertiary_attendee_id = PrimaryKeyRelatedField(
-        write_only=True,
-        queryset=MedicalPersonnel.objects.all(),
-        required=False,
-        allow_null=True,
-    )
     pain_severity = CharField()
     surgery_comments_box = CharField(
         required=False, allow_blank=True, allow_null=True
@@ -691,8 +675,6 @@ class FollowUpWriteSerializer(ModelSerializer):
             "pain_severity",
             "attendee_ids",
             "primary_attendee_id",
-            "secondary_attendee_id",
-            "tertiary_attendee_id",
             "mesh_awareness",
             "seroma",
             "infection",
@@ -711,13 +693,9 @@ class FollowUpWriteSerializer(ModelSerializer):
         attendees = validated_data.get("attendee_ids", [])
 
         primary_attendee = validated_data.get("primary_attendee_id")
-        secondary_attendee = validated_data.get("secondary_attendee_id")
-        tertiary_attendee = validated_data.get("tertiary_attendee_id")
 
         if not primary_attendee and attendees:
             primary_attendee = attendees[0] if len(attendees) > 0 else None
-            secondary_attendee = attendees[1] if len(attendees) > 1 else None
-            tertiary_attendee = attendees[2] if len(attendees) > 2 else None
 
         if episode.surgery_date > validated_data["date"]:
             raise ValidationError(
@@ -738,8 +716,6 @@ class FollowUpWriteSerializer(ModelSerializer):
             episode_id=episode.id,
             date=validated_data["date"],
             primary_attendee=primary_attendee,
-            secondary_attendee=secondary_attendee,
-            tertiary_attendee=tertiary_attendee,
             pain_severity=(
                 get_text_choice_value_from_label(
                     FollowUp.PainSeverityChoices.choices, pain_severity
@@ -766,8 +742,6 @@ class FollowUpWriteSerializer(ModelSerializer):
                 a
                 for a in [
                     primary_attendee,
-                    secondary_attendee,
-                    tertiary_attendee,
                 ]
                 if a is not None
             ]

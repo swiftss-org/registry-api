@@ -20,16 +20,14 @@ class Command(BaseCommand):
             if len(attendees) > 0:
                 followup.primary_attendee = attendees[0]
                 if len(attendees) > 1:
-                    followup.secondary_attendee = attendees[1]
-                if len(attendees) > 2:
-                    followup.tertiary_attendee = attendees[2]
-                if len(attendees) > 3:
+                    patient_name = (
+                        followup.episode.patient_hospital_mapping.patient.full_name
+                    )
                     self.stdout.write(
                         self.style.ERROR(
-                            f"FollowUp {followup.id} has more than 3 attendees. It has {len(attendees)} attendees."
+                            f"FollowUp {followup.id} [Episode ({followup.episode.episode_type}) {patient_name} | FollowUp {followup.id}] has more than 1 attendee. It has {len(attendees)} attendees."
                         )
                     )
-
                 followups_to_update.append(followup)
 
         if followups_to_update:
@@ -37,8 +35,6 @@ class Command(BaseCommand):
                 followups_to_update,
                 [
                     "primary_attendee",
-                    "secondary_attendee",
-                    "tertiary_attendee",
                 ],
             )
             self.stdout.write(
