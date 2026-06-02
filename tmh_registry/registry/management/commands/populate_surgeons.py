@@ -20,15 +20,17 @@ class Command(BaseCommand):
             if len(surgeons) > 0:
                 episode.primary_surgeon = surgeons[0]
                 if len(surgeons) > 1:
+                    patient_name = (
+                        episode.patient_hospital_mapping.patient.full_name
+                    )
+                    self.stdout.write(
+                        self.style.ERROR(
+                            f"Episode {episode.id} [({episode.episode_type}) {patient_name}] has more than 1 surgeon. It has {len(surgeons)} surgeons."
+                        )
+                    )
                     episode.secondary_surgeon = surgeons[1]
                 if len(surgeons) > 2:
                     episode.tertiary_surgeon = surgeons[2]
-                if len(surgeons) > 3:
-                    self.stdout.write(
-                        self.style.ERROR(
-                            f"Episode {episode.id} has more than 3 surgeons. It has {len(surgeons)} surgeons."
-                        )
-                    )
 
                 episodes_to_update.append(episode)
 
