@@ -118,6 +118,7 @@ class TestPopulateSurgeonsCommand(TestCase):
             secondary_surgeon=None,
             tertiary_surgeon=None,
         )
+        episode.surgeons.clear()
         for surgeon in ordered_surgeons:
             episode.surgeons.add(surgeon)
 

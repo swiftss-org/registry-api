@@ -105,6 +105,7 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
             episode=self.episode,
             primary_attendee=None,
         )
+        fu.attendees.clear()
         for attendee in ordered_attendees:
             fu.attendees.add(attendee)
 
