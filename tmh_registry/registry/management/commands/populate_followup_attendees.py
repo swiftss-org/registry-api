@@ -1,34 +1,106 @@
+from collections import defaultdict
+
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 from tmh_registry.registry.models import FollowUp
 
 
 class Command(BaseCommand):
-    help = "Populates the primary, secondary, and tertiary attendee fields from the attendees ManyToMany field in FollowUp."
+    help = (
+        "Populates the primary attendee field from the attendees "
+        "ManyToMany field in FollowUp in natural insertion order."
+    )
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--report-only",
+            action="store_true",
+            help="Generate the migration report without applying database changes.",
+        )
 
     def handle(self, *args, **options):
-        self.stdout.write("Starting FollowUp attendee migration...")
+        report_only = options.get("report_only", False)
+        if report_only:
+            self.stdout.write(
+                self.style.WARNING(
+                    "Running in --report-only mode. Database will NOT be updated."
+                )
+            )
+        else:
+            self.stdout.write("Starting FollowUp attendee migration...")
 
-        followups = FollowUp.objects.prefetch_related("attendees").all()
+        followups = (
+            FollowUp.objects.select_related(
+                "episode__patient_hospital_mapping__patient",
+                "episode__patient_hospital_mapping__hospital",
+            )
+            .prefetch_related("attendees")
+            .all()
+        )
+
+        through_records = (
+            FollowUp.attendees.through.objects.filter(followup__in=followups)
+            .order_by("id")
+            .select_related("medicalpersonnel__user")
+        )
+        natural_attendees_by_followup = defaultdict(list)
+        for record in through_records:
+            natural_attendees_by_followup[record.followup_id].append(
+                record.medicalpersonnel
+            )
+
         followups_to_update = []
         original_attendee_counts = {}
 
         for followup in followups:
-            attendees = list(followup.attendees.all().order_by("id"))
+            attendees = natural_attendees_by_followup[followup.id]
             original_attendee_counts[followup.id] = len(attendees)
 
             if len(attendees) > 0:
                 followup.primary_attendee = attendees[0]
                 if len(attendees) > 1:
-                    patient_name = (
-                        followup.episode.patient_hospital_mapping.patient.full_name
+                    patient = followup.episode.patient_hospital_mapping.patient
+                    hospital = (
+                        followup.episode.patient_hospital_mapping.hospital
                     )
+                    ui_path = f"/patients/{hospital.id}/{patient.id}/episodes/{followup.episode_id}"
+                    admin_path = (
+                        f"/admin/registry/followup/{followup.id}/change/"
+                    )
+
                     self.stdout.write(
                         self.style.ERROR(
-                            f"FollowUp {followup.id} [Episode ({followup.episode.episode_type}) {patient_name} | FollowUp {followup.id}] has more than 1 attendee. It has {len(attendees)} attendees."
+                            f"FollowUp {followup.id} [Episode {followup.episode_id} ({followup.episode.episode_type}) Patient ID: {patient.id} ({patient.full_name})] "
+                            f"has {len(attendees)} attendees.\n"
+                            f"  UI Path:    {ui_path}\n"
+                            f"  Admin Path: {admin_path}\n"
+                            f"  Natural Order:"
                         )
                     )
+                    for idx, attendee in enumerate(attendees, start=1):
+                        role = (
+                            "Primary Attendee" if idx == 1 else f"Extra #{idx}"
+                        )
+                        user = attendee.user
+                        full_name = (
+                            f"{user.first_name} {user.last_name}".strip()
+                            or "(No name set)"
+                        )
+                        self.stdout.write(
+                            f"    {idx}. [{role}] MP ID: {attendee.id} | User ID: {user.id} ({user.username} - {full_name})"
+                        )
                 followups_to_update.append(followup)
+
+        if report_only:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"[REPORT-ONLY] {len(followups_to_update)} follow-ups would be updated."
+                )
+            )
+            self.stdout.write(
+                self.style.SUCCESS("Report finished (no changes made).")
+            )
+            return
 
         if followups_to_update:
             FollowUp.objects.bulk_update(

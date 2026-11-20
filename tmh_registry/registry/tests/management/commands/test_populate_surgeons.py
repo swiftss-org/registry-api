@@ -84,3 +84,49 @@ class TestPopulateSurgeonsCommand(TestCase):
 
         # Ensure validation passed (validation verifies no M2M counts decreased)
         self.assertIn("Validation passed", out.getvalue())
+
+    def test_populate_surgeons_report_only(self):
+        ep = self._create_episode_with_surgeons(2)
+
+        out = io.StringIO()
+        call_command("populate_surgeons", report_only=True, stdout=out)
+
+        ep.refresh_from_db()
+        self.assertIsNone(ep.primary_surgeon)
+        self.assertIsNone(ep.secondary_surgeon)
+
+        output = out.getvalue()
+        self.assertIn("Running in --report-only mode", output)
+        self.assertIn("[REPORT-ONLY] 1 episodes would be updated", output)
+        self.assertIn(
+            f"/patients/{self.hospital.id}/{self.patient.id}/episodes/{ep.id}",
+            output,
+        )
+        self.assertIn(f"/admin/registry/episode/{ep.id}/change/", output)
+        self.assertIn(f"Patient ID: {self.patient.id}", output)
+
+    def test_populate_surgeons_natural_order(self):
+        # Assign surgeons in non-sequential order (e.g. highest ID first)
+        ordered_surgeons = [
+            self.surgeons[4],
+            self.surgeons[2],
+            self.surgeons[0],
+        ]
+        episode = EpisodeFactory(
+            patient_hospital_mapping=self.mapping,
+            primary_surgeon=None,
+            secondary_surgeon=None,
+            tertiary_surgeon=None,
+        )
+        episode.surgeons.clear()
+        for surgeon in ordered_surgeons:
+            episode.surgeons.add(surgeon)
+
+        out = io.StringIO()
+        call_command("populate_surgeons", stdout=out)
+
+        episode.refresh_from_db()
+        # Verify natural order was respected, not sorted by MedicalPersonnel.id
+        self.assertEqual(episode.primary_surgeon.id, self.surgeons[4].id)
+        self.assertEqual(episode.secondary_surgeon.id, self.surgeons[2].id)
+        self.assertEqual(episode.tertiary_surgeon.id, self.surgeons[0].id)
