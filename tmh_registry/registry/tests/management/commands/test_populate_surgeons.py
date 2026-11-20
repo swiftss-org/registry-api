@@ -118,7 +118,8 @@ class TestPopulateSurgeonsCommand(TestCase):
             secondary_surgeon=None,
             tertiary_surgeon=None,
         )
-        episode.surgeons.set(ordered_surgeons)
+        for surgeon in ordered_surgeons:
+            episode.surgeons.add(surgeon)
 
         out = io.StringIO()
         call_command("populate_surgeons", stdout=out)

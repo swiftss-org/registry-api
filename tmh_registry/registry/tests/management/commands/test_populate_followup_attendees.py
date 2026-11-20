@@ -105,7 +105,8 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
             episode=self.episode,
             primary_attendee=None,
         )
-        fu.attendees.set(ordered_attendees)
+        for attendee in ordered_attendees:
+            fu.attendees.add(attendee)
 
         out = io.StringIO()
         call_command("populate_followup_attendees", stdout=out)
