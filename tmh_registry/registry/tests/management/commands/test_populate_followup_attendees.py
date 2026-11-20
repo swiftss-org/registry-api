@@ -2,13 +2,24 @@ import io
 
 from django.core.management import call_command
 from django.test import TestCase
-from tmh_registry.registry.factories import EpisodeFactory, FollowUpFactory
+from tmh_registry.registry.factories import (
+    EpisodeFactory,
+    FollowUpFactory,
+    HospitalFactory,
+    PatientFactory,
+    PatientHospitalMappingFactory,
+)
 from tmh_registry.users.factories import MedicalPersonnelFactory
 
 
 class TestPopulateFollowUpAttendeesCommand(TestCase):
     def setUp(self):
-        self.episode = EpisodeFactory()
+        self.hospital = HospitalFactory()
+        self.patient = PatientFactory()
+        self.mapping = PatientHospitalMappingFactory(
+            patient=self.patient, hospital=self.hospital
+        )
+        self.episode = EpisodeFactory(patient_hospital_mapping=self.mapping)
 
         # Create medical personnel
         self.attendees = [MedicalPersonnelFactory() for _ in range(5)]
@@ -63,3 +74,39 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
 
         # Ensure validation passed (validation verifies no M2M counts decreased)
         self.assertIn("Validation passed", out.getvalue())
+
+    def test_populate_followup_attendees_report_only(self):
+        fu = self._create_followup_with_attendees(2)
+
+        out = io.StringIO()
+        call_command("populate_followup_attendees", report_only=True, stdout=out)
+
+        fu.refresh_from_db()
+        self.assertIsNone(fu.primary_attendee)
+
+        output = out.getvalue()
+        self.assertIn("Running in --report-only mode", output)
+        self.assertIn("[REPORT-ONLY] 1 follow-ups would be updated", output)
+        self.assertIn(
+            f"/patients/{self.hospital.id}/{self.patient.id}/episodes/{self.episode.id}",
+            output,
+        )
+        self.assertIn(f"/admin/registry/followup/{fu.id}/change/", output)
+        self.assertIn(f"Patient ID: {self.patient.id}", output)
+
+    def test_populate_followup_attendees_natural_order(self):
+        ordered_attendees = [
+            self.attendees[3],
+            self.attendees[1],
+        ]
+        fu = FollowUpFactory(
+            episode=self.episode,
+            primary_attendee=None,
+        )
+        fu.attendees.set(ordered_attendees)
+
+        out = io.StringIO()
+        call_command("populate_followup_attendees", stdout=out)
+
+        fu.refresh_from_db()
+        self.assertEqual(fu.primary_attendee.id, self.attendees[3].id)

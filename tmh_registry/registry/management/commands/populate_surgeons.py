@@ -1,38 +1,112 @@
+from collections import defaultdict
+
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 from tmh_registry.registry.models import Episode
 
 
 class Command(BaseCommand):
-    help = "Populates the primary, secondary, and tertiary surgeon fields from the surgeons ManyToMany field."
+    help = (
+        "Populates the primary, secondary, and tertiary surgeon fields "
+        "from the surgeons ManyToMany field in natural insertion order."
+    )
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--report-only",
+            action="store_true",
+            help="Generate the migration report without applying database changes.",
+        )
 
     def handle(self, *args, **options):
-        self.stdout.write("Starting surgeon migration...")
+        report_only = options.get("report_only", False)
+        if report_only:
+            self.stdout.write(
+                self.style.WARNING(
+                    "Running in --report-only mode. Database will NOT be updated."
+                )
+            )
+        else:
+            self.stdout.write("Starting surgeon migration...")
 
-        episodes = Episode.objects.prefetch_related("surgeons").all()
+        episodes = (
+            Episode.objects.select_related(
+                "patient_hospital_mapping__patient",
+                "patient_hospital_mapping__hospital",
+            )
+            .prefetch_related("surgeons")
+            .all()
+        )
+
+        through_records = (
+            Episode.surgeons.through.objects.filter(episode__in=episodes)
+            .order_by("id")
+            .select_related("medicalpersonnel__user")
+        )
+        natural_surgeons_by_episode = defaultdict(list)
+        for record in through_records:
+            natural_surgeons_by_episode[record.episode_id].append(
+                record.medicalpersonnel
+            )
+
         episodes_to_update = []
         original_surgeon_counts = {}
 
         for episode in episodes:
-            surgeons = list(episode.surgeons.all().order_by("id"))
+            surgeons = natural_surgeons_by_episode[episode.id]
             original_surgeon_counts[episode.id] = len(surgeons)
 
             if len(surgeons) > 0:
                 episode.primary_surgeon = surgeons[0]
                 if len(surgeons) > 1:
-                    patient_name = (
-                        episode.patient_hospital_mapping.patient.full_name
-                    )
+                    patient = episode.patient_hospital_mapping.patient
+                    hospital = episode.patient_hospital_mapping.hospital
+                    ui_path = f"/patients/{hospital.id}/{patient.id}/episodes/{episode.id}"
+                    admin_path = f"/admin/registry/episode/{episode.id}/change/"
+
                     self.stdout.write(
                         self.style.ERROR(
-                            f"Episode {episode.id} [({episode.episode_type}) {patient_name}] has more than 1 surgeon. It has {len(surgeons)} surgeons."
+                            f"Episode {episode.id} [({episode.episode_type}) Patient ID: {patient.id} ({patient.full_name})] "
+                            f"has {len(surgeons)} surgeons.\n"
+                            f"  UI Path:    {ui_path}\n"
+                            f"  Admin Path: {admin_path}\n"
+                            f"  Natural Order:"
                         )
                     )
+                    for idx, surgeon in enumerate(surgeons, start=1):
+                        role = (
+                            "Main Operating"
+                            if idx == 1
+                            else "Secondary"
+                            if idx == 2
+                            else "Supervising"
+                            if idx == 3
+                            else f"Extra #{idx}"
+                        )
+                        user = surgeon.user
+                        full_name = (
+                            f"{user.first_name} {user.last_name}".strip()
+                            or "(No name set)"
+                        )
+                        self.stdout.write(
+                            f"    {idx}. [{role}] MP ID: {surgeon.id} | User ID: {user.id} ({user.username} - {full_name})"
+                        )
                     episode.secondary_surgeon = surgeons[1]
                 if len(surgeons) > 2:
                     episode.tertiary_surgeon = surgeons[2]
 
                 episodes_to_update.append(episode)
+
+        if report_only:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"[REPORT-ONLY] {len(episodes_to_update)} episodes would be updated."
+                )
+            )
+            self.stdout.write(
+                self.style.SUCCESS("Report finished (no changes made).")
+            )
+            return
 
         if episodes_to_update:
             Episode.objects.bulk_update(
