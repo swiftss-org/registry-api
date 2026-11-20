@@ -62,7 +62,9 @@ class Command(BaseCommand):
                     patient = episode.patient_hospital_mapping.patient
                     hospital = episode.patient_hospital_mapping.hospital
                     ui_path = f"/patients/{hospital.id}/{patient.id}/episodes/{episode.id}"
-                    admin_path = f"/admin/registry/episode/{episode.id}/change/"
+                    admin_path = (
+                        f"/admin/registry/episode/{episode.id}/change/"
+                    )
 
                     self.stdout.write(
                         self.style.ERROR(
@@ -77,11 +79,15 @@ class Command(BaseCommand):
                         role = (
                             "Main Operating"
                             if idx == 1
-                            else "Secondary"
-                            if idx == 2
-                            else "Supervising"
-                            if idx == 3
-                            else f"Extra #{idx}"
+                            else (
+                                "Secondary"
+                                if idx == 2
+                                else (
+                                    "Supervising"
+                                    if idx == 3
+                                    else f"Extra #{idx}"
+                                )
+                            )
                         )
                         user = surgeon.user
                         full_name = (

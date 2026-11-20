@@ -79,7 +79,9 @@ class TestPopulateFollowUpAttendeesCommand(TestCase):
         fu = self._create_followup_with_attendees(2)
 
         out = io.StringIO()
-        call_command("populate_followup_attendees", report_only=True, stdout=out)
+        call_command(
+            "populate_followup_attendees", report_only=True, stdout=out
+        )
 
         fu.refresh_from_db()
         self.assertIsNone(fu.primary_attendee)

@@ -59,14 +59,14 @@ class Command(BaseCommand):
             if len(attendees) > 0:
                 followup.primary_attendee = attendees[0]
                 if len(attendees) > 1:
-                    patient = (
-                        followup.episode.patient_hospital_mapping.patient
-                    )
+                    patient = followup.episode.patient_hospital_mapping.patient
                     hospital = (
                         followup.episode.patient_hospital_mapping.hospital
                     )
                     ui_path = f"/patients/{hospital.id}/{patient.id}/episodes/{followup.episode_id}"
-                    admin_path = f"/admin/registry/followup/{followup.id}/change/"
+                    admin_path = (
+                        f"/admin/registry/followup/{followup.id}/change/"
+                    )
 
                     self.stdout.write(
                         self.style.ERROR(
@@ -78,7 +78,9 @@ class Command(BaseCommand):
                         )
                     )
                     for idx, attendee in enumerate(attendees, start=1):
-                        role = "Primary Attendee" if idx == 1 else f"Extra #{idx}"
+                        role = (
+                            "Primary Attendee" if idx == 1 else f"Extra #{idx}"
+                        )
                         user = attendee.user
                         full_name = (
                             f"{user.first_name} {user.last_name}".strip()
