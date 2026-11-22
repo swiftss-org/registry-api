@@ -70,8 +70,9 @@ class Command(BaseCommand):
 
                     self.stdout.write(
                         self.style.ERROR(
-                            f"FollowUp {followup.id} [Episode {followup.episode_id} ({followup.episode.episode_type}) Patient ID: {patient.id} ({patient.full_name})] "
-                            f"has {len(attendees)} attendees.\n"
+                            f"---- FollowUp {followup.id} -- Episode {followup.episode_id} -- {followup.episode.episode_type} ----\n"
+                            f"[Patient ID: {patient.id} ({patient.full_name})]\n"
+                            f"Has {len(attendees)} attendees.\n"
                             f"  UI Path:    {ui_path}\n"
                             f"  Admin Path: {admin_path}\n"
                             f"  Natural Order:"
