@@ -68,8 +68,10 @@ class Command(BaseCommand):
 
                     self.stdout.write(
                         self.style.ERROR(
-                            f"Episode {episode.id} [({episode.episode_type}) Patient ID: {patient.id} ({patient.full_name})] "
-                            f"has {len(surgeons)} surgeons.\n"
+                            f"\n"
+                            f"---- Episode {episode.id} -- {episode.surgery_date} -- {episode.episode_type} ----\n"
+                            f"[Patient ID: {patient.id} ({patient.full_name})] \n"
+                            f"Has {len(surgeons)} surgeons.\n"
                             f"  UI Path:    {ui_path}\n"
                             f"  Admin Path: {admin_path}\n"
                             f"  Natural Order:"
